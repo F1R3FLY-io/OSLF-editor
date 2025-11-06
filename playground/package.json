@@ -1,0 +1,22 @@
+{
+	"name": "playground",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "pnpx esbuild index.tsx --bundle --watch --outfile=index.js",
+		"dev": "pnpx serve ."
+	},
+	"author": "Denys Bushuliak <denys.b@devbrother.com>",
+	"license": "UNLICENSED",
+	"packageManager": "pnpm@10.20.0",
+	"dependencies": {
+		"f1r3fly-io-oslf-editor": "link:../editor",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0"
+	},
+	"devDependencies": {
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2"
+	}
+}
