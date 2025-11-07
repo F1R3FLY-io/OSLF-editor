@@ -9,8 +9,10 @@ root.render(<App />);
 function App() {
 	const [structure, setStructure] = useState("");
 	const ref = useRef(null);
+	const [show, setShow] = useState(false);
 
 	function sendRequest() {
+		setStructure("");
 		ref.current?.dispatchEvent(new Event("tree:request"));
 	}
 
@@ -31,7 +33,13 @@ function App() {
 			<h1>OSLF Editor</h1>
 			<button onClick={sendRequest}>Get Structure</button>
 			<pre>{structure}</pre>
-			<oslf-editor ref={ref} width="800" height="800"></oslf-editor>
+			<button onClick={() => setShow((v) => !v)}>
+				{show ? "Hide" : "Show"}
+			</button>
+
+			{show && (
+				<oslf-editor ref={ref} width="800" height="800"></oslf-editor>
+			)}
 		</div>
 	);
 }

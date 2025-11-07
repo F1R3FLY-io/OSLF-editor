@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "pnpx esbuild index.tsx --bundle --watch --outfile=index.js",
-		"dev": "pnpx serve ."
+		"dev": "pnpx esbuild index.tsx --bundle --watch --outfile=index.js",
+		"open": "pnpx serve ."
 	},
 	"author": "Denys Bushuliak <denys.b@devbrother.com>",
 	"license": "UNLICENSED",

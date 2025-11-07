@@ -5,6 +5,9 @@ export enum Events {
 	TREE_RETURN = "tree:return",
 }
 
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 600;
+
 function createEditor(
 	el: string | HTMLCanvasElement,
 	width: number,
@@ -26,15 +29,14 @@ function createEditor(
 
 class EditorElement extends HTMLElement {
 	canvas: Canvas;
-	width: number = null;
-	height: number = null;
-	disposers: Array<Function> = [];
+	width: null | number = null;
+	height: null | number = null;
+	handlers: Array<Function> = [];
 
 	static observedAttributes = ["width", "height"];
 
 	constructor() {
 		super();
-
 		this.attachShadow({ mode: "open" });
 	}
 
@@ -42,22 +44,8 @@ class EditorElement extends HTMLElement {
 		this.render();
 	}
 
-	render() {
-		if (this.width == null || this.height == null) {
-			return;
-		} else {
-			console.log("rendered");
-		}
-
-		this.disposers.forEach((callback) => callback());
-
-		const canvas = document.createElement("canvas");
-		const width = parseInt(this.getAttribute("width"));
-		const height = parseInt(this.getAttribute("height"));
-
-		this.shadowRoot?.appendChild(canvas);
-
-		this.canvas = createEditor(canvas, width, height);
+	handleListeners() {
+		this.handlers.forEach((callback) => callback());
 
 		const listenTreeRequest = () => {
 			this.dispatchEvent(
@@ -70,10 +58,26 @@ class EditorElement extends HTMLElement {
 		};
 
 		this.addEventListener(Events.TREE_REQUEST, listenTreeRequest);
-		this.disposers.push(() => {
+		this.handlers.push(() => {
 			this.removeEventListener(Events.TREE_REQUEST, listenTreeRequest);
 			console.log("Callback removed");
 		});
+	}
+
+	render() {
+		if (this.height == null || this.width == null) {
+			return;
+		} else {
+			console.log("rendered");
+		}
+
+		this.handleListeners();
+
+		const canvas = document.createElement("canvas");
+
+		this.shadowRoot?.appendChild(canvas);
+
+		this.canvas = createEditor(canvas, this.width, this.height);
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
