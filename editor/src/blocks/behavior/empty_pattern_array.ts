@@ -1,8 +1,7 @@
 import * as Blockly from "blockly/core";
 import { defineBlocksWithJsonArray } from "blockly";
 
-// Create the definition.
-export default Blockly.common.createBlockDefinitionsFromJsonArray([
+const definition = [
 	{
 		// The type is like the "class name" for your block. It is used to construct
 		// new instances. E.g. in the toolbox.
@@ -14,6 +13,9 @@ export default Blockly.common.createBlockDefinitionsFromJsonArray([
 		// Adds an untyped previous connection to the top of the block.
 		previousStatement: null,
 		// Adds an untyped next connection to the bottom of the block.
-		nextStatement: null,
+		nextStatement: "Behavior",
 	},
-]);
+];
+
+// Create the definition.
+export default Blockly.common.createBlockDefinitionsFromJsonArray(definition);

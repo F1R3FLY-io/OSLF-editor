@@ -23114,7 +23114,7 @@ ${b} to its parent, because: ${a}`);
   }
 
   // src/blocks/structures/zero.ts
-  var zero_default = common.createBlockDefinitionsFromJsonArray([
+  var definition = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23126,12 +23126,14 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped previous connection to the top of the block.
       previousStatement: null,
       // Adds an untyped next connection to the bottom of the block.
-      nextStatement: null
+      nextStatement: null,
+      colour: "208bfe"
     }
-  ]);
+  ];
+  var zero_default = common.createBlockDefinitionsFromJsonArray(definition);
 
   // src/blocks/structures/for.ts
-  var for_default = common.createBlockDefinitionsFromJsonArray([
+  var definition2 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23139,6 +23141,7 @@ ${b} to its parent, because: ${a}`);
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
       message0: "for %1 <- %2 %3",
+      inputsInline: true,
       args0: [
         {
           type: "input_value",
@@ -23161,16 +23164,18 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var for_default = common.createBlockDefinitionsFromJsonArray(definition2);
 
   // src/blocks/structures/send.ts
-  var send_default = common.createBlockDefinitionsFromJsonArray([
+  var definition3 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
       type: "send_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
+      inputsInline: true,
       message0: "%1 ! %2",
       args0: [
         {
@@ -23189,16 +23194,18 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var send_default = common.createBlockDefinitionsFromJsonArray(definition3);
 
   // src/blocks/structures/convertToProcess.ts
-  var convertToProcess_default = common.createBlockDefinitionsFromJsonArray([
+  var definition4 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
       type: "convert_to_process_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
+      inputsInline: true,
       message0: "* %1",
       args0: [
         {
@@ -23212,16 +23219,18 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var convertToProcess_default = common.createBlockDefinitionsFromJsonArray(definition4);
 
   // src/blocks/structures/convertToMessage.ts
-  var convertToMessage_default = common.createBlockDefinitionsFromJsonArray([
+  var definition5 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
       type: "convert_to_message_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
+      inputsInline: true,
       message0: "@ %1",
       args0: [
         {
@@ -23235,16 +23244,18 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var convertToMessage_default = common.createBlockDefinitionsFromJsonArray(definition5);
 
   // src/blocks/structures/channelName.ts
-  var channelName_default = common.createBlockDefinitionsFromJsonArray([
+  var definition6 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
       type: "channel_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
+      inputsInline: true,
       message0: "%1",
       args0: [
         {
@@ -23258,10 +23269,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var channelName_default = common.createBlockDefinitionsFromJsonArray(definition6);
 
   // src/blocks/collections/true.ts
-  var true_default = common.createBlockDefinitionsFromJsonArray([
+  var definition7 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23275,10 +23287,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var true_default = common.createBlockDefinitionsFromJsonArray(definition7);
 
   // src/blocks/collections/false.ts
-  var false_default = common.createBlockDefinitionsFromJsonArray([
+  var definition8 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23292,10 +23305,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var false_default = common.createBlockDefinitionsFromJsonArray(definition8);
 
   // src/blocks/collections/conjunction.ts
-  var conjunction_default = common.createBlockDefinitionsFromJsonArray([
+  var definition9 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23320,10 +23334,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var conjunction_default = common.createBlockDefinitionsFromJsonArray(definition9);
 
   // src/blocks/collections/disjunction.ts
-  var disjunction_default = common.createBlockDefinitionsFromJsonArray([
+  var definition10 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23348,13 +23363,12 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var disjunction_default = common.createBlockDefinitionsFromJsonArray(definition10);
 
   // src/blocks/collections/for_all.ts
-  var for_all_default = common.createBlockDefinitionsFromJsonArray([
+  var definition11 = [
     {
-      // The type is like the "class name" for your block. It is used to construct
-      // new instances. E.g. in the toolbox.
       type: "for_all_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
@@ -23381,10 +23395,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var for_all_default = common.createBlockDefinitionsFromJsonArray(definition11);
 
   // src/blocks/collections/for_some.ts
-  var for_some_default = common.createBlockDefinitionsFromJsonArray([
+  var definition12 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23414,10 +23429,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var for_some_default = common.createBlockDefinitionsFromJsonArray(definition12);
 
   // src/blocks/collections/not.ts
-  var not_default = common.createBlockDefinitionsFromJsonArray([
+  var definition13 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23437,10 +23453,11 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var not_default = common.createBlockDefinitionsFromJsonArray(definition13);
 
   // src/blocks/behavior/empty_pattern_array.ts
-  var empty_pattern_array_default = common.createBlockDefinitionsFromJsonArray([
+  var definition14 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23452,12 +23469,13 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped previous connection to the top of the block.
       previousStatement: null,
       // Adds an untyped next connection to the bottom of the block.
-      nextStatement: null
+      nextStatement: "Behavior"
     }
-  ]);
+  ];
+  var empty_pattern_array_default = common.createBlockDefinitionsFromJsonArray(definition14);
 
   // src/blocks/behavior/pattern.ts
-  var pattern_default = common.createBlockDefinitionsFromJsonArray([
+  var definition15 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23480,7 +23498,8 @@ ${b} to its parent, because: ${a}`);
       // Adds an untyped next connection to the bottom of the block.
       nextStatement: null
     }
-  ]);
+  ];
+  var pattern_default = common.createBlockDefinitionsFromJsonArray(definition15);
 
   // src/index.ts
   var Events2 = /* @__PURE__ */ ((Events3) => {

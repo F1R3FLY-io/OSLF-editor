@@ -1,8 +1,7 @@
 import * as Blockly from "blockly/core";
 import { defineBlocksWithJsonArray } from "blockly";
 
-// Create the definition.
-export default Blockly.common.createBlockDefinitionsFromJsonArray([
+const definition = [
 	{
 		// The type is like the "class name" for your block. It is used to construct
 		// new instances. E.g. in the toolbox.
@@ -10,6 +9,7 @@ export default Blockly.common.createBlockDefinitionsFromJsonArray([
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
 		message0: "for %1 <- %2 %3",
+		inputsInline: true,
 		args0: [
 			{
 				type: "input_value",
@@ -32,4 +32,7 @@ export default Blockly.common.createBlockDefinitionsFromJsonArray([
 		// Adds an untyped next connection to the bottom of the block.
 		nextStatement: null,
 	},
-]);
+];
+
+// Create the definition.
+export default Blockly.common.createBlockDefinitionsFromJsonArray(definition);
