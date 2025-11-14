@@ -5,10 +5,9 @@ const definition = [
 	{
 		// The type is like the "class name" for your block. It is used to construct
 		// new instances. E.g. in the toolbox.
-		type: "channel_block",
+		type: "NLookup",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
-
 		inputsInline: true,
 		message0: "%1",
 		args0: [
@@ -22,6 +21,8 @@ const definition = [
 		previousStatement: null,
 		// Adds an untyped next connection to the bottom of the block.
 		nextStatement: null,
+		colour: "208bfe",
+		output: "Name",
 	},
 ];
 

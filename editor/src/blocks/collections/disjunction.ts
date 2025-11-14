@@ -25,6 +25,9 @@ const definition = [
 		previousStatement: null,
 		// Adds an untyped next connection to the bottom of the block.
 		nextStatement: null,
+		colour: "9a52FF",
+		inputsInline: true,
+		output: "Proc",
 	},
 ];
 

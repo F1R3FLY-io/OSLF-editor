@@ -5,8 +5,8 @@ import { rholangGenerator } from "./generator";
 import zeroBlock from "./blocks/structures/zero";
 import forBlock from "./blocks/structures/for";
 import sendBlock from "./blocks/structures/send";
-import convertToProcessBlock from "./blocks/structures/convertToProcess";
-import convertToMessageBlock from "./blocks/structures/convertToMessage";
+import convertToProcessBlock from "./blocks/structures/channelToProcess";
+import convertToMessageBlock from "./blocks/structures/processToChannel";
 import channelNameBlock from "./blocks/structures/channelName";
 import trueBlock from "./blocks/collections/true";
 import falseBlock from "./blocks/collections/false";
@@ -64,27 +64,27 @@ function initEditor() {
 					contents: [
 						{
 							kind: "block",
-							type: "zero_block",
+							type: "0->Proc",
 						},
 						{
 							kind: "block",
-							type: "for_block",
+							type: "for",
 						},
 						{
 							kind: "block",
-							type: "send_block",
+							type: "NameXProc->Proc",
 						},
 						{
 							kind: "block",
-							type: "convert_to_process_block",
+							type: "Name->Proc",
 						},
 						{
 							kind: "block",
-							type: "convert_to_message_block",
+							type: "Proc->Name",
 						},
 						{
 							kind: "block",
-							type: "channel_block",
+							type: "NLookup",
 						},
 					],
 				},
