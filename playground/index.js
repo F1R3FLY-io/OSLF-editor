@@ -44820,33 +44820,58 @@ ${b} to its parent, because: ${a}`);
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "0->Proc",
+        type: "empty_array_block",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
-        message0: "0",
-        args0: [],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
+        message0: "[]",
         // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
-        colour: "208bfe"
+        nextStatement: ["Behavior"],
+        previousStatement: ["Behavior"],
+        colour: "1B9461"
       }
     ];
-    var zero_default = common.createBlockDefinitionsFromJsonArray(definition);
+    var empty_pattern_array_default = common.createBlockDefinitionsFromJsonArray(definition);
     var definition2 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "pattern_block",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        message0: "<...> %1 %2",
+        args0: [
+          {
+            type: "input_value",
+            name: "INPUT1",
+            check: "Proc"
+          },
+          {
+            type: "input_value",
+            name: "INPUT2",
+            check: "Proc"
+          }
+        ],
+        previousStatement: ["Behavior"],
+        nextStatement: ["Behavior"],
+        colour: "1B9461",
+        inputsInline: true
+      }
+    ];
+    var pattern_default = common.createBlockDefinitionsFromJsonArray(definition2);
+    var definition3 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
         type: "for",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
-        message0: "for %1 <- %2 %3",
-        inputsInline: true,
+        message0: "for %1 <- %2 \n %3",
+        tooltip: "for: NameIdent x Name x Proc -> Proc",
+        // inputsInline: true,
         args0: [
           {
-            type: "input_value",
-            name: "message",
-            check: "String"
+            type: "field_input",
+            name: "message"
           },
           {
             type: "input_value",
@@ -44854,25 +44879,72 @@ ${b} to its parent, because: ${a}`);
             check: "Name"
           },
           {
-            type: "input_value",
-            name: "process",
+            type: "input_statement",
+            name: "continuation",
             check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "208bfe",
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var for_default = common.createBlockDefinitionsFromJsonArray(definition2);
-    var definition3 = [
+    var for_default = common.createBlockDefinitionsFromJsonArray(definition3);
+    var definition4 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "NameXProc->Proc",
+        type: "nameToProc",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        inputsInline: true,
+        message0: "* %1",
+        tooltip: "*: Name -> Proc",
+        args0: [
+          {
+            type: "input_value",
+            name: "message",
+            check: "Name"
+          }
+        ],
+        colour: "208bfe",
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var nameToProc_default = common.createBlockDefinitionsFromJsonArray(definition4);
+    var definition5 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "procToName",
+        tooltip: "@: Proc -> Name",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        inputsInline: true,
+        message0: "@ %1",
+        args0: [
+          {
+            type: "input_value",
+            name: "message",
+            check: "Proc"
+          }
+        ],
+        colour: "208bfe",
+        output: "Name",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var procToName_default = common.createBlockDefinitionsFromJsonArray(definition5);
+    var definition6 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "send",
+        tooltip: "!:Name x Proc -> Proc",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         inputsInline: true,
@@ -44889,133 +44961,103 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "208bfe",
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var send_default = common.createBlockDefinitionsFromJsonArray(definition3);
-    var definition4 = [
+    var send_default = common.createBlockDefinitionsFromJsonArray(definition6);
+    var definition7 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "Name->Proc",
+        type: "zero",
+        tooltip: "0: 1 -> Proc",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
-        inputsInline: true,
-        message0: "* %1",
-        args0: [
-          {
-            type: "input_value",
-            name: "message",
-            check: "String"
-          }
-        ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
+        args0: [],
+        message0: "0",
         colour: "208bfe",
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var channelToProcess_default = common.createBlockDefinitionsFromJsonArray(definition4);
-    var definition5 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "Proc->Name",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        inputsInline: true,
-        message0: "@ %1",
-        args0: [
-          {
-            type: "input_value",
-            name: "message",
-            check: "Proc"
-          }
-        ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
-        colour: "208bfe",
-        output: "Name"
-      }
-    ];
-    var processToChannel_default = common.createBlockDefinitionsFromJsonArray(definition5);
-    var definition6 = [
+    var zero_default = common.createBlockDefinitionsFromJsonArray(definition7);
+    var definition8 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
         type: "NLookup",
+        tooltip: "NLookup: NameIdent -> Name",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         inputsInline: true,
         message0: "%1",
         args0: [
           {
-            type: "input_value",
-            name: "message",
-            check: "String"
+            type: "field_input",
+            name: "message"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "208bfe",
-        output: "Name"
-      }
-    ];
-    var channelName_default = common.createBlockDefinitionsFromJsonArray(definition6);
-    var definition7 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "true_block",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        message0: "true",
-        args0: [],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
+        output: "Name",
         nextStatement: null,
-        colour: "9a52FF",
-        inputsInline: true,
-        output: "Proc"
+        previousStatement: null
       }
     ];
-    var true_default = common.createBlockDefinitionsFromJsonArray(definition7);
-    var definition8 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "false_block",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        message0: "false",
-        args0: [],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
-        colour: "9a52FF",
-        inputsInline: true,
-        output: "Proc"
-      }
-    ];
-    var false_default = common.createBlockDefinitionsFromJsonArray(definition8);
+    var nlookup_default = common.createBlockDefinitionsFromJsonArray(definition8);
     var definition9 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "conjunction_block",
+        type: "proc",
+        message0: "%1",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        args0: [
+          {
+            type: "field_input",
+            name: "value",
+            check: "String"
+          }
+        ],
+        colour: "9a52FF",
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var proc_default = common.createBlockDefinitionsFromJsonArray(definition9);
+    var definition10 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "not",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        message0: "\xAC %1",
+        args0: [
+          {
+            type: "input_value",
+            name: "value",
+            check: "Proc"
+          }
+        ],
+        colour: "9a52FF",
+        inputsInline: true,
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var not_default = common.createBlockDefinitionsFromJsonArray(definition10);
+    var definition11 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "conjunction",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         message0: "%1 ^ %2",
@@ -45023,29 +45065,27 @@ ${b} to its parent, because: ${a}`);
           {
             type: "input_value",
             name: "left",
-            check: "String"
+            check: "Proc"
           },
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "9a52FF",
         inputsInline: true,
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var conjunction_default = common.createBlockDefinitionsFromJsonArray(definition9);
-    var definition10 = [
+    var conjunction_default = common.createBlockDefinitionsFromJsonArray(definition11);
+    var definition12 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "disjunction_block",
+        type: "disjunction",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         message0: "%1 v %2",
@@ -45053,27 +45093,59 @@ ${b} to its parent, because: ${a}`);
           {
             type: "input_value",
             name: "left",
-            check: "String"
+            check: "Proc"
           },
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "9a52FF",
         inputsInline: true,
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var disjunction_default = common.createBlockDefinitionsFromJsonArray(definition10);
-    var definition11 = [
+    var disjunction_default = common.createBlockDefinitionsFromJsonArray(definition12);
+    var definition13 = [
       {
-        type: "for_all_block",
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "true",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        message0: "true",
+        args0: [],
+        // Adds an untyped next connection to the bottom of the block.
+        colour: "9a52FF",
+        inputsInline: true,
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var true_default = common.createBlockDefinitionsFromJsonArray(definition13);
+    var definition14 = [
+      {
+        // The type is like the "class name" for your block. It is used to construct
+        // new instances. E.g. in the toolbox.
+        type: "false",
+        // The message defines the basic text of your block, and where inputs or
+        // fields will be inserted.
+        message0: "false",
+        colour: "9a52FF",
+        inputsInline: true,
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
+      }
+    ];
+    var false_default = common.createBlockDefinitionsFromJsonArray(definition14);
+    var definition15 = [
+      {
+        type: "for_all",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         message0: "\u2200 %1 %2 %3",
@@ -45086,29 +45158,27 @@ ${b} to its parent, because: ${a}`);
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           },
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "9a52FF",
         inputsInline: true,
-        output: "Proc"
+        output: "Proc",
+        nextStatement: null,
+        previousStatement: null
       }
     ];
-    var for_all_default = common.createBlockDefinitionsFromJsonArray(definition11);
-    var definition12 = [
+    var for_all_default = common.createBlockDefinitionsFromJsonArray(definition15);
+    var definition16 = [
       {
         // The type is like the "class name" for your block. It is used to construct
         // new instances. E.g. in the toolbox.
-        type: "for_some_block",
+        type: "for_some",
         // The message defines the basic text of your block, and where inputs or
         // fields will be inserted.
         message0: "\u2203 %1 %2 %3",
@@ -45121,95 +45191,22 @@ ${b} to its parent, because: ${a}`);
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           },
           {
             type: "input_value",
             name: "right",
-            check: "String"
+            check: "Proc"
           }
         ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
         colour: "9a52FF",
         inputsInline: true,
-        output: "Proc"
-      }
-    ];
-    var for_some_default = common.createBlockDefinitionsFromJsonArray(definition12);
-    var definition13 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "not_block",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        message0: "\xAC %1",
-        args0: [
-          {
-            type: "input_value",
-            name: "value",
-            check: "String"
-          }
-        ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
+        output: "Proc",
         nextStatement: null,
-        colour: "9a52FF",
-        inputsInline: true,
-        output: "Proc"
+        previousStatement: null
       }
     ];
-    var not_default = common.createBlockDefinitionsFromJsonArray(definition13);
-    var definition14 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "empty_array_block",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        message0: "[]",
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: false,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: [],
-        colour: "1B9461",
-        inputsInline: true
-      }
-    ];
-    var empty_pattern_array_default = common.createBlockDefinitionsFromJsonArray(definition14);
-    var definition15 = [
-      {
-        // The type is like the "class name" for your block. It is used to construct
-        // new instances. E.g. in the toolbox.
-        type: "pattern_block",
-        // The message defines the basic text of your block, and where inputs or
-        // fields will be inserted.
-        message0: "<...> %1 %2",
-        args0: [
-          {
-            type: "input_value",
-            name: "INPUT1",
-            check: "Struct"
-          },
-          {
-            type: "input_value",
-            name: "INPUT2",
-            check: "Collection"
-          }
-        ],
-        // Adds an untyped previous connection to the top of the block.
-        previousStatement: null,
-        // Adds an untyped next connection to the bottom of the block.
-        nextStatement: null,
-        colour: "1B9461",
-        inputsInline: true
-      }
-    ];
-    var pattern_default = common.createBlockDefinitionsFromJsonArray(definition15);
+    var for_some_default = common.createBlockDefinitionsFromJsonArray(definition16);
     var Events2 = /* @__PURE__ */ ((Events3) => {
       Events3["TREE_REQUEST"] = "tree:request";
       Events3["TREE_RETURN"] = "tree:return";
@@ -45218,9 +45215,9 @@ ${b} to its parent, because: ${a}`);
     common.defineBlocks(zero_default);
     common.defineBlocks(for_default);
     common.defineBlocks(send_default);
-    common.defineBlocks(processToChannel_default);
-    common.defineBlocks(channelToProcess_default);
-    common.defineBlocks(channelName_default);
+    common.defineBlocks(nameToProc_default);
+    common.defineBlocks(procToName_default);
+    common.defineBlocks(nlookup_default);
     common.defineBlocks(true_default);
     common.defineBlocks(false_default);
     common.defineBlocks(conjunction_default);
@@ -45230,6 +45227,7 @@ ${b} to its parent, because: ${a}`);
     common.defineBlocks(not_default);
     common.defineBlocks(empty_pattern_array_default);
     common.defineBlocks(pattern_default);
+    common.defineBlocks(proc_default);
     Blocks["factory_base"] = {
       init: function() {
         this.setDeletable(false);
@@ -45252,7 +45250,7 @@ ${b} to its parent, because: ${a}`);
               contents: [
                 {
                   kind: "block",
-                  type: "0->Proc"
+                  type: "zero"
                 },
                 {
                   kind: "block",
@@ -45260,15 +45258,15 @@ ${b} to its parent, because: ${a}`);
                 },
                 {
                   kind: "block",
-                  type: "NameXProc->Proc"
+                  type: "send"
                 },
                 {
                   kind: "block",
-                  type: "Name->Proc"
+                  type: "nameToProc"
                 },
                 {
                   kind: "block",
-                  type: "Proc->Name"
+                  type: "procToName"
                 },
                 {
                   kind: "block",
@@ -45282,31 +45280,35 @@ ${b} to its parent, because: ${a}`);
               contents: [
                 {
                   kind: "block",
-                  type: "true_block"
+                  type: "true"
                 },
                 {
                   kind: "block",
-                  type: "false_block"
+                  type: "false"
                 },
                 {
                   kind: "block",
-                  type: "conjunction_block"
+                  type: "conjunction"
                 },
                 {
                   kind: "block",
-                  type: "disjunction_block"
+                  type: "disjunction"
                 },
                 {
                   kind: "block",
-                  type: "for_all_block"
+                  type: "for_all"
                 },
                 {
                   kind: "block",
-                  type: "for_some_block"
+                  type: "for_some"
                 },
                 {
                   kind: "block",
-                  type: "not_block"
+                  type: "not"
+                },
+                {
+                  kind: "block",
+                  type: "proc"
                 }
               ]
             },

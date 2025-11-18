@@ -13,18 +13,16 @@ const definition = [
 			{
 				type: "input_value",
 				name: "INPUT1",
-				check: "Struct",
+				check: "Proc",
 			},
 			{
 				type: "input_value",
 				name: "INPUT2",
-				check: "Collection",
+				check: "Proc",
 			},
 		],
-		// Adds an untyped previous connection to the top of the block.
-		previousStatement: null,
-		// Adds an untyped next connection to the bottom of the block.
-		nextStatement: null,
+		previousStatement: ["Behavior"],
+		nextStatement: ["Behavior"],
 		colour: "1B9461",
 		inputsInline: true,
 	},

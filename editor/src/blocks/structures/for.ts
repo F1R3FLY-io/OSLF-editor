@@ -1,5 +1,4 @@
 import * as Blockly from "blockly/core";
-import { defineBlocksWithJsonArray } from "blockly";
 
 const definition = [
 	{
@@ -8,13 +7,13 @@ const definition = [
 		type: "for",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
-		message0: "for %1 <- %2 %3",
-		inputsInline: true,
+		message0: "for %1 <- %2 \n %3",
+		tooltip: "for: NameIdent x Name x Proc -> Proc",
+		// inputsInline: true,
 		args0: [
 			{
-				type: "input_value",
+				type: "field_input",
 				name: "message",
-				check: "String",
 			},
 			{
 				type: "input_value",
@@ -22,17 +21,15 @@ const definition = [
 				check: "Name",
 			},
 			{
-				type: "input_value",
-				name: "process",
+				type: "input_statement",
+				name: "continuation",
 				check: "Proc",
 			},
 		],
-		// Adds an untyped previous connection to the top of the block.
-		previousStatement: null,
-		// Adds an untyped next connection to the bottom of the block.
-		nextStatement: null,
 		colour: "208bfe",
 		output: "Proc",
+		nextStatement: null,
+		previousStatement: null,
 	},
 ];
 

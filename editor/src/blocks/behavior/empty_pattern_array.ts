@@ -9,12 +9,10 @@ const definition = [
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
 		message0: "[]",
-		// Adds an untyped previous connection to the top of the block.
-		previousStatement: false,
 		// Adds an untyped next connection to the bottom of the block.
-		nextStatement: [],
+		nextStatement: ["Behavior"],
+		previousStatement: ["Behavior"],
 		colour: "1B9461",
-		inputsInline: true,
 	},
 ];
 

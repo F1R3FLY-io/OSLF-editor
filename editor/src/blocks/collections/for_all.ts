@@ -3,7 +3,7 @@ import { defineBlocksWithJsonArray } from "blockly";
 
 const definition = [
 	{
-		type: "for_all_block",
+		type: "for_all",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
 		message0: "∀ %1 %2 %3",
@@ -16,21 +16,19 @@ const definition = [
 			{
 				type: "input_value",
 				name: "right",
-				check: "String",
+				check: "Proc",
 			},
 			{
 				type: "input_value",
 				name: "right",
-				check: "String",
+				check: "Proc",
 			},
 		],
-		// Adds an untyped previous connection to the top of the block.
-		previousStatement: null,
-		// Adds an untyped next connection to the bottom of the block.
-		nextStatement: null,
 		colour: "9a52FF",
 		inputsInline: true,
 		output: "Proc",
+		nextStatement: null,
+		previousStatement: null,
 	},
 ];
 

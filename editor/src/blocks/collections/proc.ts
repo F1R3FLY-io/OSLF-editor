@@ -5,24 +5,21 @@ const definition = [
 	{
 		// The type is like the "class name" for your block. It is used to construct
 		// new instances. E.g. in the toolbox.
-		type: "NLookup",
+		type: "proc",
+		message0: "%1",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
-		inputsInline: true,
-		message0: "%1",
 		args0: [
 			{
-				type: "input_value",
-				name: "message",
+				type: "field_input",
+				name: "value",
 				check: "String",
 			},
 		],
-		// Adds an untyped previous connection to the top of the block.
-		previousStatement: null,
-		// Adds an untyped next connection to the bottom of the block.
+		colour: "9a52FF",
+		output: "Proc",
 		nextStatement: null,
-		colour: "208bfe",
-		output: "Name",
+		previousStatement: null,
 	},
 ];
 

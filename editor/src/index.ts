@@ -1,35 +1,40 @@
 import * as Blockly from "blockly/core";
-import * as libraryBlocks from "blockly/blocks";
 import * as En from "blockly/msg/en";
 import { rholangGenerator } from "./generator";
-import zeroBlock from "./blocks/structures/zero";
-import forBlock from "./blocks/structures/for";
-import sendBlock from "./blocks/structures/send";
-import convertToProcessBlock from "./blocks/structures/channelToProcess";
-import convertToMessageBlock from "./blocks/structures/processToChannel";
-import channelNameBlock from "./blocks/structures/channelName";
-import trueBlock from "./blocks/collections/true";
-import falseBlock from "./blocks/collections/false";
-import conjunctionBlock from "./blocks/collections/conjunction";
-import disjunctionBlock from "./blocks/collections/disjunction";
-import forAllBlock from "./blocks/collections/for_all";
-import forSomeBlock from "./blocks/collections/for_some";
-import notBlock from "./blocks/collections/not";
 import emptyArrayBlock from "./blocks/behavior/empty_pattern_array";
 import pattern from "./blocks/behavior/pattern";
-
+import {
+	zeroBlock,
+	forBlock,
+	sendBlock,
+	nameToProcBlock,
+	procToNameBlock,
+	nLookupBlock,
+} from "./blocks/structures";
+import {
+	falseBlock,
+	trueBlock,
+	forSomeBlock,
+	forAllBlock,
+	procBlock,
+	notBlock,
+	conjunctionBlock,
+	disjunctionBlock,
+} from "./blocks/collections";
 export enum Events {
 	TREE_REQUEST = "tree:request",
 	TREE_RETURN = "tree:return",
 }
 
-// Register the definition.
+// Register structures
 Blockly.common.defineBlocks(zeroBlock);
 Blockly.common.defineBlocks(forBlock);
 Blockly.common.defineBlocks(sendBlock);
-Blockly.common.defineBlocks(convertToMessageBlock);
-Blockly.common.defineBlocks(convertToProcessBlock);
-Blockly.common.defineBlocks(channelNameBlock);
+Blockly.common.defineBlocks(nameToProcBlock);
+Blockly.common.defineBlocks(procToNameBlock);
+Blockly.common.defineBlocks(nLookupBlock);
+
+// Register collections
 Blockly.common.defineBlocks(trueBlock);
 Blockly.common.defineBlocks(falseBlock);
 Blockly.common.defineBlocks(conjunctionBlock);
@@ -39,6 +44,7 @@ Blockly.common.defineBlocks(forAllBlock);
 Blockly.common.defineBlocks(notBlock);
 Blockly.common.defineBlocks(emptyArrayBlock);
 Blockly.common.defineBlocks(pattern);
+Blockly.common.defineBlocks(procBlock);
 
 // This creates an undeletable, unmovable block that that holds all
 Blockly.Blocks["factory_base"] = {
@@ -64,7 +70,7 @@ function initEditor() {
 					contents: [
 						{
 							kind: "block",
-							type: "0->Proc",
+							type: "zero",
 						},
 						{
 							kind: "block",
@@ -72,15 +78,15 @@ function initEditor() {
 						},
 						{
 							kind: "block",
-							type: "NameXProc->Proc",
+							type: "send",
 						},
 						{
 							kind: "block",
-							type: "Name->Proc",
+							type: "nameToProc",
 						},
 						{
 							kind: "block",
-							type: "Proc->Name",
+							type: "procToName",
 						},
 						{
 							kind: "block",
@@ -94,31 +100,35 @@ function initEditor() {
 					contents: [
 						{
 							kind: "block",
-							type: "true_block",
+							type: "true",
 						},
 						{
 							kind: "block",
-							type: "false_block",
+							type: "false",
 						},
 						{
 							kind: "block",
-							type: "conjunction_block",
+							type: "conjunction",
 						},
 						{
 							kind: "block",
-							type: "disjunction_block",
+							type: "disjunction",
 						},
 						{
 							kind: "block",
-							type: "for_all_block",
+							type: "for_all",
 						},
 						{
 							kind: "block",
-							type: "for_some_block",
+							type: "for_some",
 						},
 						{
 							kind: "block",
-							type: "not_block",
+							type: "not",
+						},
+						{
+							kind: "block",
+							type: "proc",
 						},
 					],
 				},
