@@ -1,30 +1,9 @@
 import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
 import { rholangGenerator } from "./generator";
-import emptyArrayBlock from "./blocks/behavior/empty_pattern_array";
-import pattern from "./blocks/behavior/pattern";
-import {
-	zeroBlock,
-	forBlock,
-	sendBlock,
-	nameToProcBlock,
-	procToNameBlock,
-	nLookupBlock,
-} from "./blocks/structures";
-import {
-	falseBlock,
-	trueBlock,
-	forSomeBlock,
-	forAllBlock,
-	procBlock,
-	notBlock,
-	conjunctionBlock,
-	disjunctionBlock,
-} from "./blocks/collections";
-import contract from "./blocks/behavior/contract";
 
 import { registerAllBlocks, toolboxConfig } from "./blocks";
-import { register } from "blockly/core/renderers/common/block_rendering";
+import createRholangGenerator from "./blocks/generator";
 
 registerAllBlocks();
 
@@ -33,28 +12,6 @@ export enum Events {
 	TREE_RETURN = "tree:return",
 }
 
-Blockly.common.defineBlocks(contract);
-
-// Register structures
-Blockly.common.defineBlocks(zeroBlock);
-Blockly.common.defineBlocks(forBlock);
-Blockly.common.defineBlocks(sendBlock);
-Blockly.common.defineBlocks(nameToProcBlock);
-Blockly.common.defineBlocks(procToNameBlock);
-Blockly.common.defineBlocks(nLookupBlock);
-
-// Register collections
-Blockly.common.defineBlocks(trueBlock);
-Blockly.common.defineBlocks(falseBlock);
-Blockly.common.defineBlocks(conjunctionBlock);
-Blockly.common.defineBlocks(disjunctionBlock);
-Blockly.common.defineBlocks(forSomeBlock);
-Blockly.common.defineBlocks(forAllBlock);
-Blockly.common.defineBlocks(notBlock);
-Blockly.common.defineBlocks(emptyArrayBlock);
-Blockly.common.defineBlocks(pattern);
-Blockly.common.defineBlocks(procBlock);
-
 function initEditor() {
 	let workspace = Blockly.inject("blockly", {
 		trashcan: false,
@@ -62,103 +19,16 @@ function initEditor() {
 		scrollbars: false,
 		grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
 		toolbox: toolboxConfig,
-		// toolbox: {
-		// 	kind: "categoryToolbox",
-		// 	contents: [
-		// 		{
-		// 			kind: "category",
-		// 			name: "Structure",
-		// 			contents: [
-		// 				{
-		// 					kind: "block",
-		// 					type: "zero",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "for",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "send",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "nameToProc",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "procToName",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "NLookup",
-		// 				},
-		// 			],
-		// 		},
-		// 		{
-		// 			kind: "category",
-		// 			name: "Collection",
-		// 			contents: [
-		// 				{
-		// 					kind: "block",
-		// 					type: "true",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "false",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "conjunction",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "disjunction",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "for_all",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "for_some",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "not",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "proc",
-		// 				},
-		// 			],
-		// 		},
-		// 		{
-		// 			kind: "category",
-		// 			name: "Behaviour",
-		// 			contents: [
-		// 				{
-		// 					kind: "block",
-		// 					type: "empty_array_block",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "pattern_block",
-		// 				},
-		// 				{
-		// 					kind: "block",
-		// 					type: "contract_block",
-		// 				},
-		// 			],
-		// 		},
-		// 	],
-		// },
 	});
+
+	// Create the root block
+	const rootBlock = workspace.newBlock("proc_root");
+	rootBlock.initSvg();
+	rootBlock.render();
+	rootBlock.moveBy(50, 50);
 
 	// Disable any block not connected to the root block.
 	workspace.addChangeListener(Blockly.Events.disableOrphans);
-
-	// workspace.addTopBlock({ type: "contract" });
 
 	return workspace;
 }
@@ -183,9 +53,13 @@ class EditorElement extends HTMLElement {
 		this.handlers.forEach((callback) => callback());
 
 		const listenTreeRequest = () => {
+			const generator = createRholangGenerator();
+			const code = generator.workspaceToCode(this.workspace);
+			console.log(code);
+
 			this.dispatchEvent(
 				new CustomEvent(Events.TREE_RETURN, {
-					detail: rholangGenerator().workspaceToCode(this.workspace),
+					detail: code,
 					bubbles: true,
 					composed: true,
 				}),

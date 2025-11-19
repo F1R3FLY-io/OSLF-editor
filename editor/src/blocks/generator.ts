@@ -23,6 +23,13 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		NONE: 99,
 	};
 
+	// === Root Block ===
+
+	generator.forBlock["proc_root"] = function(block) {
+		const body = generator.valueToCode(block, "BODY", ORDER.NONE);
+		return body;
+	};
+
 	// === Ground Types ===
 
 	generator.forBlock["ground_bool_true"] = function() {

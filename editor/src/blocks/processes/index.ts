@@ -4,6 +4,23 @@ import * as Blockly from "blockly/core";
 // All Proc-level operations
 
 const definitions = [
+	// === Root Block ===
+	// Root block that serves as the entry point for all processes
+	{
+		type: "proc_root",
+		tooltip: "Root process - all blocks must connect to this",
+		message0: "Root %1",
+		args0: [
+			{
+				type: "input_value",
+				name: "BODY",
+				check: "Proc",
+			},
+		],
+		colour: "0",
+		deletable: false,
+	},
+
 	// === Basic Process Types ===
 
 	// PNil - nil process
