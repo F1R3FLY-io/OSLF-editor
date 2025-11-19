@@ -844,6 +844,8 @@ const definitions = [
 		],
 		inputsInline: true,
 		output: "Proc",
+		previousConnection: ["Proc"],
+		nextConnection: ["Proc"],
 		colour: "208bfe",
 	},
 ];

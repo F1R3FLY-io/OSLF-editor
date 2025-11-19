@@ -156,7 +156,8 @@ const definitions = [
 	// Contract with remainder
 	{
 		type: "proc_contract_remainder",
-		tooltip: "Contract with remainder: contract name(params...rest) = { body }",
+		tooltip:
+			"Contract with remainder: contract name(params...rest) = { body }",
 		message0: "contract %1 ( %2 ...@ %3 ) = { %4 }",
 		args0: [
 			{

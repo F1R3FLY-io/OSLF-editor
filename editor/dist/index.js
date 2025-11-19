@@ -24956,6 +24956,8 @@ ${b} to its parent, because: ${a}`);
       ],
       inputsInline: true,
       output: "Proc",
+      previousConnection: ["Proc"],
+      nextConnection: ["Proc"],
       colour: "208bfe"
     }
   ];
