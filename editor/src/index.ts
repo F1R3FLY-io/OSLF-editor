@@ -23,6 +23,11 @@ import {
 } from "./blocks/collections";
 import contract from "./blocks/behavior/contract";
 
+import { registerAllBlocks, toolboxConfig } from "./blocks";
+import { register } from "blockly/core/renderers/common/block_rendering";
+
+registerAllBlocks();
+
 export enum Events {
 	TREE_REQUEST = "tree:request",
 	TREE_RETURN = "tree:return",
@@ -50,112 +55,104 @@ Blockly.common.defineBlocks(emptyArrayBlock);
 Blockly.common.defineBlocks(pattern);
 Blockly.common.defineBlocks(procBlock);
 
-// This creates an undeletable, unmovable block that that holds all
-Blockly.Blocks["factory_base"] = {
-	init: function () {
-		this.setDeletable(false);
-		this.setMovable(false);
-		this.setEditable(false);
-	},
-};
-
 function initEditor() {
 	let workspace = Blockly.inject("blockly", {
 		trashcan: false,
 		sounds: false,
 		scrollbars: false,
 		grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
-		toolbox: {
-			kind: "categoryToolbox",
-			contents: [
-				{
-					kind: "category",
-					name: "Structure",
-					contents: [
-						{
-							kind: "block",
-							type: "zero",
-						},
-						{
-							kind: "block",
-							type: "for",
-						},
-						{
-							kind: "block",
-							type: "send",
-						},
-						{
-							kind: "block",
-							type: "nameToProc",
-						},
-						{
-							kind: "block",
-							type: "procToName",
-						},
-						{
-							kind: "block",
-							type: "NLookup",
-						},
-					],
-				},
-				{
-					kind: "category",
-					name: "Collection",
-					contents: [
-						{
-							kind: "block",
-							type: "true",
-						},
-						{
-							kind: "block",
-							type: "false",
-						},
-						{
-							kind: "block",
-							type: "conjunction",
-						},
-						{
-							kind: "block",
-							type: "disjunction",
-						},
-						{
-							kind: "block",
-							type: "for_all",
-						},
-						{
-							kind: "block",
-							type: "for_some",
-						},
-						{
-							kind: "block",
-							type: "not",
-						},
-						{
-							kind: "block",
-							type: "proc",
-						},
-					],
-				},
-				{
-					kind: "category",
-					name: "Behaviour",
-					contents: [
-						{
-							kind: "block",
-							type: "empty_array_block",
-						},
-						{
-							kind: "block",
-							type: "pattern_block",
-						},
-						{
-							kind: "block",
-							type: "contract_block",
-						},
-					],
-				},
-			],
-		},
+		toolbox: toolboxConfig,
+		// toolbox: {
+		// 	kind: "categoryToolbox",
+		// 	contents: [
+		// 		{
+		// 			kind: "category",
+		// 			name: "Structure",
+		// 			contents: [
+		// 				{
+		// 					kind: "block",
+		// 					type: "zero",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "for",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "send",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "nameToProc",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "procToName",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "NLookup",
+		// 				},
+		// 			],
+		// 		},
+		// 		{
+		// 			kind: "category",
+		// 			name: "Collection",
+		// 			contents: [
+		// 				{
+		// 					kind: "block",
+		// 					type: "true",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "false",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "conjunction",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "disjunction",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "for_all",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "for_some",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "not",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "proc",
+		// 				},
+		// 			],
+		// 		},
+		// 		{
+		// 			kind: "category",
+		// 			name: "Behaviour",
+		// 			contents: [
+		// 				{
+		// 					kind: "block",
+		// 					type: "empty_array_block",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "pattern_block",
+		// 				},
+		// 				{
+		// 					kind: "block",
+		// 					type: "contract_block",
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// },
 	});
 
 	// Disable any block not connected to the root block.
