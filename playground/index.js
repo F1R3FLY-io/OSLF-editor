@@ -46648,8 +46648,8 @@ ${b} to its parent, because: ${a}`);
         ],
         inputsInline: true,
         output: "Proc",
-        previousConnection: ["Proc"],
-        nextConnection: ["Proc"],
+        previousConnections: ["Proc"],
+        nextConnections: ["Proc"],
         colour: "208bfe"
       }
     ];
@@ -47357,6 +47357,9 @@ ${body}}`, ORDER.NONE];
     var Events2 = /* @__PURE__ */ ((Events3) => {
       Events3["TREE_REQUEST"] = "tree:request";
       Events3["TREE_RETURN"] = "tree:return";
+      Events3["BLOCKLY_REQUEST"] = "blockly:request";
+      Events3["BLOCKLY_RETURN"] = "blockly:return";
+      Events3["BLOCKLY_LOAD"] = "blockly:load";
       return Events3;
     })(Events2 || {});
     function initEditor() {
@@ -47405,6 +47408,34 @@ ${body}}`, ORDER.NONE];
           this.removeEventListener("tree:request", listenTreeRequest);
           console.log("Callback removed");
         });
+        const listenBlocklyRequest = () => {
+          const state = serialization.workspaces.save(this.workspace);
+          console.log(state);
+          this.dispatchEvent(
+            new CustomEvent("blockly:return", {
+              detail: state,
+              bubbles: true,
+              composed: true
+            })
+          );
+        };
+        this.addEventListener("blockly:request", listenBlocklyRequest);
+        this.handlers.push(() => {
+          this.removeEventListener("blockly:request", listenBlocklyRequest);
+          console.log("Blockly callback removed");
+        });
+        const listenBlocklyLoad = (event) => {
+          const state = event.detail;
+          if (state) {
+            serialization.workspaces.load(state, this.workspace);
+            console.log("Blockly state loaded");
+          }
+        };
+        this.addEventListener("blockly:load", listenBlocklyLoad);
+        this.handlers.push(() => {
+          this.removeEventListener("blockly:load", listenBlocklyLoad);
+          console.log("Blockly load callback removed");
+        });
       }
       render() {
         console.time("Rendering");
@@ -47427,18 +47458,33 @@ ${body}}`, ORDER.NONE];
     lineNumber: 7,
     columnNumber: 13
   }));
+  var STORAGE_KEY = "oslf-editor-blockly-state";
   function App() {
     const ref = (0, import_react.useRef)(null);
+    const saveToStorageRef = (0, import_react.useRef)(false);
     const [generatedCode, setGeneratedCode] = (0, import_react.useState)("");
+    const [blocklyState, setBlocklyState] = (0, import_react.useState)("");
+    const [loadInput, setLoadInput] = (0, import_react.useState)("");
     (0, import_react.useEffect)(() => {
       const editor = ref.current;
       if (!editor) return;
       const handleTreeReturn = (event) => {
         setGeneratedCode(event.detail);
       };
+      const handleBlocklyReturn = (event) => {
+        const stateJson = JSON.stringify(event.detail, null, 2);
+        setBlocklyState(stateJson);
+        if (saveToStorageRef.current) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(event.detail));
+          saveToStorageRef.current = false;
+          alert("Saved to localStorage");
+        }
+      };
       editor.addEventListener("tree:return", handleTreeReturn);
+      editor.addEventListener("blockly:return", handleBlocklyReturn);
       return () => {
         editor.removeEventListener("tree:return", handleTreeReturn);
+        editor.removeEventListener("blockly:return", handleBlocklyReturn);
       };
     }, []);
     const handleGenerateCode = () => {
@@ -47446,25 +47492,110 @@ ${body}}`, ORDER.NONE];
         ref.current.dispatchEvent(new CustomEvent("tree:request"));
       }
     };
+    const handleExportBlockly = () => {
+      if (ref.current) {
+        ref.current.dispatchEvent(new CustomEvent("blockly:request"));
+      }
+    };
+    const handleLoadBlockly = () => {
+      if (ref.current && loadInput) {
+        try {
+          const state = JSON.parse(loadInput);
+          ref.current.dispatchEvent(new CustomEvent("blockly:load", { detail: state }));
+        } catch (e) {
+          alert("Invalid JSON");
+        }
+      }
+    };
+    const handleSaveToStorage = () => {
+      if (ref.current) {
+        saveToStorageRef.current = true;
+        ref.current.dispatchEvent(new CustomEvent("blockly:request"));
+      }
+    };
+    const handleLoadFromStorage = () => {
+      if (ref.current) {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          try {
+            const state = JSON.parse(saved);
+            ref.current.dispatchEvent(new CustomEvent("blockly:load", { detail: state }));
+            alert("Loaded from localStorage");
+          } catch (e) {
+            alert("Invalid saved state");
+          }
+        } else {
+          alert("No saved state found");
+        }
+      }
+    };
     return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginBottom: "10px" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleGenerateCode, children: "Generate Code" }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginBottom: "10px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleGenerateCode, children: "Generate Code" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 102,
+          columnNumber: 5
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleExportBlockly, style: { marginLeft: "10px" }, children: "Export Blockly" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 103,
+          columnNumber: 5
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleLoadBlockly, style: { marginLeft: "10px" }, children: "Load Blockly" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 104,
+          columnNumber: 5
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleSaveToStorage, style: { marginLeft: "10px" }, children: "Save" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 105,
+          columnNumber: 5
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleLoadFromStorage, style: { marginLeft: "10px" }, children: "Load" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 106,
+          columnNumber: 5
+        }, this)
+      ] }, void 0, true, {
         fileName: "index.tsx",
-        lineNumber: 43,
-        columnNumber: 5
-      }, this) }, void 0, false, {
+        lineNumber: 101,
+        columnNumber: 4
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginBottom: "10px" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
+        "textarea",
+        {
+          value: loadInput,
+          onChange: (e) => setLoadInput(e.target.value),
+          placeholder: "Paste Blockly JSON here to load...",
+          style: {
+            width: "100%",
+            height: "100px",
+            fontFamily: "monospace",
+            fontSize: "12px"
+          }
+        },
+        void 0,
+        false,
+        {
+          fileName: "index.tsx",
+          lineNumber: 109,
+          columnNumber: 5
+        },
+        this
+      ) }, void 0, false, {
         fileName: "index.tsx",
-        lineNumber: 42,
+        lineNumber: 108,
         columnNumber: 4
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("oslf-editor", { ref }, void 0, false, {
         fileName: "index.tsx",
-        lineNumber: 45,
+        lineNumber: 121,
         columnNumber: 4
       }, this),
       generatedCode && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginTop: "10px" }, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { children: "Generated Code:" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 48,
+          lineNumber: 124,
           columnNumber: 6
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
@@ -47482,19 +47613,51 @@ ${body}}`, ORDER.NONE];
           false,
           {
             fileName: "index.tsx",
-            lineNumber: 49,
+            lineNumber: 125,
             columnNumber: 6
           },
           this
         )
       ] }, void 0, true, {
         fileName: "index.tsx",
-        lineNumber: 47,
+        lineNumber: 123,
+        columnNumber: 5
+      }, this),
+      blocklyState && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginTop: "10px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { children: "Blockly State:" }, void 0, false, {
+          fileName: "index.tsx",
+          lineNumber: 139,
+          columnNumber: 6
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
+          "pre",
+          {
+            style: {
+              backgroundColor: "#e8f4e8",
+              padding: "10px",
+              borderRadius: "4px",
+              overflow: "auto",
+              maxHeight: "300px"
+            },
+            children: blocklyState
+          },
+          void 0,
+          false,
+          {
+            fileName: "index.tsx",
+            lineNumber: 140,
+            columnNumber: 6
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "index.tsx",
+        lineNumber: 138,
         columnNumber: 5
       }, this)
     ] }, void 0, true, {
       fileName: "index.tsx",
-      lineNumber: 41,
+      lineNumber: 100,
       columnNumber: 3
     }, this);
   }

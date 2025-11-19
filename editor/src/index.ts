@@ -10,6 +10,9 @@ registerAllBlocks();
 export enum Events {
 	TREE_REQUEST = "tree:request",
 	TREE_RETURN = "tree:return",
+	BLOCKLY_REQUEST = "blockly:request",
+	BLOCKLY_RETURN = "blockly:return",
+	BLOCKLY_LOAD = "blockly:load",
 }
 
 function initEditor() {
@@ -70,6 +73,39 @@ class EditorElement extends HTMLElement {
 		this.handlers.push(() => {
 			this.removeEventListener(Events.TREE_REQUEST, listenTreeRequest);
 			console.log("Callback removed");
+		});
+
+		const listenBlocklyRequest = () => {
+			const state = Blockly.serialization.workspaces.save(this.workspace as Blockly.WorkspaceSvg);
+			console.log(state);
+
+			this.dispatchEvent(
+				new CustomEvent(Events.BLOCKLY_RETURN, {
+					detail: state,
+					bubbles: true,
+					composed: true,
+				}),
+			);
+		};
+
+		this.addEventListener(Events.BLOCKLY_REQUEST, listenBlocklyRequest);
+		this.handlers.push(() => {
+			this.removeEventListener(Events.BLOCKLY_REQUEST, listenBlocklyRequest);
+			console.log("Blockly callback removed");
+		});
+
+		const listenBlocklyLoad = (event: CustomEvent) => {
+			const state = event.detail;
+			if (state) {
+				Blockly.serialization.workspaces.load(state, this.workspace as Blockly.WorkspaceSvg);
+				console.log("Blockly state loaded");
+			}
+		};
+
+		this.addEventListener(Events.BLOCKLY_LOAD, listenBlocklyLoad);
+		this.handlers.push(() => {
+			this.removeEventListener(Events.BLOCKLY_LOAD, listenBlocklyLoad);
+			console.log("Blockly load callback removed");
 		});
 	}
 

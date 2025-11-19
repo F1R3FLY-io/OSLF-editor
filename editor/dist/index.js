@@ -24956,8 +24956,8 @@ ${b} to its parent, because: ${a}`);
       ],
       inputsInline: true,
       output: "Proc",
-      previousConnection: ["Proc"],
-      nextConnection: ["Proc"],
+      previousConnections: ["Proc"],
+      nextConnections: ["Proc"],
       colour: "208bfe"
     }
   ];
@@ -25671,6 +25671,9 @@ ${body}}`, ORDER.NONE];
   var Events2 = /* @__PURE__ */ ((Events3) => {
     Events3["TREE_REQUEST"] = "tree:request";
     Events3["TREE_RETURN"] = "tree:return";
+    Events3["BLOCKLY_REQUEST"] = "blockly:request";
+    Events3["BLOCKLY_RETURN"] = "blockly:return";
+    Events3["BLOCKLY_LOAD"] = "blockly:load";
     return Events3;
   })(Events2 || {});
   function initEditor() {
@@ -25718,6 +25721,34 @@ ${body}}`, ORDER.NONE];
       this.handlers.push(() => {
         this.removeEventListener("tree:request" /* TREE_REQUEST */, listenTreeRequest);
         console.log("Callback removed");
+      });
+      const listenBlocklyRequest = () => {
+        const state = serialization.workspaces.save(this.workspace);
+        console.log(state);
+        this.dispatchEvent(
+          new CustomEvent("blockly:return" /* BLOCKLY_RETURN */, {
+            detail: state,
+            bubbles: true,
+            composed: true
+          })
+        );
+      };
+      this.addEventListener("blockly:request" /* BLOCKLY_REQUEST */, listenBlocklyRequest);
+      this.handlers.push(() => {
+        this.removeEventListener("blockly:request" /* BLOCKLY_REQUEST */, listenBlocklyRequest);
+        console.log("Blockly callback removed");
+      });
+      const listenBlocklyLoad = (event) => {
+        const state = event.detail;
+        if (state) {
+          serialization.workspaces.load(state, this.workspace);
+          console.log("Blockly state loaded");
+        }
+      };
+      this.addEventListener("blockly:load" /* BLOCKLY_LOAD */, listenBlocklyLoad);
+      this.handlers.push(() => {
+        this.removeEventListener("blockly:load" /* BLOCKLY_LOAD */, listenBlocklyLoad);
+        console.log("Blockly load callback removed");
       });
     }
     render() {
