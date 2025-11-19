@@ -9,6 +9,7 @@ const definition = [
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
 		message0: "%1 v %2",
+		tooltip: "disjunction",
 		args0: [
 			{
 				type: "input_value",

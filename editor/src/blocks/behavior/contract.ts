@@ -8,7 +8,7 @@ const definition = [
 		type: "contract_block",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
-		message0: "contract \n %1",
+		message0: "handler \n %1",
 		args0: [
 			{
 				type: "input_statement",

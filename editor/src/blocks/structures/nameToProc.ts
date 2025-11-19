@@ -18,8 +18,9 @@ const definition = [
 			},
 		],
 		colour: "208bfe",
+		output: "Proc",
 		nextStatement: ["Proc"],
-		previousStatement: ["Proc"],
+		previousStatement: null,
 	},
 ];
 

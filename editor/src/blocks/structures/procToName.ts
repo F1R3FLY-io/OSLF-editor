@@ -20,6 +20,7 @@ const definition = [
 		colour: "208bfe",
 		output: "Name",
 		nextStatement: [],
+		prevConnection: null,
 	},
 ];
 

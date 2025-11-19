@@ -7,11 +7,12 @@ const definition = [
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
 		message0: "∀ %1 %2 %3",
+		tooltip: "for all",
 		args0: [
 			{
 				type: "input_value",
 				name: "left",
-				check: "String",
+				check: "Name",
 			},
 			{
 				type: "input_value",

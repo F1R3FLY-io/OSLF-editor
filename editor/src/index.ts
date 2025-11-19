@@ -10,7 +10,6 @@ import {
 	nameToProcBlock,
 	procToNameBlock,
 	nLookupBlock,
-	statementToOutputBlock,
 } from "./blocks/structures";
 import {
 	falseBlock,
@@ -38,7 +37,6 @@ Blockly.common.defineBlocks(sendBlock);
 Blockly.common.defineBlocks(nameToProcBlock);
 Blockly.common.defineBlocks(procToNameBlock);
 Blockly.common.defineBlocks(nLookupBlock);
-Blockly.common.defineBlocks(statementToOutputBlock);
 
 // Register collections
 Blockly.common.defineBlocks(trueBlock);
@@ -97,10 +95,6 @@ function initEditor() {
 						{
 							kind: "block",
 							type: "NLookup",
-						},
-						{
-							kind: "block",
-							type: "statementToOuput",
 						},
 					],
 				},

@@ -11,8 +11,9 @@ const definition = [
 		args0: [],
 		message0: "0",
 		colour: "208bfe",
+		output: "Proc",
 		nextStatement: ["Proc"],
-		previousStatement: ["Proc"],
+		previousStatement: null,
 	},
 ];
 

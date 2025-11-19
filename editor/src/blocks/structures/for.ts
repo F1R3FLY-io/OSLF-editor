@@ -26,9 +26,10 @@ const definition = [
 				check: "Proc",
 			},
 		],
+		output: "Proc",
 		colour: "208bfe",
-		nextStatement: ["Proc"],
-		previousStatement: ["Proc"],
+		nextStatement: null,
+		previousStatement: null,
 	},
 ];
 

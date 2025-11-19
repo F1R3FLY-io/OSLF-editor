@@ -16,7 +16,7 @@ const definition = [
 				check: "Name",
 			},
 			{
-				type: "input_statement",
+				type: "input_value",
 				name: "INPUT2",
 				check: "Proc",
 			},
