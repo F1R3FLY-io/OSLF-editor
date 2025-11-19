@@ -8,21 +8,21 @@ const definition = [
 		type: "pattern_block",
 		// The message defines the basic text of your block, and where inputs or
 		// fields will be inserted.
-		message0: "<...> %1 %2",
+		message0: "<...> \n %1 \n %2",
 		args0: [
 			{
 				type: "input_value",
 				name: "INPUT1",
-				check: "Proc",
+				check: "Name",
 			},
 			{
-				type: "input_value",
+				type: "input_statement",
 				name: "INPUT2",
 				check: "Proc",
 			},
 		],
-		previousStatement: ["Behavior"],
 		nextStatement: ["Behavior"],
+		previousStatement: ["Behavior"],
 		colour: "1B9461",
 		inputsInline: true,
 	},

@@ -23138,21 +23138,21 @@ ${b} to its parent, because: ${a}`);
       type: "pattern_block",
       // The message defines the basic text of your block, and where inputs or
       // fields will be inserted.
-      message0: "<...> %1 %2",
+      message0: "<...> \n %1 \n %2",
       args0: [
         {
           type: "input_value",
           name: "INPUT1",
-          check: "Proc"
+          check: "Name"
         },
         {
-          type: "input_value",
+          type: "input_statement",
           name: "INPUT2",
           check: "Proc"
         }
       ],
-      previousStatement: ["Behavior"],
       nextStatement: ["Behavior"],
+      previousStatement: ["Behavior"],
       colour: "1B9461",
       inputsInline: true
     }
@@ -23187,9 +23187,8 @@ ${b} to its parent, because: ${a}`);
         }
       ],
       colour: "208bfe",
-      output: "Proc",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: ["Proc"],
+      previousStatement: ["Proc"]
     }
   ];
   var for_default = common.createBlockDefinitionsFromJsonArray(definition3);
@@ -23213,9 +23212,8 @@ ${b} to its parent, because: ${a}`);
         }
       ],
       colour: "208bfe",
-      output: "Proc",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: ["Proc"],
+      previousStatement: ["Proc"]
     }
   ];
   var nameToProc_default = common.createBlockDefinitionsFromJsonArray(definition4);
@@ -23240,8 +23238,7 @@ ${b} to its parent, because: ${a}`);
       ],
       colour: "208bfe",
       output: "Name",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: []
     }
   ];
   var procToName_default = common.createBlockDefinitionsFromJsonArray(definition5);
@@ -23270,9 +23267,8 @@ ${b} to its parent, because: ${a}`);
         }
       ],
       colour: "208bfe",
-      output: "Proc",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: ["Proc"],
+      previousStatement: ["Proc"]
     }
   ];
   var send_default = common.createBlockDefinitionsFromJsonArray(definition6);
@@ -23289,9 +23285,8 @@ ${b} to its parent, because: ${a}`);
       args0: [],
       message0: "0",
       colour: "208bfe",
-      output: "Proc",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: ["Proc"],
+      previousStatement: ["Proc"]
     }
   ];
   var zero_default = common.createBlockDefinitionsFromJsonArray(definition7);
@@ -23315,14 +23310,37 @@ ${b} to its parent, because: ${a}`);
       ],
       colour: "208bfe",
       output: "Name",
-      nextStatement: null,
-      previousStatement: null
+      nextStatement: []
     }
   ];
   var nlookup_default = common.createBlockDefinitionsFromJsonArray(definition8);
 
-  // src/blocks/collections/proc.ts
+  // src/blocks/structures/statementToOutput.ts
   var definition9 = [
+    {
+      // The type is like the "class name" for your block. It is used to construct
+      // new instances. E.g. in the toolbox.
+      type: "statementToOuput",
+      tooltip: "Proc -> Proc",
+      // The message defines the basic text of your block, and where inputs or
+      // fields will be inserted.
+      inputsInline: true,
+      message0: "%1",
+      args0: [
+        {
+          type: "input_statement",
+          name: "message",
+          check: "Proc"
+        }
+      ],
+      colour: "208bfe",
+      output: "Proc"
+    }
+  ];
+  var statementToOutput_default = common.createBlockDefinitionsFromJsonArray(definition9);
+
+  // src/blocks/collections/proc.ts
+  var definition10 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23343,10 +23361,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var proc_default = common.createBlockDefinitionsFromJsonArray(definition9);
+  var proc_default = common.createBlockDefinitionsFromJsonArray(definition10);
 
   // src/blocks/collections/not.ts
-  var definition10 = [
+  var definition11 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23368,10 +23386,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var not_default = common.createBlockDefinitionsFromJsonArray(definition10);
+  var not_default = common.createBlockDefinitionsFromJsonArray(definition11);
 
   // src/blocks/collections/conjunction.ts
-  var definition11 = [
+  var definition12 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23398,10 +23416,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var conjunction_default = common.createBlockDefinitionsFromJsonArray(definition11);
+  var conjunction_default = common.createBlockDefinitionsFromJsonArray(definition12);
 
   // src/blocks/collections/disjunction.ts
-  var definition12 = [
+  var definition13 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23428,10 +23446,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var disjunction_default = common.createBlockDefinitionsFromJsonArray(definition12);
+  var disjunction_default = common.createBlockDefinitionsFromJsonArray(definition13);
 
   // src/blocks/collections/true.ts
-  var definition13 = [
+  var definition14 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23448,10 +23466,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var true_default = common.createBlockDefinitionsFromJsonArray(definition13);
+  var true_default = common.createBlockDefinitionsFromJsonArray(definition14);
 
   // src/blocks/collections/false.ts
-  var definition14 = [
+  var definition15 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23466,10 +23484,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var false_default = common.createBlockDefinitionsFromJsonArray(definition14);
+  var false_default = common.createBlockDefinitionsFromJsonArray(definition15);
 
   // src/blocks/collections/for_all.ts
-  var definition15 = [
+  var definition16 = [
     {
       type: "for_all",
       // The message defines the basic text of your block, and where inputs or
@@ -23499,10 +23517,10 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var for_all_default = common.createBlockDefinitionsFromJsonArray(definition15);
+  var for_all_default = common.createBlockDefinitionsFromJsonArray(definition16);
 
   // src/blocks/collections/for_some.ts
-  var definition16 = [
+  var definition17 = [
     {
       // The type is like the "class name" for your block. It is used to construct
       // new instances. E.g. in the toolbox.
@@ -23534,7 +23552,28 @@ ${b} to its parent, because: ${a}`);
       previousStatement: null
     }
   ];
-  var for_some_default = common.createBlockDefinitionsFromJsonArray(definition16);
+  var for_some_default = common.createBlockDefinitionsFromJsonArray(definition17);
+
+  // src/blocks/behavior/contract.ts
+  var definition18 = [
+    {
+      // The type is like the "class name" for your block. It is used to construct
+      // new instances. E.g. in the toolbox.
+      type: "contract_block",
+      // The message defines the basic text of your block, and where inputs or
+      // fields will be inserted.
+      message0: "contract \n %1",
+      args0: [
+        {
+          type: "input_statement",
+          name: "INPUT1"
+        }
+      ],
+      // Adds an untyped next connection to the bottom of the block.
+      colour: "1B9461"
+    }
+  ];
+  var contract_default = common.createBlockDefinitionsFromJsonArray(definition18);
 
   // src/index.ts
   var Events2 = /* @__PURE__ */ ((Events3) => {
@@ -23542,12 +23581,14 @@ ${b} to its parent, because: ${a}`);
     Events3["TREE_RETURN"] = "tree:return";
     return Events3;
   })(Events2 || {});
+  common.defineBlocks(contract_default);
   common.defineBlocks(zero_default);
   common.defineBlocks(for_default);
   common.defineBlocks(send_default);
   common.defineBlocks(nameToProc_default);
   common.defineBlocks(procToName_default);
   common.defineBlocks(nlookup_default);
+  common.defineBlocks(statementToOutput_default);
   common.defineBlocks(true_default);
   common.defineBlocks(false_default);
   common.defineBlocks(conjunction_default);
@@ -23601,6 +23642,10 @@ ${b} to its parent, because: ${a}`);
               {
                 kind: "block",
                 type: "NLookup"
+              },
+              {
+                kind: "block",
+                type: "statementToOuput"
               }
             ]
           },
@@ -23653,6 +23698,10 @@ ${b} to its parent, because: ${a}`);
               {
                 kind: "block",
                 type: "pattern_block"
+              },
+              {
+                kind: "block",
+                type: "contract_block"
               }
             ]
           }

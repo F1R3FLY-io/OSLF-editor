@@ -18,8 +18,7 @@ const definition = [
 		],
 		colour: "208bfe",
 		output: "Name",
-		nextStatement: null,
-		previousStatement: null,
+		nextStatement: [],
 	},
 ];
 

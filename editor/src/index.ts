@@ -10,6 +10,7 @@ import {
 	nameToProcBlock,
 	procToNameBlock,
 	nLookupBlock,
+	statementToOutputBlock,
 } from "./blocks/structures";
 import {
 	falseBlock,
@@ -21,10 +22,14 @@ import {
 	conjunctionBlock,
 	disjunctionBlock,
 } from "./blocks/collections";
+import contract from "./blocks/behavior/contract";
+
 export enum Events {
 	TREE_REQUEST = "tree:request",
 	TREE_RETURN = "tree:return",
 }
+
+Blockly.common.defineBlocks(contract);
 
 // Register structures
 Blockly.common.defineBlocks(zeroBlock);
@@ -33,6 +38,7 @@ Blockly.common.defineBlocks(sendBlock);
 Blockly.common.defineBlocks(nameToProcBlock);
 Blockly.common.defineBlocks(procToNameBlock);
 Blockly.common.defineBlocks(nLookupBlock);
+Blockly.common.defineBlocks(statementToOutputBlock);
 
 // Register collections
 Blockly.common.defineBlocks(trueBlock);
@@ -92,6 +98,10 @@ function initEditor() {
 							kind: "block",
 							type: "NLookup",
 						},
+						{
+							kind: "block",
+							type: "statementToOuput",
+						},
 					],
 				},
 				{
@@ -144,6 +154,10 @@ function initEditor() {
 							kind: "block",
 							type: "pattern_block",
 						},
+						{
+							kind: "block",
+							type: "contract_block",
+						},
 					],
 				},
 			],
@@ -152,6 +166,8 @@ function initEditor() {
 
 	// Disable any block not connected to the root block.
 	workspace.addChangeListener(Blockly.Events.disableOrphans);
+
+	// workspace.addTopBlock({ type: "contract" });
 
 	return workspace;
 }
