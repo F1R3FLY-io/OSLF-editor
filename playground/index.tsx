@@ -36,7 +36,6 @@ function App() {
 			if (saveToStorageRef.current) {
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(event.detail));
 				saveToStorageRef.current = false;
-				alert("Saved to localStorage");
 			}
 		};
 
@@ -67,7 +66,7 @@ function App() {
 				const state = JSON.parse(loadInput);
 				ref.current.dispatchEvent(new CustomEvent("blockly:load", { detail: state }));
 			} catch (e) {
-				alert("Invalid JSON");
+				console.error("Invalid JSON", e);
 			}
 		}
 	};
@@ -86,12 +85,9 @@ function App() {
 				try {
 					const state = JSON.parse(saved);
 					ref.current.dispatchEvent(new CustomEvent("blockly:load", { detail: state }));
-					alert("Loaded from localStorage");
 				} catch (e) {
-					alert("Invalid saved state");
+					console.error("Invalid saved state", e);
 				}
-			} else {
-				alert("No saved state found");
 			}
 		}
 	};
