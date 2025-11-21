@@ -605,9 +605,9 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	// === Parallel Composition ===
 
 	generator.forBlock["proc_par"] = function(block) {
-		const left = generator.valueToCode(block, "LEFT", ORDER.PARALLEL);
-		const right = generator.valueToCode(block, "RIGHT", ORDER.PARALLEL);
-		return [`${left} | ${right}`, ORDER.PARALLEL];
+		const left = generator.statementToCode(block, "LEFT");
+		const right = generator.statementToCode(block, "RIGHT");
+		return `${left} | ${right}\n`;
 	};
 
 	return generator;

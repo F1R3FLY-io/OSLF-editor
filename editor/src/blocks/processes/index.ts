@@ -838,20 +838,19 @@ const definitions = [
 		message0: "%1 | %2",
 		args0: [
 			{
-				type: "input_value",
+				type: "input_statement",
 				name: "LEFT",
 				check: "Proc",
 			},
 			{
-				type: "input_value",
+				type: "input_statement",
 				name: "RIGHT",
 				check: "Proc",
 			},
 		],
 		inputsInline: true,
-		output: "Proc",
-		previousConnections: ["Proc"],
-		nextConnections: ["Proc"],
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 ];

@@ -24962,20 +24962,19 @@ ${b} to its parent, because: ${a}`);
       message0: "%1 | %2",
       args0: [
         {
-          type: "input_value",
+          type: "input_statement",
           name: "LEFT",
           check: "Proc"
         },
         {
-          type: "input_value",
+          type: "input_statement",
           name: "RIGHT",
           check: "Proc"
         }
       ],
       inputsInline: true,
-      output: "Proc",
-      previousConnections: ["Proc"],
-      nextConnections: ["Proc"],
+      previousStatement: "Proc",
+      nextStatement: "Proc",
       colour: "208bfe"
     }
   ];
@@ -25694,9 +25693,10 @@ ${body}}
 `;
     };
     generator.forBlock["proc_par"] = function(block) {
-      const left = generator.valueToCode(block, "LEFT", ORDER.PARALLEL);
-      const right = generator.valueToCode(block, "RIGHT", ORDER.PARALLEL);
-      return [`${left} | ${right}`, ORDER.PARALLEL];
+      const left = generator.statementToCode(block, "LEFT");
+      const right = generator.statementToCode(block, "RIGHT");
+      return `${left} | ${right}
+`;
     };
     return generator;
   }
