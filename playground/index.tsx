@@ -41,8 +41,14 @@ function App() {
 			}
 		};
 
+		const handleBlocklyChange = (event: CustomEvent) => {
+			// Auto-save to localStorage whenever workspace changes
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(event.detail));
+		};
+
 		editor.addEventListener("tree:return", handleTreeReturn);
 		editor.addEventListener("blockly:return", handleBlocklyReturn);
+		editor.addEventListener("blockly:change", handleBlocklyChange);
 
 		// Auto-load from localStorage on start
 		const saved = localStorage.getItem(STORAGE_KEY);
@@ -60,6 +66,7 @@ function App() {
 		return () => {
 			editor.removeEventListener("tree:return", handleTreeReturn);
 			editor.removeEventListener("blockly:return", handleBlocklyReturn);
+			editor.removeEventListener("blockly:change", handleBlocklyChange);
 		};
 	}, []);
 

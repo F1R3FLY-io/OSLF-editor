@@ -13,6 +13,7 @@ export enum Events {
 	BLOCKLY_REQUEST = "blockly:request",
 	BLOCKLY_RETURN = "blockly:return",
 	BLOCKLY_LOAD = "blockly:load",
+	BLOCKLY_CHANGE = "blockly:change",
 }
 
 function initEditor() {
@@ -152,6 +153,30 @@ class EditorElement extends HTMLElement {
 		this.handleListeners();
 
 		this.workspace = initEditor();
+
+		// Auto-save workspace changes with debouncing
+		let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+		this.workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+			// Ignore UI events, only save on actual workspace changes
+			if (event.isUiEvent) return;
+
+			// Debounce to avoid excessive saves
+			if (debounceTimer) {
+				clearTimeout(debounceTimer);
+			}
+
+			debounceTimer = setTimeout(() => {
+				const state = Blockly.serialization.workspaces.save(this.workspace as Blockly.WorkspaceSvg);
+				this.dispatchEvent(
+					new CustomEvent(Events.BLOCKLY_CHANGE, {
+						detail: state,
+						bubbles: true,
+						composed: true,
+					}),
+				);
+			}, 1000); // Save 1 second after last change
+		});
+
 		console.timeEnd("Rendering");
 	}
 

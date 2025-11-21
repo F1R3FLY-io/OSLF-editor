@@ -25710,6 +25710,7 @@ ${body}}
     Events3["BLOCKLY_REQUEST"] = "blockly:request";
     Events3["BLOCKLY_RETURN"] = "blockly:return";
     Events3["BLOCKLY_LOAD"] = "blockly:load";
+    Events3["BLOCKLY_CHANGE"] = "blockly:change";
     return Events3;
   })(Events2 || {});
   function initEditor() {
@@ -25819,6 +25820,23 @@ ${body}}
       console.time("Rendering");
       this.handleListeners();
       this.workspace = initEditor();
+      let debounceTimer = null;
+      this.workspace.addChangeListener((event) => {
+        if (event.isUiEvent) return;
+        if (debounceTimer) {
+          clearTimeout(debounceTimer);
+        }
+        debounceTimer = setTimeout(() => {
+          const state = serialization.workspaces.save(this.workspace);
+          this.dispatchEvent(
+            new CustomEvent("blockly:change" /* BLOCKLY_CHANGE */, {
+              detail: state,
+              bubbles: true,
+              composed: true
+            })
+          );
+        }, 1e3);
+      });
       console.timeEnd("Rendering");
     }
     attributeChangedCallback(name, oldValue, newValue) {
