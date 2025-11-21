@@ -47417,15 +47417,28 @@ ${body}}
           if (toolboxDiv) {
             toolboxDiv.style.display = "block";
           }
-          const workspaceSvg = workspace;
-          if (workspaceSvg.getFlyout && workspaceSvg.getFlyout()) {
-            const flyout = workspaceSvg.getFlyout();
+          const workspaceSvg2 = workspace;
+          if (workspaceSvg2.getFlyout && workspaceSvg2.getFlyout()) {
+            const flyout = workspaceSvg2.getFlyout();
             if (flyout) {
               flyout.setVisible(true);
             }
           }
         }
       });
+      const workspaceSvg = workspace;
+      const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
+      if (svgElement) {
+        svgElement.addEventListener("click", (event) => {
+          const target = event.target;
+          if (target.classList.contains("blocklyMainBackground") || target.classList.contains("blocklyWorkspace") || target.tagName === "svg") {
+            const flyout = workspaceSvg.getFlyout();
+            if (flyout) {
+              flyout.setVisible(false);
+            }
+          }
+        });
+      }
       return workspace;
     }
     var EditorElement = class extends HTMLElement {

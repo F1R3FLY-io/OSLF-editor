@@ -53,6 +53,24 @@ function initEditor() {
 		}
 	});
 
+	// Hide flyout when clicking on workspace pane
+	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
+	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
+	if (svgElement) {
+		svgElement.addEventListener('click', (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			// Check if clicked on workspace background (not a block)
+			if (target.classList.contains('blocklyMainBackground') ||
+			    target.classList.contains('blocklyWorkspace') ||
+			    target.tagName === 'svg') {
+				const flyout = workspaceSvg.getFlyout();
+				if (flyout) {
+					flyout.setVisible(false);
+				}
+			}
+		});
+	}
+
 	return workspace;
 }
 
