@@ -44,6 +44,19 @@ function App() {
 		editor.addEventListener("tree:return", handleTreeReturn);
 		editor.addEventListener("blockly:return", handleBlocklyReturn);
 
+		// Auto-load from localStorage on start
+		const saved = localStorage.getItem(STORAGE_KEY);
+		if (saved) {
+			try {
+				const state = JSON.parse(saved);
+				editor.dispatchEvent(new CustomEvent("blockly:load", { detail: state }));
+			} catch (e) {
+				console.log("Failed to load from localStorage. Value:", saved);
+				console.error("Parse error:", e);
+				localStorage.removeItem(STORAGE_KEY);
+			}
+		}
+
 		return () => {
 			editor.removeEventListener("tree:return", handleTreeReturn);
 			editor.removeEventListener("blockly:return", handleBlocklyReturn);
