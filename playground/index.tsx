@@ -20,6 +20,8 @@ function App() {
 	const [generatedCode, setGeneratedCode] = useState<string>("");
 	const [blocklyState, setBlocklyState] = useState<string>("");
 	const [loadInput, setLoadInput] = useState<string>("");
+	const [codeCopied, setCodeCopied] = useState<boolean>(false);
+	const [stateCopied, setStateCopied] = useState<boolean>(false);
 
 	useEffect(() => {
 		const editor = ref.current;
@@ -92,6 +94,26 @@ function App() {
 		}
 	};
 
+	const handleCopyCode = async () => {
+		try {
+			await navigator.clipboard.writeText(generatedCode);
+			setCodeCopied(true);
+			setTimeout(() => setCodeCopied(false), 2000);
+		} catch (e) {
+			console.error("Failed to copy code", e);
+		}
+	};
+
+	const handleCopyState = async () => {
+		try {
+			await navigator.clipboard.writeText(blocklyState);
+			setStateCopied(true);
+			setTimeout(() => setStateCopied(false), 2000);
+		} catch (e) {
+			console.error("Failed to copy state", e);
+		}
+	};
+
 	return (
 		<div>
 			<div style={{ marginBottom: "10px" }}>
@@ -117,13 +139,19 @@ function App() {
 			<oslf-editor ref={ref}></oslf-editor>
 			{generatedCode && (
 				<div style={{ marginTop: "10px" }}>
-					<h3>Generated Code:</h3>
+					<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+						<h3 style={{ margin: 0 }}>Generated Code:</h3>
+						<button onClick={handleCopyCode}>
+							{codeCopied ? "Copied!" : "Copy"}
+						</button>
+					</div>
 					<pre
 						style={{
 							backgroundColor: "#f4f4f4",
 							padding: "10px",
 							borderRadius: "4px",
 							overflow: "auto",
+							marginTop: "10px",
 						}}
 					>
 						{generatedCode}
@@ -132,7 +160,12 @@ function App() {
 			)}
 			{blocklyState && (
 				<div style={{ marginTop: "10px" }}>
-					<h3>Blockly State:</h3>
+					<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+						<h3 style={{ margin: 0 }}>Blockly State:</h3>
+						<button onClick={handleCopyState}>
+							{stateCopied ? "Copied!" : "Copy"}
+						</button>
+					</div>
 					<pre
 						style={{
 							backgroundColor: "#e8f4e8",
@@ -140,6 +173,7 @@ function App() {
 							borderRadius: "4px",
 							overflow: "auto",
 							maxHeight: "300px",
+							marginTop: "10px",
 						}}
 					>
 						{blocklyState}

@@ -47529,6 +47529,8 @@ ${body}}
     const [generatedCode, setGeneratedCode] = (0, import_react.useState)("");
     const [blocklyState, setBlocklyState] = (0, import_react.useState)("");
     const [loadInput, setLoadInput] = (0, import_react.useState)("");
+    const [codeCopied, setCodeCopied] = (0, import_react.useState)(false);
+    const [stateCopied, setStateCopied] = (0, import_react.useState)(false);
     (0, import_react.useEffect)(() => {
       const editor = ref.current;
       if (!editor) return;
@@ -47589,36 +47591,54 @@ ${body}}
         }
       }
     };
+    const handleCopyCode = async () => {
+      try {
+        await navigator.clipboard.writeText(generatedCode);
+        setCodeCopied(true);
+        setTimeout(() => setCodeCopied(false), 2e3);
+      } catch (e) {
+        console.error("Failed to copy code", e);
+      }
+    };
+    const handleCopyState = async () => {
+      try {
+        await navigator.clipboard.writeText(blocklyState);
+        setStateCopied(true);
+        setTimeout(() => setStateCopied(false), 2e3);
+      } catch (e) {
+        console.error("Failed to copy state", e);
+      }
+    };
     return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginBottom: "10px" }, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleGenerateCode, children: "Generate Code" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 98,
+          lineNumber: 120,
           columnNumber: 5
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleExportBlockly, style: { marginLeft: "10px" }, children: "Export Blockly" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 99,
+          lineNumber: 121,
           columnNumber: 5
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleLoadBlockly, style: { marginLeft: "10px" }, children: "Load Blockly" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 100,
+          lineNumber: 122,
           columnNumber: 5
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleSaveToStorage, style: { marginLeft: "10px" }, children: "Save" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 101,
+          lineNumber: 123,
           columnNumber: 5
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleLoadFromStorage, style: { marginLeft: "10px" }, children: "Load" }, void 0, false, {
           fileName: "index.tsx",
-          lineNumber: 102,
+          lineNumber: 124,
           columnNumber: 5
         }, this)
       ] }, void 0, true, {
         fileName: "index.tsx",
-        lineNumber: 97,
+        lineNumber: 119,
         columnNumber: 4
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginBottom: "10px" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
@@ -47638,24 +47658,35 @@ ${body}}
         false,
         {
           fileName: "index.tsx",
-          lineNumber: 105,
+          lineNumber: 127,
           columnNumber: 5
         },
         this
       ) }, void 0, false, {
         fileName: "index.tsx",
-        lineNumber: 104,
+        lineNumber: 126,
         columnNumber: 4
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("oslf-editor", { ref }, void 0, false, {
         fileName: "index.tsx",
-        lineNumber: 117,
+        lineNumber: 139,
         columnNumber: 4
       }, this),
       generatedCode && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginTop: "10px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { children: "Generated Code:" }, void 0, false, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { display: "flex", alignItems: "center", gap: "10px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { style: { margin: 0 }, children: "Generated Code:" }, void 0, false, {
+            fileName: "index.tsx",
+            lineNumber: 143,
+            columnNumber: 7
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleCopyCode, children: codeCopied ? "Copied!" : "Copy" }, void 0, false, {
+            fileName: "index.tsx",
+            lineNumber: 144,
+            columnNumber: 7
+          }, this)
+        ] }, void 0, true, {
           fileName: "index.tsx",
-          lineNumber: 120,
+          lineNumber: 142,
           columnNumber: 6
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
@@ -47665,7 +47696,8 @@ ${body}}
               backgroundColor: "#f4f4f4",
               padding: "10px",
               borderRadius: "4px",
-              overflow: "auto"
+              overflow: "auto",
+              marginTop: "10px"
             },
             children: generatedCode
           },
@@ -47673,20 +47705,31 @@ ${body}}
           false,
           {
             fileName: "index.tsx",
-            lineNumber: 121,
+            lineNumber: 148,
             columnNumber: 6
           },
           this
         )
       ] }, void 0, true, {
         fileName: "index.tsx",
-        lineNumber: 119,
+        lineNumber: 141,
         columnNumber: 5
       }, this),
       blocklyState && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { marginTop: "10px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { children: "Blockly State:" }, void 0, false, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: { display: "flex", alignItems: "center", gap: "10px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", { style: { margin: 0 }, children: "Blockly State:" }, void 0, false, {
+            fileName: "index.tsx",
+            lineNumber: 164,
+            columnNumber: 7
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { onClick: handleCopyState, children: stateCopied ? "Copied!" : "Copy" }, void 0, false, {
+            fileName: "index.tsx",
+            lineNumber: 165,
+            columnNumber: 7
+          }, this)
+        ] }, void 0, true, {
           fileName: "index.tsx",
-          lineNumber: 135,
+          lineNumber: 163,
           columnNumber: 6
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(
@@ -47697,7 +47740,8 @@ ${body}}
               padding: "10px",
               borderRadius: "4px",
               overflow: "auto",
-              maxHeight: "300px"
+              maxHeight: "300px",
+              marginTop: "10px"
             },
             children: blocklyState
           },
@@ -47705,19 +47749,19 @@ ${body}}
           false,
           {
             fileName: "index.tsx",
-            lineNumber: 136,
+            lineNumber: 169,
             columnNumber: 6
           },
           this
         )
       ] }, void 0, true, {
         fileName: "index.tsx",
-        lineNumber: 134,
+        lineNumber: 162,
         columnNumber: 5
       }, this)
     ] }, void 0, true, {
       fileName: "index.tsx",
-      lineNumber: 96,
+      lineNumber: 118,
       columnNumber: 3
     }, this);
   }
