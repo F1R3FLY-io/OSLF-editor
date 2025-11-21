@@ -21,7 +21,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// NameDeclList - comma-separated name declarations
@@ -62,7 +63,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// DeclImpl - let declaration binding
@@ -150,7 +152,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "1B9461",
 	},
 	// Contract with remainder
@@ -181,7 +184,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "1B9461",
 	},
 	// PBundle - bundle
@@ -196,7 +200,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	{
@@ -210,7 +215,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	{
@@ -224,7 +230,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	{
@@ -238,7 +245,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 ];

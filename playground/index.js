@@ -45477,7 +45477,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PIfElse - if statement with else
@@ -45502,7 +45503,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PMatch - match expression
@@ -45522,7 +45524,8 @@ ${b} to its parent, because: ${a}`);
             check: "Case"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // CaseImpl - match case
@@ -45558,7 +45561,8 @@ ${b} to its parent, because: ${a}`);
             check: "Branch"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // BranchImpl - select branch
@@ -45602,7 +45606,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // NameDeclList - comma-separated name declarations
@@ -45643,7 +45648,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // DeclImpl - let declaration binding
@@ -45731,7 +45737,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "1B9461"
       },
       // Contract with remainder
@@ -45761,7 +45768,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "1B9461"
       },
       // PBundle - bundle
@@ -45776,7 +45784,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       {
@@ -45790,7 +45799,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       {
@@ -45804,7 +45814,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       {
@@ -45818,7 +45829,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       }
     ];
@@ -45832,7 +45844,7 @@ ${b} to its parent, because: ${a}`);
         message0: "Root %1",
         args0: [
           {
-            type: "input_value",
+            type: "input_statement",
             name: "BODY",
             check: "Proc"
           }
@@ -46493,7 +46505,8 @@ ${b} to its parent, because: ${a}`);
           }
         ],
         inputsInline: true,
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PSend - multiple send
@@ -46514,7 +46527,8 @@ ${b} to its parent, because: ${a}`);
           }
         ],
         inputsInline: true,
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PSend - symmetric send
@@ -46535,7 +46549,8 @@ ${b} to its parent, because: ${a}`);
           }
         ],
         inputsInline: true,
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PSendSynch - synchronous send
@@ -46561,7 +46576,8 @@ ${b} to its parent, because: ${a}`);
           }
         ],
         inputsInline: true,
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // SynchSendCont - empty continuation
@@ -46605,7 +46621,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // PSynchIO - foreach loop
@@ -46625,7 +46642,8 @@ ${b} to its parent, because: ${a}`);
             check: "Proc"
           }
         ],
-        output: "Proc",
+        previousStatement: "Proc",
+        nextStatement: "Proc",
         colour: "208bfe"
       },
       // === Parallel Composition ===
@@ -46876,7 +46894,7 @@ ${b} to its parent, because: ${a}`);
         NONE: 99
       };
       generator.forBlock["proc_root"] = function(block) {
-        const body = generator.valueToCode(block, "BODY", ORDER.NONE);
+        const body = generator.statementToCode(block, "BODY");
         return body;
       };
       generator.forBlock["ground_bool_true"] = function() {
@@ -47047,22 +47065,25 @@ ${b} to its parent, because: ${a}`);
       generator.forBlock["proc_if"] = function(block) {
         const condition = generator.valueToCode(block, "CONDITION", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`if (${condition}) {
-${body}}`, ORDER.NONE];
+        return `if (${condition}) {
+${body}}
+`;
       };
       generator.forBlock["proc_if_else"] = function(block) {
         const condition = generator.valueToCode(block, "CONDITION", ORDER.NONE);
         const thenBody = generator.statementToCode(block, "THEN_BODY");
         const elseBody = generator.statementToCode(block, "ELSE_BODY");
-        return [`if (${condition}) {
+        return `if (${condition}) {
 ${thenBody}} else {
-${elseBody}}`, ORDER.NONE];
+${elseBody}}
+`;
       };
       generator.forBlock["proc_match"] = function(block) {
         const expr = generator.valueToCode(block, "EXPR", ORDER.NONE);
         const cases = generator.statementToCode(block, "CASES");
-        return [`match ${expr} {
-${cases}}`, ORDER.NONE];
+        return `match ${expr} {
+${cases}}
+`;
       };
       generator.forBlock["case"] = function(block) {
         const pattern = generator.valueToCode(block, "PATTERN", ORDER.NONE);
@@ -47073,8 +47094,9 @@ ${body}}
       };
       generator.forBlock["proc_select"] = function(block) {
         const branches = generator.statementToCode(block, "BRANCHES");
-        return [`select {
-${branches}}`, ORDER.NONE];
+        return `select {
+${branches}}
+`;
       };
       generator.forBlock["branch"] = function(block) {
         const receipt = generator.valueToCode(block, "RECEIPT", ORDER.NONE);
@@ -47086,8 +47108,9 @@ ${body}}
       generator.forBlock["proc_new"] = function(block) {
         const names = generator.valueToCode(block, "NAMES", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`new ${names} in {
-${body}}`, ORDER.NONE];
+        return `new ${names} in {
+${body}}
+`;
       };
       generator.forBlock["name_decl_list"] = function(block) {
         const item = generator.valueToCode(block, "ITEM", ORDER.NONE);
@@ -47097,8 +47120,9 @@ ${body}}`, ORDER.NONE];
       generator.forBlock["proc_let"] = function(block) {
         const decls = generator.valueToCode(block, "DECLS", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`let ${decls} in {
-${body}}`, ORDER.NONE];
+        return `let ${decls} in {
+${body}}
+`;
       };
       generator.forBlock["decl"] = function(block) {
         const names = generator.valueToCode(block, "NAMES", ORDER.NONE);
@@ -47119,36 +47143,42 @@ ${body}}`, ORDER.NONE];
         const name = generator.valueToCode(block, "NAME", ORDER.NONE);
         const params = generator.valueToCode(block, "PARAMS", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`contract ${name}(${params}) = {
-${body}}`, ORDER.NONE];
+        return `contract ${name}(${params}) = {
+${body}}
+`;
       };
       generator.forBlock["proc_contract_remainder"] = function(block) {
         const name = generator.valueToCode(block, "NAME", ORDER.NONE);
         const params = generator.valueToCode(block, "PARAMS", ORDER.NONE);
         const remainder = block.getFieldValue("REMAINDER");
         const body = generator.statementToCode(block, "BODY");
-        return [`contract ${name}(${params}...@${remainder}) = {
-${body}}`, ORDER.NONE];
+        return `contract ${name}(${params}...@${remainder}) = {
+${body}}
+`;
       };
       generator.forBlock["proc_bundle_write"] = function(block) {
         const body = generator.statementToCode(block, "BODY");
-        return [`bundle+ {
-${body}}`, ORDER.NONE];
+        return `bundle+ {
+${body}}
+`;
       };
       generator.forBlock["proc_bundle_read"] = function(block) {
         const body = generator.statementToCode(block, "BODY");
-        return [`bundle- {
-${body}}`, ORDER.NONE];
+        return `bundle- {
+${body}}
+`;
       };
       generator.forBlock["proc_bundle_equiv"] = function(block) {
         const body = generator.statementToCode(block, "BODY");
-        return [`bundle0 {
-${body}}`, ORDER.NONE];
+        return `bundle0 {
+${body}}
+`;
       };
       generator.forBlock["proc_bundle_rw"] = function(block) {
         const body = generator.statementToCode(block, "BODY");
-        return [`bundle {
-${body}}`, ORDER.NONE];
+        return `bundle {
+${body}}
+`;
       };
       generator.forBlock["proc_nil"] = function() {
         return ["Nil", ORDER.ATOMIC];
@@ -47308,23 +47338,27 @@ ${body}}`, ORDER.NONE];
       generator.forBlock["proc_send"] = function(block) {
         const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
         const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-        return [`${channel}!(${args})`, ORDER.NONE];
+        return `${channel}!(${args})
+`;
       };
       generator.forBlock["proc_send_multiple"] = function(block) {
         const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
         const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-        return [`${channel}!!(${args})`, ORDER.NONE];
+        return `${channel}!!(${args})
+`;
       };
       generator.forBlock["proc_send_symm"] = function(block) {
         const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
         const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-        return [`${channel}!$(${args})`, ORDER.NONE];
+        return `${channel}!$(${args})
+`;
       };
       generator.forBlock["proc_send_synch"] = function(block) {
         const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
         const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
         const cont = generator.valueToCode(block, "CONT", ORDER.NONE);
-        return [`${channel}!?(${args})${cont}`, ORDER.NONE];
+        return `${channel}!?(${args})${cont}
+`;
       };
       generator.forBlock["synch_send_cont_empty"] = function() {
         return [".", ORDER.ATOMIC];
@@ -47336,14 +47370,16 @@ ${body}}`, ORDER.NONE];
       generator.forBlock["proc_for"] = function(block) {
         const receipts = generator.valueToCode(block, "RECEIPTS", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`for (${receipts}) {
-${body}}`, ORDER.NONE];
+        return `for (${receipts}) {
+${body}}
+`;
       };
       generator.forBlock["proc_foreach"] = function(block) {
         const receipts = generator.valueToCode(block, "RECEIPTS", ORDER.NONE);
         const body = generator.statementToCode(block, "BODY");
-        return [`foreach (${receipts}) {
-${body}}`, ORDER.NONE];
+        return `foreach (${receipts}) {
+${body}}
+`;
       };
       generator.forBlock["proc_par"] = function(block) {
         const left = generator.valueToCode(block, "LEFT", ORDER.PARALLEL);
@@ -47375,6 +47411,21 @@ ${body}}`, ORDER.NONE];
       rootBlock.render();
       rootBlock.moveBy(50, 50);
       workspace.addChangeListener(Events.disableOrphans);
+      workspace.addChangeListener((event) => {
+        if (event.type === Events.SELECTED) {
+          const toolboxDiv = document.querySelector(".blocklyToolboxDiv");
+          if (toolboxDiv) {
+            toolboxDiv.style.display = "block";
+          }
+          const workspaceSvg = workspace;
+          if (workspaceSvg.getFlyout && workspaceSvg.getFlyout()) {
+            const flyout = workspaceSvg.getFlyout();
+            if (flyout) {
+              flyout.setVisible(true);
+            }
+          }
+        }
+      });
       return workspace;
     }
     var EditorElement = class extends HTMLElement {

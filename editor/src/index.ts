@@ -33,6 +33,26 @@ function initEditor() {
 	// Disable any block not connected to the root block.
 	workspace.addChangeListener(Blockly.Events.disableOrphans);
 
+	// Show toolbox when a block is selected
+	workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+		if (event.type === Blockly.Events.SELECTED) {
+			// Make toolbox visible
+			const toolboxDiv = document.querySelector('.blocklyToolboxDiv');
+			if (toolboxDiv) {
+				(toolboxDiv as HTMLElement).style.display = 'block';
+			}
+
+			// Show flyout if available
+			const workspaceSvg = workspace as Blockly.WorkspaceSvg;
+			if (workspaceSvg.getFlyout && workspaceSvg.getFlyout()) {
+				const flyout = workspaceSvg.getFlyout();
+				if (flyout) {
+					(flyout as any).setVisible(true);
+				}
+			}
+		}
+	});
+
 	return workspace;
 }
 

@@ -26,7 +26,7 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	// === Root Block ===
 
 	generator.forBlock["proc_root"] = function(block) {
-		const body = generator.valueToCode(block, "BODY", ORDER.NONE);
+		const body = generator.statementToCode(block, "BODY");
 		return body;
 	};
 
@@ -247,20 +247,20 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_if"] = function(block) {
 		const condition = generator.valueToCode(block, "CONDITION", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`if (${condition}) {\n${body}}`, ORDER.NONE];
+		return `if (${condition}) {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_if_else"] = function(block) {
 		const condition = generator.valueToCode(block, "CONDITION", ORDER.NONE);
 		const thenBody = generator.statementToCode(block, "THEN_BODY");
 		const elseBody = generator.statementToCode(block, "ELSE_BODY");
-		return [`if (${condition}) {\n${thenBody}} else {\n${elseBody}}`, ORDER.NONE];
+		return `if (${condition}) {\n${thenBody}} else {\n${elseBody}}\n`;
 	};
 
 	generator.forBlock["proc_match"] = function(block) {
 		const expr = generator.valueToCode(block, "EXPR", ORDER.NONE);
 		const cases = generator.statementToCode(block, "CASES");
-		return [`match ${expr} {\n${cases}}`, ORDER.NONE];
+		return `match ${expr} {\n${cases}}\n`;
 	};
 
 	generator.forBlock["case"] = function(block) {
@@ -271,7 +271,7 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 
 	generator.forBlock["proc_select"] = function(block) {
 		const branches = generator.statementToCode(block, "BRANCHES");
-		return [`select {\n${branches}}`, ORDER.NONE];
+		return `select {\n${branches}}\n`;
 	};
 
 	generator.forBlock["branch"] = function(block) {
@@ -285,7 +285,7 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_new"] = function(block) {
 		const names = generator.valueToCode(block, "NAMES", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`new ${names} in {\n${body}}`, ORDER.NONE];
+		return `new ${names} in {\n${body}}\n`;
 	};
 
 	generator.forBlock["name_decl_list"] = function(block) {
@@ -297,7 +297,7 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_let"] = function(block) {
 		const decls = generator.valueToCode(block, "DECLS", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`let ${decls} in {\n${body}}`, ORDER.NONE];
+		return `let ${decls} in {\n${body}}\n`;
 	};
 
 	generator.forBlock["decl"] = function(block) {
@@ -322,7 +322,7 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		const name = generator.valueToCode(block, "NAME", ORDER.NONE);
 		const params = generator.valueToCode(block, "PARAMS", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`contract ${name}(${params}) = {\n${body}}`, ORDER.NONE];
+		return `contract ${name}(${params}) = {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_contract_remainder"] = function(block) {
@@ -330,27 +330,27 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		const params = generator.valueToCode(block, "PARAMS", ORDER.NONE);
 		const remainder = block.getFieldValue("REMAINDER");
 		const body = generator.statementToCode(block, "BODY");
-		return [`contract ${name}(${params}...@${remainder}) = {\n${body}}`, ORDER.NONE];
+		return `contract ${name}(${params}...@${remainder}) = {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_bundle_write"] = function(block) {
 		const body = generator.statementToCode(block, "BODY");
-		return [`bundle+ {\n${body}}`, ORDER.NONE];
+		return `bundle+ {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_bundle_read"] = function(block) {
 		const body = generator.statementToCode(block, "BODY");
-		return [`bundle- {\n${body}}`, ORDER.NONE];
+		return `bundle- {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_bundle_equiv"] = function(block) {
 		const body = generator.statementToCode(block, "BODY");
-		return [`bundle0 {\n${body}}`, ORDER.NONE];
+		return `bundle0 {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_bundle_rw"] = function(block) {
 		const body = generator.statementToCode(block, "BODY");
-		return [`bundle {\n${body}}`, ORDER.NONE];
+		return `bundle {\n${body}}\n`;
 	};
 
 	// === Basic Processes ===
@@ -557,26 +557,26 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_send"] = function(block) {
 		const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
 		const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-		return [`${channel}!(${args})`, ORDER.NONE];
+		return `${channel}!(${args})\n`;
 	};
 
 	generator.forBlock["proc_send_multiple"] = function(block) {
 		const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
 		const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-		return [`${channel}!!(${args})`, ORDER.NONE];
+		return `${channel}!!(${args})\n`;
 	};
 
 	generator.forBlock["proc_send_symm"] = function(block) {
 		const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
 		const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
-		return [`${channel}!$(${args})`, ORDER.NONE];
+		return `${channel}!$(${args})\n`;
 	};
 
 	generator.forBlock["proc_send_synch"] = function(block) {
 		const channel = generator.valueToCode(block, "CHANNEL", ORDER.NONE);
 		const args = generator.valueToCode(block, "ARGS", ORDER.NONE);
 		const cont = generator.valueToCode(block, "CONT", ORDER.NONE);
-		return [`${channel}!?(${args})${cont}`, ORDER.NONE];
+		return `${channel}!?(${args})${cont}\n`;
 	};
 
 	generator.forBlock["synch_send_cont_empty"] = function() {
@@ -593,13 +593,13 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_for"] = function(block) {
 		const receipts = generator.valueToCode(block, "RECEIPTS", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`for (${receipts}) {\n${body}}`, ORDER.NONE];
+		return `for (${receipts}) {\n${body}}\n`;
 	};
 
 	generator.forBlock["proc_foreach"] = function(block) {
 		const receipts = generator.valueToCode(block, "RECEIPTS", ORDER.NONE);
 		const body = generator.statementToCode(block, "BODY");
-		return [`foreach (${receipts}) {\n${body}}`, ORDER.NONE];
+		return `foreach (${receipts}) {\n${body}}\n`;
 	};
 
 	// === Parallel Composition ===

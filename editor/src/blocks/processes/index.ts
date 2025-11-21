@@ -12,7 +12,7 @@ const definitions = [
 		message0: "Root %1",
 		args0: [
 			{
-				type: "input_value",
+				type: "input_statement",
 				name: "BODY",
 				check: "Proc",
 			},
@@ -685,7 +685,8 @@ const definitions = [
 			},
 		],
 		inputsInline: true,
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PSend - multiple send
@@ -706,7 +707,8 @@ const definitions = [
 			},
 		],
 		inputsInline: true,
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PSend - symmetric send
@@ -727,7 +729,8 @@ const definitions = [
 			},
 		],
 		inputsInline: true,
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PSendSynch - synchronous send
@@ -753,7 +756,8 @@ const definitions = [
 			},
 		],
 		inputsInline: true,
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// SynchSendCont - empty continuation
@@ -799,7 +803,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PSynchIO - foreach loop
@@ -819,7 +824,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 

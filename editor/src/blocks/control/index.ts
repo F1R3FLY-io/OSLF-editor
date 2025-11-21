@@ -21,7 +21,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PIfElse - if statement with else
@@ -46,7 +47,8 @@ const definitions = [
 				check: "Proc",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// PMatch - match expression
@@ -66,7 +68,8 @@ const definitions = [
 				check: "Case",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// CaseImpl - match case
@@ -102,7 +105,8 @@ const definitions = [
 				check: "Branch",
 			},
 		],
-		output: "Proc",
+		previousStatement: "Proc",
+		nextStatement: "Proc",
 		colour: "208bfe",
 	},
 	// BranchImpl - select branch
