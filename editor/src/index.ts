@@ -4,6 +4,7 @@ import { rholangGenerator } from "./generator";
 
 import { registerAllBlocks, toolboxConfig } from "./blocks";
 import createRholangGenerator from "./blocks/generator";
+import { OslfTheme } from "./theme";
 
 registerAllBlocks();
 
@@ -21,8 +22,9 @@ function initEditor() {
 		trashcan: false,
 		sounds: false,
 		scrollbars: false,
-		grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
+		grid: { spacing: 7, length: 1, colour: "#3e4042", snap: true },
 		toolbox: toolboxConfig,
+		theme: OslfTheme,
 	});
 
 	// Create the root block

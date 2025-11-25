@@ -47,6 +47,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Ground Types",
+			categorystyle: "ground_category",
 			contents: [
 				{ kind: "block", type: "ground_bool_true" },
 				{ kind: "block", type: "ground_bool_false" },
@@ -63,6 +64,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Names",
+			categorystyle: "names_category",
 			contents: [
 				{ kind: "block", type: "name_wildcard" },
 				{ kind: "block", type: "name_var" },
@@ -75,6 +77,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Collections",
+			categorystyle: "collections_category",
 			contents: [
 				{ kind: "block", type: "collect_list" },
 				{ kind: "block", type: "collect_list_remainder" },
@@ -91,6 +94,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Receipts & Binds",
+			categorystyle: "receipts_category",
 			contents: [
 				{ kind: "block", type: "linear_bind" },
 				{ kind: "block", type: "linear_bind_receive_send" },
@@ -110,6 +114,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Control Flow",
+			categorystyle: "control_category",
 			contents: [
 				{ kind: "block", type: "proc_if" },
 				{ kind: "block", type: "proc_if_else" },
@@ -122,6 +127,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Declarations",
+			categorystyle: "declarations_category",
 			contents: [
 				{ kind: "block", type: "proc_new" },
 				{ kind: "block", type: "name_decl_list" },
@@ -140,6 +146,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Basic Processes",
+			categorystyle: "processes_category",
 			contents: [
 				{ kind: "block", type: "proc_nil" },
 				{ kind: "block", type: "proc_ground" },
@@ -156,6 +163,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Logical Operations",
+			categorystyle: "logical_category",
 			contents: [
 				{ kind: "block", type: "proc_negation" },
 				{ kind: "block", type: "proc_conjunction" },
@@ -168,6 +176,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Arithmetic",
+			categorystyle: "arithmetic_category",
 			contents: [
 				{ kind: "block", type: "proc_neg" },
 				{ kind: "block", type: "proc_mult" },
@@ -183,6 +192,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Comparison",
+			categorystyle: "comparison_category",
 			contents: [
 				{ kind: "block", type: "proc_lt" },
 				{ kind: "block", type: "proc_lte" },
@@ -196,6 +206,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Methods & Paths",
+			categorystyle: "methods_category",
 			contents: [
 				{ kind: "block", type: "proc_method" },
 				{ kind: "block", type: "proc_path_map" },
@@ -204,6 +215,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Send & Receive",
+			categorystyle: "send_receive_category",
 			contents: [
 				{ kind: "block", type: "proc_send" },
 				{ kind: "block", type: "proc_send_multiple" },
@@ -218,6 +230,7 @@ export const toolboxConfig = {
 		{
 			kind: "category",
 			name: "Composition",
+			categorystyle: "composition_category",
 			contents: [
 				{ kind: "block", type: "proc_par" },
 			],
