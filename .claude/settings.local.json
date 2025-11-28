@@ -1,7 +1,24 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.figma.com)"
+      "WebFetch(domain:www.figma.com)",
+      "Bash(comm -23:*)",
+      "Bash(cat:*)",
+      "Bash(while read block)",
+      "Bash(do if [ \"$block\" != \"field_input\" ])",
+      "Bash([ \"$block\" != \"field_number\" ])",
+      "Bash([ \"$block\" != \"input_statement\" ])",
+      "Bash([ \"$block\" != \"input_value\" ])",
+      "Bash([ \"$block\" != \"proc_root\" ])",
+      "Bash(then if ! grep -q \"kind: \"\"block\"\", type: \"\"$block\"\"\" editor/src/blocks/index.ts)",
+      "Bash(then echo \"$block\" fi fi done)",
+      "Bash(for block in tuple_single tuple_multiple collect_list collect_list_remainder collect_set conc_decls concurrent_binds decl linear_bind linear_bind_receive_send linear_bind_send_receive linear_bind_symm linear_decls name_decl_list peek_bind peek_bind_symm proc_add proc_and proc_collect proc_conjunction proc_contract proc_contract_remainder proc_disjunction proc_div proc_eq proc_eval proc_for proc_foreach proc_ground proc_gt proc_gte proc_if proc_if_else proc_let proc_lt proc_lte proc_match proc_matches proc_method proc_minus proc_minus_minus proc_mod proc_mult proc_neg proc_negation proc_neq proc_new proc_not proc_or proc_paren proc_path_map proc_percent_percent proc_plus_plus proc_send proc_send_multiple proc_send_symm proc_send_synch proc_simple_type receipt_linear receipt_peek receipt_repeated repeated_bind repeated_bind_symm sequential_receipts branch case)",
+      "Bash(do)",
+      "Bash(if ! grep -q \"{ kind: \"\"block\"\", type: \"\"$block\"\"\" editor/src/blocks/index.ts)",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

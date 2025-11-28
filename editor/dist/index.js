@@ -25024,7 +25024,15 @@ ${b} to its parent, because: ${a}`);
           },
           { kind: "block", type: "name_decl_simple" },
           { kind: "block", type: "name_decl_urn" },
-          { kind: "block", type: "name_remainder" }
+          { kind: "block", type: "name_remainder" },
+          {
+            kind: "block",
+            type: "name_list",
+            inputs: {
+              ITEM: { shadow: { type: "name_var" } },
+              NEXT: { shadow: { type: "name_var" } }
+            }
+          }
         ]
       },
       {
@@ -25035,14 +25043,30 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "collect_list",
             inputs: {
-              ELEMENTS: { shadow: { type: "proc_list" } }
+              ELEMENTS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "collect_list_remainder",
             inputs: {
-              ELEMENTS: { shadow: { type: "proc_list" } }
+              ELEMENTS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25057,14 +25081,30 @@ ${b} to its parent, because: ${a}`);
             type: "tuple_multiple",
             inputs: {
               FIRST: { shadow: { type: "proc_var" } },
-              REST: { shadow: { type: "proc_list" } }
+              REST: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "collect_set",
             inputs: {
-              ELEMENTS: { shadow: { type: "proc_list" } }
+              ELEMENTS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           { kind: "block", type: "collect_map" },
@@ -25121,7 +25161,15 @@ ${b} to its parent, because: ${a}`);
             inputs: {
               PATTERN: { shadow: { type: "name_var" } },
               SOURCE: { shadow: { type: "name_var" } },
-              ARGS: { shadow: { type: "proc_list" } }
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25144,37 +25192,107 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "receipt_linear",
             inputs: {
-              BINDS: { shadow: { type: "linear_bind" } }
+              BINDS: {
+                shadow: {
+                  type: "linear_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "receipt_repeated",
             inputs: {
-              BINDS: { shadow: { type: "repeated_bind" } }
+              BINDS: {
+                shadow: {
+                  type: "repeated_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "receipt_peek",
             inputs: {
-              BINDS: { shadow: { type: "peek_bind" } }
+              BINDS: {
+                shadow: {
+                  type: "peek_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "concurrent_binds",
             inputs: {
-              LEFT: { shadow: { type: "linear_bind" } },
-              RIGHT: { shadow: { type: "linear_bind" } }
+              LEFT: {
+                shadow: {
+                  type: "linear_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              },
+              RIGHT: {
+                shadow: {
+                  type: "linear_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "sequential_receipts",
             inputs: {
-              LEFT: { shadow: { type: "receipt_linear" } },
-              RIGHT: { shadow: { type: "receipt_linear" } }
+              LEFT: {
+                shadow: {
+                  type: "receipt_linear",
+                  inputs: {
+                    BINDS: {
+                      shadow: {
+                        type: "linear_bind",
+                        inputs: {
+                          PATTERN: { shadow: { type: "name_var" } },
+                          SOURCE: { shadow: { type: "name_var" } }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              RIGHT: {
+                shadow: {
+                  type: "receipt_linear",
+                  inputs: {
+                    BINDS: {
+                      shadow: {
+                        type: "linear_bind",
+                        inputs: {
+                          PATTERN: { shadow: { type: "name_var" } },
+                          SOURCE: { shadow: { type: "name_var" } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           {
@@ -25240,7 +25358,15 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "branch",
             inputs: {
-              RECEIPT: { shadow: { type: "linear_bind" } }
+              RECEIPT: {
+                shadow: {
+                  type: "linear_bind",
+                  inputs: {
+                    PATTERN: { shadow: { type: "name_var" } },
+                    SOURCE: { shadow: { type: "name_var" } }
+                  }
+                }
+              }
             }
           }
         ]
@@ -25272,7 +25398,15 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "proc_let",
             inputs: {
-              DECLS: { shadow: { type: "decl" } }
+              DECLS: {
+                shadow: {
+                  type: "decl",
+                  inputs: {
+                    NAMES: { shadow: { type: "name_var" } },
+                    PROCS: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25287,16 +25421,48 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "linear_decls",
             inputs: {
-              LEFT: { shadow: { type: "decl" } },
-              RIGHT: { shadow: { type: "decl" } }
+              LEFT: {
+                shadow: {
+                  type: "decl",
+                  inputs: {
+                    NAMES: { shadow: { type: "name_var" } },
+                    PROCS: { shadow: { type: "proc_var" } }
+                  }
+                }
+              },
+              RIGHT: {
+                shadow: {
+                  type: "decl",
+                  inputs: {
+                    NAMES: { shadow: { type: "name_var" } },
+                    PROCS: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "conc_decls",
             inputs: {
-              LEFT: { shadow: { type: "decl" } },
-              RIGHT: { shadow: { type: "decl" } }
+              LEFT: {
+                shadow: {
+                  type: "decl",
+                  inputs: {
+                    NAMES: { shadow: { type: "name_var" } },
+                    PROCS: { shadow: { type: "proc_var" } }
+                  }
+                }
+              },
+              RIGHT: {
+                shadow: {
+                  type: "decl",
+                  inputs: {
+                    NAMES: { shadow: { type: "name_var" } },
+                    PROCS: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25337,7 +25503,30 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "proc_collect",
             inputs: {
-              VALUE: { shadow: { type: "collect_list" } }
+              VALUE: {
+                shadow: {
+                  type: "collect_list",
+                  inputs: {
+                    ELEMENTS: {
+                      shadow: {
+                        type: "proc_list",
+                        inputs: {
+                          ITEM: {
+                            shadow: {
+                              type: "proc_var"
+                            }
+                          },
+                          NEXT: {
+                            shadow: {
+                              type: "proc_var"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           { kind: "block", type: "proc_var" },
@@ -25567,7 +25756,15 @@ ${b} to its parent, because: ${a}`);
             type: "proc_method",
             inputs: {
               OBJECT: { shadow: { type: "proc_var" } },
-              ARGS: { shadow: { type: "proc_list" } }
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25588,7 +25785,15 @@ ${b} to its parent, because: ${a}`);
             type: "proc_send",
             inputs: {
               CHANNEL: { shadow: { type: "name_var" } },
-              ARGS: { shadow: { type: "proc_list" } }
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25596,7 +25801,15 @@ ${b} to its parent, because: ${a}`);
             type: "proc_send_multiple",
             inputs: {
               CHANNEL: { shadow: { type: "name_var" } },
-              ARGS: { shadow: { type: "proc_list" } }
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25604,7 +25817,15 @@ ${b} to its parent, because: ${a}`);
             type: "proc_send_symm",
             inputs: {
               CHANNEL: { shadow: { type: "name_var" } },
-              ARGS: { shadow: { type: "proc_list" } }
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              }
             }
           },
           {
@@ -25612,7 +25833,15 @@ ${b} to its parent, because: ${a}`);
             type: "proc_send_synch",
             inputs: {
               CHANNEL: { shadow: { type: "name_var" } },
-              ARGS: { shadow: { type: "proc_list" } },
+              ARGS: {
+                shadow: {
+                  type: "proc_list",
+                  inputs: {
+                    ITEM: { shadow: { type: "proc_var" } },
+                    NEXT: { shadow: { type: "proc_var" } }
+                  }
+                }
+              },
               CONT: { shadow: { type: "synch_send_cont_empty" } }
             }
           },
@@ -25622,14 +25851,44 @@ ${b} to its parent, because: ${a}`);
             kind: "block",
             type: "proc_for",
             inputs: {
-              RECEIPTS: { shadow: { type: "receipt_linear" } }
+              RECEIPTS: {
+                shadow: {
+                  type: "receipt_linear",
+                  inputs: {
+                    BINDS: {
+                      shadow: {
+                        type: "linear_bind",
+                        inputs: {
+                          PATTERN: { shadow: { type: "name_var" } },
+                          SOURCE: { shadow: { type: "name_var" } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           {
             kind: "block",
             type: "proc_foreach",
             inputs: {
-              RECEIPTS: { shadow: { type: "receipt_linear" } }
+              RECEIPTS: {
+                shadow: {
+                  type: "receipt_linear",
+                  inputs: {
+                    BINDS: {
+                      shadow: {
+                        type: "linear_bind",
+                        inputs: {
+                          PATTERN: { shadow: { type: "name_var" } },
+                          SOURCE: { shadow: { type: "name_var" } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         ]
