@@ -545,13 +545,6 @@ export const toolboxConfig = {
 				{ kind: "block", type: "proc_nil" },
 				{
 					kind: "block",
-					type: "proc_ground",
-					inputs: {
-						VALUE: { shadow: { type: "ground_int" } },
-					},
-				},
-				{
-					kind: "block",
 					type: "proc_collect",
 					inputs: {
 						VALUE: {

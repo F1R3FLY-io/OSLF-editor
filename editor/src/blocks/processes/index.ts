@@ -31,22 +31,6 @@ const definitions = [
 		output: "Proc",
 		colour: "208bfe",
 	},
-	// PGround - ground value as process
-	{
-		type: "proc_ground",
-		tooltip: "Ground value as process",
-		message0: "%1",
-		args0: [
-			{
-				type: "input_value",
-				name: "VALUE",
-				check: "Ground",
-			},
-		],
-		inputsInline: true,
-		output: "Proc",
-		colour: "208bfe",
-	},
 	// PCollect - collection as process
 	{
 		type: "proc_collect",

@@ -9,7 +9,7 @@ const definitions = [
 		type: "ground_bool_true",
 		tooltip: "Boolean true literal",
 		message0: "true",
-		output: "Ground",
+		output: "Proc",
 		colour: "160",
 	},
 	// BoolFalse - false literal
@@ -17,7 +17,7 @@ const definitions = [
 		type: "ground_bool_false",
 		tooltip: "Boolean false literal",
 		message0: "false",
-		output: "Ground",
+		output: "Proc",
 		colour: "160",
 	},
 	// GroundInt - integer literal
@@ -33,7 +33,7 @@ const definitions = [
 				precision: 1,
 			},
 		],
-		output: "Ground",
+		output: "Proc",
 		colour: "230",
 	},
 	// GroundString - string literal
@@ -48,7 +48,7 @@ const definitions = [
 				text: "",
 			},
 		],
-		output: "Ground",
+		output: "Proc",
 		colour: "160",
 	},
 	// GroundUri - URI literal
@@ -63,7 +63,7 @@ const definitions = [
 				text: "",
 			},
 		],
-		output: "Ground",
+		output: "Proc",
 		colour: "290",
 	},
 	// SimpleTypes

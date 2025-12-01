@@ -359,11 +359,6 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		return ["Nil", ORDER.ATOMIC];
 	};
 
-	generator.forBlock["proc_ground"] = function(block) {
-		const value = generator.valueToCode(block, "VALUE", ORDER.NONE);
-		return [value, ORDER.ATOMIC];
-	};
-
 	generator.forBlock["proc_collect"] = function(block) {
 		const value = generator.valueToCode(block, "VALUE", ORDER.NONE);
 		return [value, ORDER.ATOMIC];
