@@ -27,6 +27,18 @@ function initEditor() {
 		theme: OslfTheme,
 	});
 
+	// Add border styling to toolbox and flyout
+	const style = document.createElement("style");
+	style.textContent = `
+		.blocklyToolbox {
+			border-right: 1px solid #2E3F52 !important;
+		}
+		.blocklyFlyout {
+			border-right: 1px solid #2E3F52 !important;
+		}
+	`;
+	document.head.appendChild(style);
+
 	// Create the root block
 	const rootBlock = workspace.newBlock("proc_root");
 	rootBlock.initSvg();
@@ -40,9 +52,9 @@ function initEditor() {
 	workspace.addChangeListener((event: Blockly.Events.Abstract) => {
 		if (event.type === Blockly.Events.SELECTED) {
 			// Make toolbox visible
-			const toolboxDiv = document.querySelector('.blocklyToolboxDiv');
+			const toolboxDiv = document.querySelector(".blocklyToolboxDiv");
 			if (toolboxDiv) {
-				(toolboxDiv as HTMLElement).style.display = 'block';
+				(toolboxDiv as HTMLElement).style.display = "block";
 			}
 
 			// Show flyout if available
@@ -60,12 +72,14 @@ function initEditor() {
 	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
 	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
 	if (svgElement) {
-		svgElement.addEventListener('click', (event: MouseEvent) => {
+		svgElement.addEventListener("click", (event: MouseEvent) => {
 			const target = event.target as HTMLElement;
 			// Check if clicked on workspace background (not a block)
-			if (target.classList.contains('blocklyMainBackground') ||
-			    target.classList.contains('blocklyWorkspace') ||
-			    target.tagName === 'svg') {
+			if (
+				target.classList.contains("blocklyMainBackground") ||
+				target.classList.contains("blocklyWorkspace") ||
+				target.tagName === "svg"
+			) {
 				const flyout = workspaceSvg.getFlyout();
 				if (flyout) {
 					flyout.setVisible(false);
@@ -117,7 +131,9 @@ class EditorElement extends HTMLElement {
 		});
 
 		const listenBlocklyRequest = () => {
-			const state = Blockly.serialization.workspaces.save(this.workspace as Blockly.WorkspaceSvg);
+			const state = Blockly.serialization.workspaces.save(
+				this.workspace as Blockly.WorkspaceSvg,
+			);
 			console.log(state);
 
 			this.dispatchEvent(
@@ -131,14 +147,20 @@ class EditorElement extends HTMLElement {
 
 		this.addEventListener(Events.BLOCKLY_REQUEST, listenBlocklyRequest);
 		this.handlers.push(() => {
-			this.removeEventListener(Events.BLOCKLY_REQUEST, listenBlocklyRequest);
+			this.removeEventListener(
+				Events.BLOCKLY_REQUEST,
+				listenBlocklyRequest,
+			);
 			console.log("Blockly callback removed");
 		});
 
 		const listenBlocklyLoad = (event: CustomEvent) => {
 			const state = event.detail;
 			if (state) {
-				Blockly.serialization.workspaces.load(state, this.workspace as Blockly.WorkspaceSvg);
+				Blockly.serialization.workspaces.load(
+					state,
+					this.workspace as Blockly.WorkspaceSvg,
+				);
 				console.log("Blockly state loaded");
 			}
 		};
@@ -168,7 +190,9 @@ class EditorElement extends HTMLElement {
 			}
 
 			debounceTimer = setTimeout(() => {
-				const state = Blockly.serialization.workspaces.save(this.workspace as Blockly.WorkspaceSvg);
+				const state = Blockly.serialization.workspaces.save(
+					this.workspace as Blockly.WorkspaceSvg,
+				);
 				this.dispatchEvent(
 					new CustomEvent(Events.BLOCKLY_CHANGE, {
 						detail: state,

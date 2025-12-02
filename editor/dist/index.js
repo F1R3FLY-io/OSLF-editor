@@ -26438,7 +26438,7 @@ ${body}}
     // UI colors
     workspace: "#161E27",
     toolbox: "#161E27",
-    flyout: "#f8f8f8",
+    flyout: "#161E27",
     scrollbar: "#cccccc",
     scrollbarOpacity: 0.4,
     insertionMarker: "#000000",
@@ -26605,6 +26605,16 @@ ${body}}
       toolbox: toolboxConfig,
       theme: OslfTheme
     });
+    const style = document.createElement("style");
+    style.textContent = `
+		.blocklyToolbox {
+			border-right: 1px solid #2E3F52 !important;
+		}
+		.blocklyFlyout {
+			border-right: 1px solid #2E3F52 !important;
+		}
+	`;
+    document.head.appendChild(style);
     const rootBlock = workspace.newBlock("proc_root");
     rootBlock.initSvg();
     rootBlock.render();
@@ -26672,7 +26682,9 @@ ${body}}
         console.log("Callback removed");
       });
       const listenBlocklyRequest = () => {
-        const state = serialization.workspaces.save(this.workspace);
+        const state = serialization.workspaces.save(
+          this.workspace
+        );
         console.log(state);
         this.dispatchEvent(
           new CustomEvent("blockly:return" /* BLOCKLY_RETURN */, {
@@ -26684,13 +26696,19 @@ ${body}}
       };
       this.addEventListener("blockly:request" /* BLOCKLY_REQUEST */, listenBlocklyRequest);
       this.handlers.push(() => {
-        this.removeEventListener("blockly:request" /* BLOCKLY_REQUEST */, listenBlocklyRequest);
+        this.removeEventListener(
+          "blockly:request" /* BLOCKLY_REQUEST */,
+          listenBlocklyRequest
+        );
         console.log("Blockly callback removed");
       });
       const listenBlocklyLoad = (event) => {
         const state = event.detail;
         if (state) {
-          serialization.workspaces.load(state, this.workspace);
+          serialization.workspaces.load(
+            state,
+            this.workspace
+          );
           console.log("Blockly state loaded");
         }
       };
@@ -26711,7 +26729,9 @@ ${body}}
           clearTimeout(debounceTimer);
         }
         debounceTimer = setTimeout(() => {
-          const state = serialization.workspaces.save(this.workspace);
+          const state = serialization.workspaces.save(
+            this.workspace
+          );
           this.dispatchEvent(
             new CustomEvent("blockly:change" /* BLOCKLY_CHANGE */, {
               detail: state,
