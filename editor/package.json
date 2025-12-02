@@ -19,11 +19,16 @@
 	"author": "Denys Bushuliak <denys.b@devbrother.com>",
 	"main": "dist/index.js",
 	"type": "module",
+	"files": [
+		"dist",
+		"src"
+	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "rm -rf dist node_modules",
 		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch --outdir=dist/",
-		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/"
+		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/",
+		"prepublishOnly": "npm run build"
 	},
 	"dependencies": {
 		"@blockly/plugin-cross-tab-copy-paste": "^8.0.2",
