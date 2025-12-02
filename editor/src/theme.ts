@@ -24,7 +24,7 @@ const Colors = {
 
 	// UI colors
 	workspace: "#161E27",
-	toolbox: "#ffffff",
+	toolbox: "#161E27",
 	flyout: "#f8f8f8",
 	scrollbar: "#cccccc",
 	scrollbarOpacity: 0.4,
