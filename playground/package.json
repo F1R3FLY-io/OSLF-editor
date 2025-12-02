@@ -1,11 +1,13 @@
 {
 	"name": "playground",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"description": "Development playground for f1r3fly-io-oslf-editor",
+	"private": true,
 	"scripts": {
-		"dev": "pnpx esbuild index.tsx --bundle --watch --outfile=index.js",
-		"open": "pnpx serve ."
+		"build": "pnpx esbuild index.tsx --bundle --sourcemap --outfile=index.js",
+		"dev": "pnpx esbuild index.tsx --bundle --sourcemap --watch --outfile=index.js",
+		"serve": "pnpx serve .",
+		"start": "npm run build && npm run serve"
 	},
 	"author": "Denys Bushuliak <denys.b@devbrother.com>",
 	"license": "UNLICENSED",
