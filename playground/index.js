@@ -48131,7 +48131,7 @@ ${body}}
       insertionMarkerOpacity: 0.2,
       // Text colors
       text: "#000000",
-      textSecondary: "#575e75"
+      textSecondary: "#ffffff"
     };
     var blockStyles = {
       ground_blocks: {

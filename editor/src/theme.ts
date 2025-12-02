@@ -33,7 +33,7 @@ const Colors = {
 
 	// Text colors
 	text: "#000000",
-	textSecondary: "#575e75",
+	textSecondary: "#ffffff",
 };
 
 // Define block styles for different categories
