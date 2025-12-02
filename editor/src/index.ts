@@ -77,6 +77,7 @@ function initEditor() {
 	});
 
 	// Hide flyout when clicking on workspace pane
+	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
 	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
 	if (svgElement) {
 		svgElement.addEventListener("click", (event: MouseEvent) => {
@@ -86,6 +87,24 @@ function initEditor() {
 				target.classList.contains("blocklyMainBackground") ||
 				target.classList.contains("blocklyWorkspace") ||
 				target.tagName === "svg"
+			) {
+				const flyout = workspaceSvg.getFlyout();
+				if (flyout) {
+					flyout.setVisible(false);
+				}
+			}
+		});
+	}
+
+	// Also hide flyout when clicking on the workspace div
+	const workspaceDiv = document.querySelector(".blocklyWorkspace");
+	if (workspaceDiv) {
+		workspaceDiv.addEventListener("click", (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			// Only hide if clicked directly on workspace, not on blocks
+			if (
+				target.classList.contains("blocklyWorkspace") ||
+				target.classList.contains("blocklyMainBackground")
 			) {
 				const flyout = workspaceSvg.getFlyout();
 				if (flyout) {
