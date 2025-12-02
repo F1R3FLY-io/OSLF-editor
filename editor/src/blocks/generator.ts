@@ -137,14 +137,20 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	};
 
 	generator.forBlock["collect_map"] = function(block) {
-		const pairs = generator.valueToCode(block, "PAIRS", ORDER.NONE);
+		const pairsCode = generator.statementToCode(block, "PAIRS");
+		// Convert statement blocks to comma-separated list
+		const pairs = pairsCode
+			.split('\n')
+			.map(line => line.trim())
+			.filter(line => line.length > 0)
+			.join(', ');
 		return [`{${pairs}}`, ORDER.ATOMIC];
 	};
 
 	generator.forBlock["key_value_pair"] = function(block) {
 		const key = generator.valueToCode(block, "KEY", ORDER.NONE);
 		const value = generator.valueToCode(block, "VALUE", ORDER.NONE);
-		return [`${key}: ${value}`, ORDER.ATOMIC];
+		return `${key}: ${value}\n`;
 	};
 
 	generator.forBlock["proc_list"] = function(block) {

@@ -101,9 +101,9 @@ const definitions = [
 		message0: "{ %1 }",
 		args0: [
 			{
-				type: "input_value",
+				type: "input_statement",
 				name: "PAIRS",
-				check: "KeyValuePairList",
+				check: "KeyValuePair",
 			},
 		],
 		inputsInline: true,
@@ -128,7 +128,8 @@ const definitions = [
 			},
 		],
 		inputsInline: true,
-		output: "KeyValuePair",
+		previousStatement: "KeyValuePair",
+		nextStatement: "KeyValuePair",
 		colour: "260",
 	},
 	// ProcList - list of processes (for args)
