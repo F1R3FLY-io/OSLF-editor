@@ -1,5 +1,6 @@
 import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
+import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
 import { rholangGenerator } from "./generator";
 
 import { registerAllBlocks, toolboxConfig } from "./blocks";
@@ -26,6 +27,13 @@ function initEditor() {
 		toolbox: toolboxConfig,
 		theme: OslfTheme,
 	});
+
+	// Init plugins
+	const plugin = new CrossTabCopyPaste();
+	plugin.init({ contextMenu: true, shortcut: true }, () => {
+		console.error("Some error occurred while copying or pasting");
+	});
+	Blockly.ContextMenuRegistry.registry.unregister("blockDuplicate");
 
 	// Add border styling to toolbox and flyout
 	const style = document.createElement("style");
@@ -69,7 +77,6 @@ function initEditor() {
 	});
 
 	// Hide flyout when clicking on workspace pane
-	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
 	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
 	if (svgElement) {
 		svgElement.addEventListener("click", (event: MouseEvent) => {

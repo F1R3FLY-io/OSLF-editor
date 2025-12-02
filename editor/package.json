@@ -26,6 +26,7 @@
 		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/"
 	},
 	"dependencies": {
+		"@blockly/plugin-cross-tab-copy-paste": "^8.0.2",
 		"blockly": "^12.3.1"
 	},
 	"devDependencies": {
