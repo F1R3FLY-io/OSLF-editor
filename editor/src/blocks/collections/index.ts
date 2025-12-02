@@ -24,7 +24,7 @@ const definitions = [
 	{
 		type: "collect_list_remainder",
 		tooltip: "List with remainder: [elements...rest]",
-		message0: "[ %1 ...%2 ]",
+		message0: "[ %1 %2 ]",
 		args0: [
 			{
 				type: "input_value",
@@ -32,9 +32,9 @@ const definitions = [
 				check: "ProcList",
 			},
 			{
-				type: "field_input",
+				type: "input_value",
 				name: "REMAINDER",
-				text: "rest",
+				check: "ProcRemainder",
 			},
 		],
 		inputsInline: true,
@@ -94,6 +94,27 @@ const definitions = [
 		output: "Collection",
 		colour: "260",
 	},
+	// CollectSet with remainder
+	{
+		type: "collect_set_remainder",
+		tooltip: "Set with remainder: Set(elements...rest)",
+		message0: "Set( %1 %2 )",
+		args0: [
+			{
+				type: "input_value",
+				name: "ELEMENTS",
+				check: "ProcList",
+			},
+			{
+				type: "input_value",
+				name: "REMAINDER",
+				check: "ProcRemainder",
+			},
+		],
+		inputsInline: true,
+		output: "Collection",
+		colour: "260",
+	},
 	// CollectMap - map collection {key: value, ...}
 	{
 		type: "collect_map",
@@ -104,6 +125,27 @@ const definitions = [
 				type: "input_statement",
 				name: "PAIRS",
 				check: "KeyValuePair",
+			},
+		],
+		inputsInline: true,
+		output: "Collection",
+		colour: "260",
+	},
+	// CollectMap with remainder
+	{
+		type: "collect_map_remainder",
+		tooltip: "Map with remainder: {pairs...rest}",
+		message0: "{ %1 %2 }",
+		args0: [
+			{
+				type: "input_statement",
+				name: "PAIRS",
+				check: "KeyValuePair",
+			},
+			{
+				type: "input_value",
+				name: "REMAINDER",
+				check: "ProcRemainder",
 			},
 		],
 		inputsInline: true,
@@ -165,6 +207,14 @@ const definitions = [
 				text: "rest",
 			},
 		],
+		output: "ProcRemainder",
+		colour: "260",
+	},
+	// ProcRemainderEmpty - empty process remainder
+	{
+		type: "proc_remainder_empty",
+		tooltip: "Empty remainder (no remaining elements)",
+		message0: "",
 		output: "ProcRemainder",
 		colour: "260",
 	},

@@ -107,6 +107,10 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		return [`...@${varName}`, ORDER.ATOMIC];
 	};
 
+	generator.forBlock["name_remainder_empty"] = function() {
+		return ["", ORDER.ATOMIC];
+	};
+
 	// === Collections ===
 
 	generator.forBlock["collect_list"] = function(block) {
@@ -116,8 +120,8 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 
 	generator.forBlock["collect_list_remainder"] = function(block) {
 		const elements = generator.valueToCode(block, "ELEMENTS", ORDER.NONE);
-		const remainder = block.getFieldValue("REMAINDER");
-		return [`[${elements}...${remainder}]`, ORDER.ATOMIC];
+		const remainder = generator.valueToCode(block, "REMAINDER", ORDER.NONE);
+		return [`[${elements}${remainder}]`, ORDER.ATOMIC];
 	};
 
 	generator.forBlock["tuple_single"] = function(block) {
@@ -136,6 +140,12 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 		return [`Set(${elements})`, ORDER.ATOMIC];
 	};
 
+	generator.forBlock["collect_set_remainder"] = function(block) {
+		const elements = generator.valueToCode(block, "ELEMENTS", ORDER.NONE);
+		const remainder = generator.valueToCode(block, "REMAINDER", ORDER.NONE);
+		return [`Set(${elements}${remainder})`, ORDER.ATOMIC];
+	};
+
 	generator.forBlock["collect_map"] = function(block) {
 		const pairsCode = generator.statementToCode(block, "PAIRS");
 		// Convert statement blocks to comma-separated list
@@ -145,6 +155,18 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 			.filter(line => line.length > 0)
 			.join(', ');
 		return [`{${pairs}}`, ORDER.ATOMIC];
+	};
+
+	generator.forBlock["collect_map_remainder"] = function(block) {
+		const pairsCode = generator.statementToCode(block, "PAIRS");
+		// Convert statement blocks to comma-separated list
+		const pairs = pairsCode
+			.split('\n')
+			.map(line => line.trim())
+			.filter(line => line.length > 0)
+			.join(', ');
+		const remainder = generator.valueToCode(block, "REMAINDER", ORDER.NONE);
+		return [`{${pairs}${remainder}}`, ORDER.ATOMIC];
 	};
 
 	generator.forBlock["key_value_pair"] = function(block) {
@@ -162,6 +184,10 @@ export function createRholangGenerator(): Blockly.CodeGenerator {
 	generator.forBlock["proc_remainder"] = function(block) {
 		const varName = block.getFieldValue("VAR");
 		return [`...${varName}`, ORDER.ATOMIC];
+	};
+
+	generator.forBlock["proc_remainder_empty"] = function() {
+		return ["", ORDER.ATOMIC];
 	};
 
 	generator.forBlock["name_list"] = function(block) {

@@ -93,6 +93,14 @@ const definitions = [
 		output: "NameRemainder",
 		colour: "65",
 	},
+	// NameRemainderEmpty - empty name remainder
+	{
+		type: "name_remainder_empty",
+		tooltip: "Empty remainder (no remaining names)",
+		message0: "",
+		output: "NameRemainder",
+		colour: "65",
+	},
 ];
 
 export default Blockly.common.createBlockDefinitionsFromJsonArray(definitions);
