@@ -56,60 +56,25 @@ function initEditor() {
 	// Disable any block not connected to the root block.
 	workspace.addChangeListener(Blockly.Events.disableOrphans);
 
-	// Show toolbox when a block is selected
-	workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-		if (event.type === Blockly.Events.SELECTED) {
-			// Make toolbox visible
-			const toolboxDiv = document.querySelector(".blocklyToolboxDiv");
-			if (toolboxDiv) {
-				(toolboxDiv as HTMLElement).style.display = "block";
-			}
-
-			// Show flyout if available
-			const workspaceSvg = workspace as Blockly.WorkspaceSvg;
-			if (workspaceSvg.getFlyout && workspaceSvg.getFlyout()) {
-				const flyout = workspaceSvg.getFlyout();
-				if (flyout) {
-					(flyout as any).setVisible(true);
-				}
-			}
-		}
-	});
-
-	// Hide flyout when clicking on workspace pane
+	// Hide flyout when clicking on workspace (anywhere except flyout and toolbox)
 	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
 	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
 	if (svgElement) {
-		svgElement.addEventListener("click", (event: MouseEvent) => {
+		svgElement.addEventListener("mousedown", (event: MouseEvent) => {
 			const target = event.target as HTMLElement;
-			// Check if clicked on workspace background (not a block)
-			if (
-				target.classList.contains("blocklyMainBackground") ||
-				target.classList.contains("blocklyWorkspace") ||
-				target.tagName === "svg"
-			) {
-				const flyout = workspaceSvg.getFlyout();
-				if (flyout) {
-					flyout.setVisible(false);
-				}
-			}
-		});
-	}
 
-	// Also hide flyout when clicking on the workspace div
-	const workspaceDiv = document.querySelector(".blocklyWorkspace");
-	if (workspaceDiv) {
-		workspaceDiv.addEventListener("click", (event: MouseEvent) => {
-			const target = event.target as HTMLElement;
-			// Only hide if clicked directly on workspace, not on blocks
+			// Don't hide if clicking on flyout or toolbox
 			if (
-				target.classList.contains("blocklyWorkspace") ||
-				target.classList.contains("blocklyMainBackground")
+				target.closest(".blocklyFlyout") ||
+				target.closest(".blocklyToolbox")
 			) {
-				const flyout = workspaceSvg.getFlyout();
-				if (flyout) {
-					flyout.setVisible(false);
-				}
+				return;
+			}
+
+			// Hide flyout when clicking anywhere on workspace (blocks or background)
+			const flyout = workspaceSvg.getFlyout();
+			if (flyout && flyout.isVisible()) {
+				flyout.setVisible(false);
 			}
 		});
 	}
