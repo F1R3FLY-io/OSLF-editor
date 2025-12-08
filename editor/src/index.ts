@@ -1,30 +1,29 @@
 import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
 import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
-import { rholangGenerator } from "./generator";
-
-import { registerAllBlocks, toolboxConfig } from "./blocks";
-import createRholangGenerator from "./blocks/generator";
 import { OslfTheme } from "./theme";
 
-registerAllBlocks();
-
 export enum Events {
-	TREE_REQUEST = "tree:request",
-	TREE_RETURN = "tree:return",
-	BLOCKLY_REQUEST = "blockly:request",
-	BLOCKLY_RETURN = "blockly:return",
-	BLOCKLY_LOAD = "blockly:load",
+	BLOCKLY_LOAD = "blockly:init",
 	BLOCKLY_CHANGE = "blockly:change",
 }
 
-function initEditor() {
+const DEFAULT_TOOLBOX = {
+	kind: "flyoutToolbox",
+	contents: [],
+};
+
+function initEditor(toolbox?: Blockly.utils.toolbox.ToolboxDefinition) {
+	// Default empty toolbox to allow dynamic updates
+	const defaultToolbox = toolbox || DEFAULT_TOOLBOX;
+
 	let workspace = Blockly.inject("blockly", {
 		trashcan: false,
 		sounds: false,
 		scrollbars: false,
+		disable: false,
 		grid: { spacing: 7, length: 1, colour: "#3e4042", snap: true },
-		toolbox: toolboxConfig,
+		toolbox: defaultToolbox,
 		theme: OslfTheme,
 	});
 
@@ -46,15 +45,6 @@ function initEditor() {
 		}
 	`;
 	document.head.appendChild(style);
-
-	// Create the root block
-	const rootBlock = workspace.newBlock("proc_root");
-	rootBlock.initSvg();
-	rootBlock.render();
-	rootBlock.moveBy(50, 50);
-
-	// Disable any block not connected to the root block.
-	workspace.addChangeListener(Blockly.Events.disableOrphans);
 
 	// Hide flyout when clicking on workspace (anywhere except flyout and toolbox)
 	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
@@ -82,11 +72,22 @@ function initEditor() {
 	return workspace;
 }
 
-class EditorElement extends HTMLElement {
-	handlers: Array<Function> = [];
-	private workspace: Blockly.Workspace;
+type ObservedAttributesTypes = "width" | "height";
 
-	static observedAttributes = ["width", "height"];
+class EditorElement extends HTMLElement {
+	private handlers: Array<Function> = [];
+	private workspace: Blockly.Workspace;
+	static observedAttributes: ObservedAttributesTypes[] = ["width", "height"];
+	private witdh: ObservedAttributesTypes;
+	private height: ObservedAttributesTypes;
+
+	attributeChangedCallback(
+		name: ObservedAttributesTypes,
+		oldValue,
+		newValue,
+	) {
+		this[name] = newValue;
+	}
 
 	constructor() {
 		super();
@@ -95,81 +96,68 @@ class EditorElement extends HTMLElement {
 	}
 
 	connectedCallback() {
+		this.registerCallbacks();
 		this.render();
 	}
 
-	handleListeners() {
+	removeEventListeners() {
 		this.handlers.forEach((callback) => callback());
+	}
 
-		const listenTreeRequest = () => {
-			const generator = createRholangGenerator();
-			const code = generator.workspaceToCode(this.workspace);
-			console.log(code);
+	disconnectedCallback() {
+		this.removeEventListeners();
+	}
 
-			this.dispatchEvent(
-				new CustomEvent(Events.TREE_RETURN, {
-					detail: code,
-					bubbles: true,
-					composed: true,
-				}),
-			);
-		};
+	dispatchChanges() {
+		const state = Blockly.serialization.workspaces.save(
+			this.workspace as Blockly.WorkspaceSvg,
+		);
 
-		this.addEventListener(Events.TREE_REQUEST, listenTreeRequest);
+		this.dispatchEvent(
+			new CustomEvent(Events.BLOCKLY_CHANGE, {
+				detail: { state },
+				bubbles: true,
+				composed: true,
+			}),
+		);
+	}
+
+	registerListener(event: Events, callback: (...args: any[]) => void) {
+		this.addEventListener(event, callback);
 		this.handlers.push(() => {
-			this.removeEventListener(Events.TREE_REQUEST, listenTreeRequest);
-			console.log("Callback removed");
-		});
-
-		const listenBlocklyRequest = () => {
-			const state = Blockly.serialization.workspaces.save(
-				this.workspace as Blockly.WorkspaceSvg,
-			);
-			console.log(state);
-
-			this.dispatchEvent(
-				new CustomEvent(Events.BLOCKLY_RETURN, {
-					detail: state,
-					bubbles: true,
-					composed: true,
-				}),
-			);
-		};
-
-		this.addEventListener(Events.BLOCKLY_REQUEST, listenBlocklyRequest);
-		this.handlers.push(() => {
-			this.removeEventListener(
-				Events.BLOCKLY_REQUEST,
-				listenBlocklyRequest,
-			);
-			console.log("Blockly callback removed");
-		});
-
-		const listenBlocklyLoad = (event: CustomEvent) => {
-			const state = event.detail;
-			if (state) {
-				Blockly.serialization.workspaces.load(
-					state,
-					this.workspace as Blockly.WorkspaceSvg,
-				);
-				console.log("Blockly state loaded");
-			}
-		};
-
-		this.addEventListener(Events.BLOCKLY_LOAD, listenBlocklyLoad);
-		this.handlers.push(() => {
-			this.removeEventListener(Events.BLOCKLY_LOAD, listenBlocklyLoad);
-			console.log("Blockly load callback removed");
+			this.removeEventListener(event, callback);
+			console.log(`Callback for ${event} removed`);
 		});
 	}
 
-	render() {
-		console.time("Rendering");
-		this.handleListeners();
+	loadBlocks(event: CustomEvent) {
+		const blocks = event.detail;
+		if (blocks) {
+			Blockly.defineBlocksWithJsonArray(blocks);
 
-		this.workspace = initEditor();
+			// Generate toolbox contents from the block definitions
+			const customBlocksToolbox = blocks.map((block) => ({
+				kind: "block",
+				type: block.type,
+			}));
 
-		// Auto-save workspace changes with debouncing
+			// Create toolbox with blocks in the root (flyout toolbox)
+			const updatedToolbox = {
+				kind: "flyoutToolbox",
+				contents: customBlocksToolbox,
+			};
+
+			// Update the workspace toolbox
+			const workspaceSvg = this.workspace as Blockly.WorkspaceSvg;
+			workspaceSvg.updateToolbox(updatedToolbox);
+		}
+	}
+
+	registerCallbacks() {
+		this.registerListener(Events.BLOCKLY_LOAD, this.loadBlocks);
+	}
+
+	setupWorkspaceChangeListener() {
 		let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 		this.workspace.addChangeListener((event: Blockly.Events.Abstract) => {
 			// Ignore UI events, only save on actual workspace changes
@@ -181,24 +169,19 @@ class EditorElement extends HTMLElement {
 			}
 
 			debounceTimer = setTimeout(() => {
-				const state = Blockly.serialization.workspaces.save(
-					this.workspace as Blockly.WorkspaceSvg,
-				);
-				this.dispatchEvent(
-					new CustomEvent(Events.BLOCKLY_CHANGE, {
-						detail: state,
-						bubbles: true,
-						composed: true,
-					}),
-				);
+				this.dispatchChanges();
 			}, 1000); // Save 1 second after last change
 		});
-
-		console.timeEnd("Rendering");
 	}
 
-	attributeChangedCallback(name, oldValue, newValue) {
-		this[name] = newValue;
+	render() {
+		if (this.workspace === undefined) {
+			console.time("Rendering");
+			this.workspace = initEditor();
+			this.setupWorkspaceChangeListener();
+
+			console.timeEnd("Rendering");
+		}
 	}
 }
 

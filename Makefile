@@ -40,7 +40,7 @@ playground-dev:
 	cd playground && pnpm run dev
 
 playground-open:
-	cd playground && pnpm run open
+	cd playground && pnpm run start
 
 # Combined/shortcut commands
 dev: editor-dev
