@@ -18,6 +18,7 @@
 	"license": "Apache-2.0",
 	"author": "Denys Bushuliak <denys.b@devbrother.com>",
 	"main": "dist/index.js",
+	"types": "src/index.ts",
 	"type": "module",
 	"files": [
 		"dist",
@@ -26,8 +27,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "rm -rf dist node_modules",
-		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch --outdir=dist/",
-		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/",
+		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch --outdir=dist/ --format=esm",
+		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/ --format=esm",
 		"prepublishOnly": "npm run build"
 	},
 	"dependencies": {
