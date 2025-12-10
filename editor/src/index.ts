@@ -4,8 +4,8 @@ import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
 import { OslfTheme } from "./theme";
 
 export enum Events {
-	BLOCKLY_LOAD = "blockly:init",
-	BLOCKLY_CHANGE = "blockly:change",
+	INIT = "blockly:init",
+	ON_CHANGE = "blockly:on_change",
 }
 
 const DEFAULT_TOOLBOX = {
@@ -114,7 +114,7 @@ class EditorElement extends HTMLElement {
 		);
 
 		this.dispatchEvent(
-			new CustomEvent(Events.BLOCKLY_CHANGE, {
+			new CustomEvent(Events.ON_CHANGE, {
 				detail: { state },
 				bubbles: true,
 				composed: true,
@@ -154,7 +154,7 @@ class EditorElement extends HTMLElement {
 	}
 
 	registerCallbacks() {
-		this.registerListener(Events.BLOCKLY_LOAD, this.loadBlocks);
+		this.registerListener(Events.INIT, this.loadBlocks);
 	}
 
 	setupWorkspaceChangeListener() {

@@ -112,7 +112,7 @@ import { Events } from "@f1r3fly-io/oslf-editor";
 
 #### Event Types
 
-##### `Events.BLOCKLY_LOAD`
+##### `Events.INIT`
 
 Dispatched **to** the editor to load custom block definitions.
 
@@ -139,7 +139,7 @@ const blockDefinitions = [
 ];
 
 editor.dispatchEvent(
-  new CustomEvent(Events.BLOCKLY_LOAD, {
+  new CustomEvent(Events.INIT, {
     detail: blockDefinitions
   })
 );
@@ -147,17 +147,17 @@ editor.dispatchEvent(
 
 **Event Detail:** Array of Blockly block definitions (JSON format)
 
-##### `Events.BLOCKLY_CHANGE`
+##### `Events.ON_CHANGE`
 
 Dispatched **by** the editor when the workspace changes.
 
-**Event Name:** `"blockly:change"`
+**Event Name:** `"blockly:on_change"`
 
 **Usage:**
 ```typescript
 const editor = document.querySelector("oslf-editor");
 
-editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+editor.addEventListener(Events.ON_CHANGE, (event: CustomEvent) => {
   const { state } = event.detail;
   console.log("Workspace changed:", state);
 
@@ -245,7 +245,7 @@ const blocks = [
 ];
 
 editor.dispatchEvent(
-  new CustomEvent(Events.BLOCKLY_LOAD, {
+  new CustomEvent(Events.INIT, {
     detail: blocks
   })
 );
@@ -264,7 +264,7 @@ The editor emits workspace changes that you can listen to for:
 ```typescript
 const AUTOSAVE_KEY = "oslf-workspace";
 
-editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+editor.addEventListener(Events.ON_CHANGE, (event: CustomEvent) => {
   const { state } = event.detail;
   localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state));
 });
@@ -283,10 +283,10 @@ useEffect(() => {
     setWorkspaceState(event.detail.state);
   };
 
-  editor.addEventListener(Events.BLOCKLY_CHANGE, handleChange);
+  editor.addEventListener(Events.ON_CHANGE, handleChange);
 
   return () => {
-    editor.removeEventListener(Events.BLOCKLY_CHANGE, handleChange);
+    editor.removeEventListener(Events.ON_CHANGE, handleChange);
   };
 }, []);
 ```
@@ -312,10 +312,10 @@ function Editor() {
       console.log("Workspace changed:", event.detail.state);
     };
 
-    editor.addEventListener(Events.BLOCKLY_CHANGE, handleChange);
+    editor.addEventListener(Events.ON_CHANGE, handleChange);
 
     return () => {
-      editor.removeEventListener(Events.BLOCKLY_CHANGE, handleChange);
+      editor.removeEventListener(Events.ON_CHANGE, handleChange);
     };
   }, []);
 
@@ -325,7 +325,7 @@ function Editor() {
     try {
       const blocks = JSON.parse(blocksJson);
       editorRef.current.dispatchEvent(
-        new CustomEvent(Events.BLOCKLY_LOAD, {
+        new CustomEvent(Events.INIT, {
           detail: blocks
         })
       );
@@ -366,7 +366,7 @@ function Editor() {
       const editor = document.querySelector("oslf-editor");
 
       // Listen to changes
-      editor.addEventListener(Events.BLOCKLY_CHANGE, (event) => {
+      editor.addEventListener(Events.ON_CHANGE, (event) => {
         console.log("Changed:", event.detail.state);
       });
 
@@ -380,7 +380,7 @@ function Editor() {
       ];
 
       editor.dispatchEvent(
-        new CustomEvent(Events.BLOCKLY_LOAD, {
+        new CustomEvent(Events.INIT, {
           detail: blocks
         })
       );
@@ -401,7 +401,7 @@ The package includes TypeScript type definitions. Import the Events enum for typ
 import { Events } from "@f1r3fly-io/oslf-editor";
 
 // TypeScript will recognize the event names
-editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+editor.addEventListener(Events.ON_CHANGE, (event: CustomEvent) => {
   // Type-safe event handling
 });
 ```
@@ -429,7 +429,7 @@ Make sure you:
 Ensure:
 1. Block definitions are valid JSON
 2. The `type` field is unique for each block
-3. You dispatch the `BLOCKLY_LOAD` event after the editor is mounted
+3. You dispatch the `INIT` event after the editor is mounted
 
 #### Changes not firing
 

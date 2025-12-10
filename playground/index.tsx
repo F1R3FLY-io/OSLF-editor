@@ -29,11 +29,11 @@ function App() {
 		const editor = ref.current;
 		if (!editor) return;
 
-		editor.addEventListener(Events.BLOCKLY_CHANGE, handleBlocklyChange);
+		editor.addEventListener(Events.ON_CHANGE, handleBlocklyChange);
 
 		return () => {
 			editor.removeEventListener(
-				Events.BLOCKLY_CHANGE,
+				Events.ON_CHANGE,
 				handleBlocklyChange,
 			);
 		};
@@ -44,7 +44,7 @@ function App() {
 			try {
 				const blocksJson = JSON.parse(blocksInput);
 				ref.current.dispatchEvent(
-					new CustomEvent(Events.BLOCKLY_LOAD, {
+					new CustomEvent(Events.INIT, {
 						detail: blocksJson,
 					}),
 				);
