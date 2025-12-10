@@ -1,6 +1,8 @@
 # OSLF-editor
 Operational Semantics in Logical Form editor
 
+**[Installation](#installation)** | **[API Documentation](#api-documentation)** | **[Development](#development)** | **[Releases](#releasing-a-new-version-for-contributors)**
+
 ## Installation
 
 To use this editor in your project:
@@ -32,6 +34,415 @@ import { Events } from "@f1r3fly-io/oslf-editor";
 // Use the custom element in your HTML
 <oslf-editor></oslf-editor>
 ```
+
+## API Documentation
+
+The OSLF Editor is a web component built on top of Blockly that provides a visual editor for Operational Semantics in Logical Form (OSLF).
+
+### Table of Contents
+
+- [Basic Usage](#basic-usage)
+- [Custom Element](#custom-element)
+- [Events](#events)
+- [Loading Custom Blocks](#loading-custom-blocks)
+- [Listening to Changes](#listening-to-changes)
+- [Examples](#examples)
+- [TypeScript Support](#typescript-support)
+- [Browser Support](#browser-support)
+- [Troubleshooting](#troubleshooting)
+
+### Basic Usage
+
+#### Import the editor
+
+```typescript
+import "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly-io/oslf-editor";
+```
+
+#### Use in HTML
+
+```html
+<oslf-editor></oslf-editor>
+```
+
+#### Use with React
+
+```tsx
+import { useRef, useEffect } from "react";
+import "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly-io/oslf-editor";
+
+function App() {
+  const editorRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    // Add event listeners here
+  }, []);
+
+  return <oslf-editor ref={editorRef}></oslf-editor>;
+}
+```
+
+### Custom Element
+
+#### `<oslf-editor>`
+
+The main editor component implemented as a custom element.
+
+##### Attributes
+
+- `width` (optional) - Sets the width of the editor
+- `height` (optional) - Sets the height of the editor
+
+##### Methods
+
+The editor element exposes standard DOM methods. Interact with it primarily through Custom Events.
+
+### Events
+
+The editor uses Custom Events for communication. Import the `Events` enum to access event names:
+
+```typescript
+import { Events } from "@f1r3fly-io/oslf-editor";
+```
+
+#### Event Types
+
+##### `Events.BLOCKLY_LOAD`
+
+Dispatched **to** the editor to load custom block definitions.
+
+**Event Name:** `"blockly:init"`
+
+**Usage:**
+```typescript
+const editor = document.querySelector("oslf-editor");
+
+const blockDefinitions = [
+  {
+    type: "custom_block",
+    message0: "custom block %1",
+    args0: [
+      {
+        type: "input_value",
+        name: "INPUT"
+      }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: 230
+  }
+];
+
+editor.dispatchEvent(
+  new CustomEvent(Events.BLOCKLY_LOAD, {
+    detail: blockDefinitions
+  })
+);
+```
+
+**Event Detail:** Array of Blockly block definitions (JSON format)
+
+##### `Events.BLOCKLY_CHANGE`
+
+Dispatched **by** the editor when the workspace changes.
+
+**Event Name:** `"blockly:change"`
+
+**Usage:**
+```typescript
+const editor = document.querySelector("oslf-editor");
+
+editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+  const { state } = event.detail;
+  console.log("Workspace changed:", state);
+
+  // Save to localStorage
+  localStorage.setItem("workspace", JSON.stringify(state));
+});
+```
+
+**Event Detail:**
+```typescript
+{
+  state: {
+    blocks: {
+      languageVersion: number,
+      blocks: Array<BlockState>
+    }
+  }
+}
+```
+
+**Note:** Changes are debounced by 1 second to avoid excessive event firing.
+
+### Loading Custom Blocks
+
+Custom blocks are defined using [Blockly's JSON format](https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks).
+
+#### Block Definition Structure
+
+```typescript
+interface BlockDefinition {
+  type: string;              // Unique block type identifier
+  message0: string;          // Block text with %1, %2 placeholders
+  args0?: Array<{           // Input definitions
+    type: string;
+    name: string;
+    check?: string;
+  }>;
+  previousStatement?: null | string;  // Connection type above
+  nextStatement?: null | string;      // Connection type below
+  output?: null | string;             // Output type (for value blocks)
+  colour: number;                     // Block color (HSV hue)
+  tooltip?: string;                   // Hover tooltip
+  helpUrl?: string;                   // Help documentation URL
+}
+```
+
+#### Example: Loading Multiple Blocks
+
+```typescript
+const blocks = [
+  {
+    type: "process",
+    message0: "process %1",
+    args0: [
+      {
+        type: "input_value",
+        name: "NAME",
+        check: "String"
+      }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: 160,
+    tooltip: "Define a process",
+    helpUrl: ""
+  },
+  {
+    type: "send",
+    message0: "send %1 on %2",
+    args0: [
+      {
+        type: "input_value",
+        name: "MESSAGE"
+      },
+      {
+        type: "input_value",
+        name: "CHANNEL"
+      }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: 230,
+    tooltip: "Send a message on a channel"
+  }
+];
+
+editor.dispatchEvent(
+  new CustomEvent(Events.BLOCKLY_LOAD, {
+    detail: blocks
+  })
+);
+```
+
+### Listening to Changes
+
+The editor emits workspace changes that you can listen to for:
+- Auto-saving
+- Syncing with external state
+- Validation
+- Code generation
+
+#### Auto-save Example
+
+```typescript
+const AUTOSAVE_KEY = "oslf-workspace";
+
+editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+  const { state } = event.detail;
+  localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state));
+});
+```
+
+#### React State Sync Example
+
+```tsx
+const [workspaceState, setWorkspaceState] = useState(null);
+
+useEffect(() => {
+  const editor = editorRef.current;
+  if (!editor) return;
+
+  const handleChange = (event: CustomEvent) => {
+    setWorkspaceState(event.detail.state);
+  };
+
+  editor.addEventListener(Events.BLOCKLY_CHANGE, handleChange);
+
+  return () => {
+    editor.removeEventListener(Events.BLOCKLY_CHANGE, handleChange);
+  };
+}, []);
+```
+
+### Examples
+
+#### Complete React Example
+
+```tsx
+import { useRef, useState, useEffect } from "react";
+import "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly-io/oslf-editor";
+
+function Editor() {
+  const editorRef = useRef<HTMLElement>(null);
+  const [blocksJson, setBlocksJson] = useState("");
+
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const handleChange = (event: CustomEvent) => {
+      console.log("Workspace changed:", event.detail.state);
+    };
+
+    editor.addEventListener(Events.BLOCKLY_CHANGE, handleChange);
+
+    return () => {
+      editor.removeEventListener(Events.BLOCKLY_CHANGE, handleChange);
+    };
+  }, []);
+
+  const loadCustomBlocks = () => {
+    if (!editorRef.current || !blocksJson) return;
+
+    try {
+      const blocks = JSON.parse(blocksJson);
+      editorRef.current.dispatchEvent(
+        new CustomEvent(Events.BLOCKLY_LOAD, {
+          detail: blocks
+        })
+      );
+    } catch (error) {
+      console.error("Invalid JSON:", error);
+    }
+  };
+
+  return (
+    <div>
+      <div>
+        <textarea
+          value={blocksJson}
+          onChange={(e) => setBlocksJson(e.target.value)}
+          placeholder="Paste block definitions JSON..."
+          rows={10}
+          cols={50}
+        />
+        <button onClick={loadCustomBlocks}>Load Blocks</button>
+      </div>
+      <oslf-editor ref={editorRef}></oslf-editor>
+    </div>
+  );
+}
+```
+
+#### Vanilla JavaScript Example
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="module">
+    import "@f1r3fly-io/oslf-editor";
+    import { Events } from "@f1r3fly-io/oslf-editor";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const editor = document.querySelector("oslf-editor");
+
+      // Listen to changes
+      editor.addEventListener(Events.BLOCKLY_CHANGE, (event) => {
+        console.log("Changed:", event.detail.state);
+      });
+
+      // Load custom blocks
+      const blocks = [
+        {
+          type: "custom_block",
+          message0: "custom block",
+          colour: 160
+        }
+      ];
+
+      editor.dispatchEvent(
+        new CustomEvent(Events.BLOCKLY_LOAD, {
+          detail: blocks
+        })
+      );
+    });
+  </script>
+</head>
+<body>
+  <oslf-editor></oslf-editor>
+</body>
+</html>
+```
+
+### TypeScript Support
+
+The package includes TypeScript type definitions. Import the Events enum for type safety:
+
+```typescript
+import { Events } from "@f1r3fly-io/oslf-editor";
+
+// TypeScript will recognize the event names
+editor.addEventListener(Events.BLOCKLY_CHANGE, (event: CustomEvent) => {
+  // Type-safe event handling
+});
+```
+
+### Browser Support
+
+The editor uses Web Components (Custom Elements) which are supported in all modern browsers:
+- Chrome/Edge 67+
+- Firefox 63+
+- Safari 10.1+
+
+For older browsers, you may need to include polyfills.
+
+### Troubleshooting
+
+#### Editor not rendering
+
+Make sure you:
+1. Imported the editor: `import "@f1r3fly-io/oslf-editor"`
+2. Used the correct element name: `<oslf-editor></oslf-editor>`
+3. The element is added to the DOM before dispatching events
+
+#### Custom blocks not appearing
+
+Ensure:
+1. Block definitions are valid JSON
+2. The `type` field is unique for each block
+3. You dispatch the `BLOCKLY_LOAD` event after the editor is mounted
+
+#### Changes not firing
+
+The change event:
+- Is debounced by 1 second
+- Only fires for actual workspace changes (not UI events)
+- Bubbles up, so you can listen on parent elements
+
+### Additional Resources
+
+- [Blockly Documentation](https://developers.google.com/blockly)
+- [Custom Block Definitions](https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks)
+- [GitHub Repository](https://github.com/F1R3FLY-io/OSLF-editor)
 
 ## Project Structure
 
