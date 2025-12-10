@@ -1,4 +1,4 @@
-.PHONY: help release-fix release-minor release-major
+.PHONY: help release-fix release-feature release-breaking
 
 # Default target
 help:
@@ -24,8 +24,8 @@ help:
 	@echo ""
 	@echo "Release commands:"
 	@echo "  make release-fix         - Create and push fix version release"
-	@echo "  make release-minor       - Create and push minor version release"
-	@echo "  make release-major       - Create and push major version release"
+	@echo "  make release-feature     - Create and push feature version release"
+	@echo "  make release-breaking    - Create and push breaking version release"
 
 # Editor commands
 editor-test:
@@ -77,8 +77,8 @@ release-fix:
 	git push origin "v$$NEW_VERSION"
 	@echo "Fix release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
-release-minor:
-	@echo "Creating minor release..."
+release-feature:
+	@echo "Creating feature release..."
 	@cd editor && npm version minor --no-git-tag-version
 	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
@@ -86,10 +86,10 @@ release-minor:
 	git tag "v$$NEW_VERSION" && \
 	git push origin main && \
 	git push origin "v$$NEW_VERSION"
-	@echo "Minor release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	@echo "Feature release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
-release-major:
-	@echo "Creating major release..."
+release-breaking:
+	@echo "Creating breaking release..."
 	@cd editor && npm version major --no-git-tag-version
 	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
@@ -97,4 +97,4 @@ release-major:
 	git tag "v$$NEW_VERSION" && \
 	git push origin main && \
 	git push origin "v$$NEW_VERSION"
-	@echo "Major release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	@echo "Breaking release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"

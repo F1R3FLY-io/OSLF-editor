@@ -78,8 +78,8 @@ make playground-dev
 
 #### Release Commands
 - `make release-fix` - Create and push fix version release
-- `make release-minor` - Create and push minor version release
-- `make release-major` - Create and push major version release
+- `make release-feature` - Create and push feature version release
+- `make release-breaking` - Create and push breaking version release
 
 ## Releasing a New Version (For Contributors)
 
@@ -88,9 +88,9 @@ make playground-dev
 Use one command to bump the version, create a tag, and push:
 
 ```bash
-make release-fix     # 0.0.1 → 0.0.2
-make release-minor   # 0.0.1 → 0.1.0
-make release-major   # 0.0.1 → 1.0.0
+make release-fix       # 0.0.1 → 0.0.2 (bug fixes)
+make release-feature   # 0.0.1 → 0.1.0 (new features)
+make release-breaking  # 0.0.1 → 1.0.0 (breaking changes)
 ```
 
 This will:
