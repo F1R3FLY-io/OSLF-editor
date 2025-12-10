@@ -1,15 +1,14 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(pnpm run build:*)",
-      "Bash(make:*)",
-      "Bash(pnpm install:*)",
-      "Bash(ls:*)",
-      "Bash(pnpm pack:*)"
-    ],
-    "deny": [],
-    "ask": []
-  }
+	"permissions": {
+		"allow": [
+			"Bash(git add:*)",
+			"Bash(pnpm run build:*)",
+			"Bash(make:*)",
+			"Bash(pnpm install:*)",
+			"Bash(ls:*)",
+			"Bash(pnpm pack:*)"
+		],
+		"deny": ["Bash(git commit:*)"],
+		"ask": []
+	}
 }
