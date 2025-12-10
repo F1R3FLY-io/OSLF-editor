@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { useRef, useState, useEffect } from "react";
-import "f1r3fly-io-oslf-editor";
-import { Events } from "f1r3fly-io-oslf-editor";
+import "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly-io/oslf-editor";
 
 // Render your React component instead
 const root = createRoot(document.getElementById("app"));

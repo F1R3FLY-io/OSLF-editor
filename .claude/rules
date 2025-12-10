@@ -1,0 +1,6 @@
+# Project-Specific Rules for Claude Code
+
+## Git Commits
+- Do NOT add "Generated with [Claude Code]" footer to commit messages
+- Do NOT add "Co-Authored-By: Claude Sonnet" to commit messages
+- Keep commit messages clean and follow the project's conventional commit style

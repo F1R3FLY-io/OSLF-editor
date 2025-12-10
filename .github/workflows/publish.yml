@@ -1,0 +1,42 @@
+name: Publish Package to GitHub Packages
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.20.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@f1r3fly-io'
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ./editor
+
+      - name: Build package
+        run: pnpm run build
+        working-directory: ./editor
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks
+        working-directory: ./editor
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
