@@ -78,47 +78,42 @@ make playground-dev
 
 ## Releasing a New Version (For Contributors)
 
-Git tags are the source of truth for versioning. The package.json version is synced from git tags.
+### Create a Release
 
-### GitHub Release (Recommended)
+Use one command to bump the version, create a tag, and push:
 
-1. Create and push a git tag:
-   ```bash
-   git tag v0.1.0
-   git push origin v0.1.0
-   ```
+```bash
+make release-patch   # 0.0.1 → 0.0.2
+make release-minor   # 0.0.1 → 0.1.0
+make release-major   # 0.0.1 → 1.0.0
+```
 
-2. Sync package.json version with the tag:
-   ```bash
-   cd editor
-   npm version from-git
-   ```
+This will:
+1. Bump the version in `editor/package.json`
+2. Commit the version change
+3. Create and push a git tag
+4. Push the commit to main
 
-3. Commit and push the version change:
-   ```bash
-   git add package.json
-   git commit -m "chore: bump version to $(node -p "require('./package.json').version")"
-   git push origin main
-   ```
+### Publish to GitHub Packages
 
-4. Create a release on GitHub:
-   - Go to the repository on GitHub
-   - Click "Releases" → "Create a new release"
-   - Select the tag you created
-   - Add release notes
-   - Click "Publish release"
+After creating a release, publish it on GitHub:
+
+1. Go to [Releases](https://github.com/F1R3FLY-io/OSLF-editor/releases/new)
+2. Select the tag that was just created
+3. Add release notes
+4. Click "Publish release"
 
 The GitHub Actions workflow will automatically build and publish the package to GitHub Packages.
 
 ### Manual Publishing
 
-1. Create a git tag and sync version (steps 1-3 above)
-2. Build and publish:
-   ```bash
-   make build
-   cd editor
-   pnpm publish
-   ```
+To publish without creating a GitHub release:
+
+```bash
+make build
+cd editor
+pnpm publish
+```
 
 ## Design
 

@@ -1,4 +1,4 @@
-.PHONY: help
+.PHONY: help release-patch release-minor release-major
 
 # Default target
 help:
@@ -21,6 +21,11 @@ help:
 	@echo "  make install             - Install all dependencies"
 	@echo "  make install-editor      - Install editor dependencies"
 	@echo "  make install-playground  - Install playground dependencies"
+	@echo ""
+	@echo "Release commands:"
+	@echo "  make release-patch       - Create and push patch version release"
+	@echo "  make release-minor       - Create and push minor version release"
+	@echo "  make release-major       - Create and push major version release"
 
 # Editor commands
 editor-test:
@@ -59,3 +64,37 @@ install-playground:
 	cd playground && pnpm install
 
 install: install-editor install-playground
+
+# Release commands
+release-patch:
+	@echo "Creating patch release..."
+	@cd editor && npm version patch --no-git-tag-version
+	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	git add editor/package.json && \
+	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	git tag "v$$NEW_VERSION" && \
+	git push origin main && \
+	git push origin "v$$NEW_VERSION"
+	@echo "Patch release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+
+release-minor:
+	@echo "Creating minor release..."
+	@cd editor && npm version minor --no-git-tag-version
+	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	git add editor/package.json && \
+	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	git tag "v$$NEW_VERSION" && \
+	git push origin main && \
+	git push origin "v$$NEW_VERSION"
+	@echo "Minor release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+
+release-major:
+	@echo "Creating major release..."
+	@cd editor && npm version major --no-git-tag-version
+	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	git add editor/package.json && \
+	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	git tag "v$$NEW_VERSION" && \
+	git push origin main && \
+	git push origin "v$$NEW_VERSION"
+	@echo "Major release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
