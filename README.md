@@ -76,6 +76,11 @@ make playground-dev
 - `make clean` - Alias for `make editor-clean`
 - `make test` - Alias for `make editor-test`
 
+#### Release Commands
+- `make release-patch` - Create and push patch version release
+- `make release-minor` - Create and push minor version release
+- `make release-major` - Create and push major version release
+
 ## Releasing a New Version (For Contributors)
 
 ### Create a Release
