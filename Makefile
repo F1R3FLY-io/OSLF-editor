@@ -1,4 +1,4 @@
-.PHONY: help release-patch release-minor release-major
+.PHONY: help release-fix release-minor release-major
 
 # Default target
 help:
@@ -23,7 +23,7 @@ help:
 	@echo "  make install-playground  - Install playground dependencies"
 	@echo ""
 	@echo "Release commands:"
-	@echo "  make release-patch       - Create and push patch version release"
+	@echo "  make release-fix         - Create and push fix version release"
 	@echo "  make release-minor       - Create and push minor version release"
 	@echo "  make release-major       - Create and push major version release"
 
@@ -66,8 +66,8 @@ install-playground:
 install: install-editor install-playground
 
 # Release commands
-release-patch:
-	@echo "Creating patch release..."
+release-fix:
+	@echo "Creating fix release..."
 	@cd editor && npm version patch --no-git-tag-version
 	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
@@ -75,7 +75,7 @@ release-patch:
 	git tag "v$$NEW_VERSION" && \
 	git push origin main && \
 	git push origin "v$$NEW_VERSION"
-	@echo "Patch release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	@echo "Fix release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
 release-minor:
 	@echo "Creating minor release..."

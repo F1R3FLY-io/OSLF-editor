@@ -77,7 +77,7 @@ make playground-dev
 - `make test` - Alias for `make editor-test`
 
 #### Release Commands
-- `make release-patch` - Create and push patch version release
+- `make release-fix` - Create and push fix version release
 - `make release-minor` - Create and push minor version release
 - `make release-major` - Create and push major version release
 
@@ -88,7 +88,7 @@ make playground-dev
 Use one command to bump the version, create a tag, and push:
 
 ```bash
-make release-patch   # 0.0.1 → 0.0.2
+make release-fix     # 0.0.1 → 0.0.2
 make release-minor   # 0.0.1 → 0.1.0
 make release-major   # 0.0.1 → 1.0.0
 ```
