@@ -78,59 +78,47 @@ make playground-dev
 
 ## Releasing a New Version (For Contributors)
 
-### Option 1: GitHub Release (Recommended)
+Git tags are the source of truth for versioning. The package.json version is synced from git tags.
 
-1. Update the version in `editor/package.json`:
+### GitHub Release (Recommended)
+
+1. Create and push a git tag:
+   ```bash
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+2. Sync package.json version with the tag:
    ```bash
    cd editor
-   npm version patch  # or minor, or major
+   npm version from-git
    ```
 
-2. Commit and push the version change:
+3. Commit and push the version change:
    ```bash
-   git add editor/package.json
-   git commit -m "Bump version to x.x.x"
+   git add package.json
+   git commit -m "chore: bump version to $(node -p "require('./package.json').version")"
    git push origin main
-   ```
-
-3. Create and push a git tag:
-   ```bash
-   git tag v0.0.1
-   git push origin v0.0.1
    ```
 
 4. Create a release on GitHub:
    - Go to the repository on GitHub
    - Click "Releases" → "Create a new release"
-   - Select the tag you just created
+   - Select the tag you created
    - Add release notes
    - Click "Publish release"
 
 The GitHub Actions workflow will automatically build and publish the package to GitHub Packages.
 
-### Option 2: Manual Publishing
+### Manual Publishing
 
-1. Update the version in `editor/package.json`
-
-2. Build the package:
+1. Create a git tag and sync version (steps 1-3 above)
+2. Build and publish:
    ```bash
    make build
-   ```
-
-3. Publish to GitHub Packages:
-   ```bash
    cd editor
-   echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.npmrc
    pnpm publish
    ```
-
-### Option 3: Trigger Workflow Manually
-
-1. Update the version in `editor/package.json`
-2. Commit and push changes
-3. Go to Actions tab in GitHub
-4. Select "Publish Package to GitHub Packages"
-5. Click "Run workflow"
 
 ## Design
 
