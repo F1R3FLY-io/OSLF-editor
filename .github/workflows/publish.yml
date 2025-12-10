@@ -28,12 +28,10 @@ jobs:
           scope: '@f1r3fly-io'
 
       - name: Install dependencies
-        run: pnpm install
-        working-directory: ./editor
+        run: make install-editor
 
       - name: Build package
-        run: pnpm run build
-        working-directory: ./editor
+        run: make build
 
       - name: Publish to GitHub Packages
         run: pnpm publish --no-git-checks
