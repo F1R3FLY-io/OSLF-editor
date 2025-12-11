@@ -11,16 +11,19 @@ help:
 	@echo "  make editor-clean        - Clean editor build artifacts"
 	@echo ""
 	@echo "Playground commands:"
-	@echo "  make playground-dev      - Build playground in watch mode"
-	@echo "  make playground-open     - Serve playground locally"
+	@echo "  make playground-react-dev      - Build React playground in watch mode"
+	@echo "  make playground-react-open     - Serve React playground locally"
+	@echo "  make playground-vanilla-dev    - Build Vanilla playground in watch mode"
+	@echo "  make playground-vanilla-open   - Serve Vanilla playground locally"
 	@echo ""
 	@echo "Combined commands:"
 	@echo "  make dev                 - Run editor dev (watch mode)"
 	@echo "  make build               - Build editor"
 	@echo "  make clean               - Clean all build artifacts"
-	@echo "  make install             - Install all dependencies"
-	@echo "  make install-editor      - Install editor dependencies"
-	@echo "  make install-playground  - Install playground dependencies"
+	@echo "  make install                    - Install all dependencies"
+	@echo "  make install-editor             - Install editor dependencies"
+	@echo "  make install-playground-react   - Install React playground dependencies"
+	@echo "  make install-playground-vanilla - Install Vanilla playground dependencies"
 	@echo ""
 	@echo "Release commands:"
 	@echo "  make release-fix         - Create and push fix version release"
@@ -41,11 +44,17 @@ editor-build:
 	cd editor && pnpm run build
 
 # Playground commands
-playground-dev:
-	cd playground && pnpm run dev
+playground-react-dev:
+	cd playground/react && pnpm run dev
 
-playground-open:
-	cd playground && pnpm run start
+playground-react-open:
+	cd playground/react && pnpm run start
+
+playground-vanilla-dev:
+	cd playground/vanilla && pnpm run dev
+
+playground-vanilla-open:
+	cd playground/vanilla && pnpm run start
 
 # Combined/shortcut commands
 dev: editor-dev
@@ -60,10 +69,13 @@ test: editor-test
 install-editor:
 	cd editor && pnpm install
 
-install-playground:
-	cd playground && pnpm install
+install-playground-react:
+	cd playground/react && pnpm install
 
-install: install-editor install-playground
+install-playground-vanilla:
+	cd playground/vanilla && pnpm install
+
+install: install-editor install-playground-react install-playground-vanilla
 
 # Release commands
 release-fix:

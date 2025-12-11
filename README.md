@@ -7,12 +7,45 @@ Operational Semantics in Logical Form editor
 
 To use this editor in your project:
 
-### 1. Configure GitHub Packages
+### 1. Configure GitHub Packages Authentication
 
-Create or update `.npmrc` in your project root:
+GitHub Packages requires authentication to download packages. You'll need a Personal Access Token (PAT) with the `read:packages` permission.
+
+#### Create a GitHub Personal Access Token
+
+1. Navigate to GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
+2. Generate a new token
+3. Grant it the following scope:
+   - `read:packages` (required)
+   - `repo` (optional, only if accessing private repositories)
+4. Save the token securely - you'll need it in the next step
+
+#### Configure npm Authentication
+
+Add authentication to your `.npmrc` file. You can configure this at the project level or globally:
+
+**Project-level** (create `.npmrc` in your project root):
 
 ```
 @f1r3fly-io:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT_HERE
+```
+
+**Global** (edit `~/.npmrc` in your home directory):
+
+```
+@f1r3fly-io:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT_HERE
+```
+
+**Important:** Replace `YOUR_GITHUB_PAT_HERE` with your actual token. Never commit `.npmrc` files containing tokens to version control.
+
+**Tip:** For project-level configuration, add `.npmrc` to your `.gitignore` and provide a `.npmrc.example` file for team members:
+
+```
+# .npmrc.example
+@f1r3fly-io:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=REPLACE_WITH_YOUR_TOKEN
 ```
 
 ### 2. Install the package
@@ -416,6 +449,35 @@ The editor uses Web Components (Custom Elements) which are supported in all mode
 For older browsers, you may need to include polyfills.
 
 ### Troubleshooting
+
+#### Installation errors
+
+**`E401 Unauthorized` error:**
+- Your authentication token is missing, incorrect, or expired
+- Verify your `.npmrc` file contains the correct token
+- Regenerate your GitHub PAT if needed
+- Ensure the token has `read:packages` permission
+
+**`E404 Not Found` error:**
+- The package scope might be incorrect (should be `@f1r3fly-io/oslf-editor`)
+- The package may be private and your token lacks access
+- Check that you're using the correct registry URL in `.npmrc`
+
+**Authentication in CI/CD:**
+- Use GitHub Actions token with `permissions: packages: read`
+- Or provide a PAT as a repository secret
+- Example GitHub Actions configuration:
+  ```yaml
+  - name: Setup Node.js
+    uses: actions/setup-node@v4
+    with:
+      registry-url: 'https://npm.pkg.github.com'
+      scope: '@f1r3fly-io'
+  - name: Install dependencies
+    run: npm install
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ```
 
 #### Editor not rendering
 

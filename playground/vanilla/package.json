@@ -1,0 +1,18 @@
+{
+	"name": "playground-vanilla",
+	"version": "1.0.0",
+	"description": "Vanilla JavaScript playground for f1r3fly-io-oslf-editor",
+	"private": true,
+	"scripts": {
+		"build": "pnpx esbuild index.js --bundle --sourcemap --outfile=dist/bundle.js --format=esm",
+		"dev": "pnpx esbuild index.js --bundle --sourcemap --watch=forever --outfile=dist/bundle.js --format=esm",
+		"serve": "pnpx serve .",
+		"start": "npm run build && npm run serve"
+	},
+	"author": "Denys Bushuliak <denys.b@devbrother.com>",
+	"license": "Apache-2.0",
+	"packageManager": "pnpm@10.20.0",
+	"dependencies": {
+		"@f1r3fly-io/oslf-editor": "link:../../editor"
+	}
+}

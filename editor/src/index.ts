@@ -1,7 +1,6 @@
 import * as Blockly from "blockly/core";
-import * as En from "blockly/msg/en";
-import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
-import { OslfTheme } from "./theme";
+import { BlockDefinition } from "blockly/core/blocks";
+import { initEditor } from "./initEditor";
 
 export enum Events {
 	INIT = "blockly:init",
@@ -9,180 +8,103 @@ export enum Events {
 }
 
 const DEFAULT_TOOLBOX = {
-	kind: "flyoutToolbox",
-	contents: [],
+	kind: "categoryToolbox",
+	contents: [
+		{
+			kind: "category",
+			name: "Conrols",
+			contents: [],
+		},
+	],
 };
 
-function initEditor(toolbox?: Blockly.utils.toolbox.ToolboxDefinition) {
-	// Default empty toolbox to allow dynamic updates
-	const defaultToolbox = toolbox || DEFAULT_TOOLBOX;
+export type OSLFInstance = {
+	workspace: Blockly.Workspace;
+	handlers: Array<() => void>;
+};
 
-	let workspace = Blockly.inject("blockly", {
-		trashcan: false,
-		sounds: false,
-		scrollbars: false,
-		disable: false,
-		grid: { spacing: 7, length: 1, colour: "#3e4042", snap: true },
-		toolbox: defaultToolbox,
-		theme: OslfTheme,
-	});
-
-	// Init plugins
-	const plugin = new CrossTabCopyPaste();
-	plugin.init({ contextMenu: true, shortcut: true }, () => {
-		console.error("Some error occurred while copying or pasting");
-	});
-	Blockly.ContextMenuRegistry.registry.unregister("blockDuplicate");
-
-	// Add border styling to toolbox and flyout
-	const style = document.createElement("style");
-	style.textContent = `
-		.blocklyToolbox {
-			border-right: 1px solid #2E3F52 !important;
-		}
-		.blocklyFlyout {
-			border-right: 1px solid #2E3F52 !important;
-		}
-	`;
-	document.head.appendChild(style);
-
-	// Hide flyout when clicking on workspace (anywhere except flyout and toolbox)
-	const workspaceSvg = workspace as Blockly.WorkspaceSvg;
-	const svgElement = workspaceSvg.getCanvas().ownerSVGElement;
-	if (svgElement) {
-		svgElement.addEventListener("mousedown", (event: MouseEvent) => {
-			const target = event.target as HTMLElement;
-
-			// Don't hide if clicking on flyout or toolbox
-			if (
-				target.closest(".blocklyFlyout") ||
-				target.closest(".blocklyToolbox")
-			) {
-				return;
-			}
-
-			// Hide flyout when clicking anywhere on workspace (blocks or background)
-			const flyout = workspaceSvg.getFlyout();
-			if (flyout && flyout.isVisible()) {
-				flyout.setVisible(false);
-			}
-		});
-	}
-
-	return workspace;
+function destroy(instance: OSLFInstance) {
+	instance.handlers.forEach((callback) => callback());
+	instance.workspace.dispose();
 }
 
-type ObservedAttributesTypes = "width" | "height";
+function dispatchChanges(workspace: Blockly.Workspace) {
+	const state = Blockly.serialization.workspaces.save(
+		workspace as Blockly.WorkspaceSvg,
+	);
 
-class EditorElement extends HTMLElement {
-	private handlers: Array<Function> = [];
-	private workspace: Blockly.Workspace;
-	static observedAttributes: ObservedAttributesTypes[] = ["width", "height"];
-	private witdh: ObservedAttributesTypes;
-	private height: ObservedAttributesTypes;
+	window.dispatchEvent(
+		new CustomEvent(Events.ON_CHANGE, {
+			detail: { state },
+			bubbles: true,
+			composed: true,
+		}),
+	);
+}
 
-	attributeChangedCallback(
-		name: ObservedAttributesTypes,
-		oldValue,
-		newValue,
-	) {
-		this[name] = newValue;
-	}
+function setupWorkspaceChangeListener(workspace: Blockly.Workspace) {
+	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-	constructor() {
-		super();
-		this.attachShadow({ mode: "open" });
-		Blockly.setLocale(En);
-	}
+	workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+		// Ignore UI events, only save on actual workspace changes
+		if (event.isUiEvent) return;
 
-	connectedCallback() {
-		this.registerCallbacks();
-		this.render();
-	}
-
-	removeEventListeners() {
-		this.handlers.forEach((callback) => callback());
-	}
-
-	disconnectedCallback() {
-		this.removeEventListeners();
-	}
-
-	dispatchChanges() {
-		const state = Blockly.serialization.workspaces.save(
-			this.workspace as Blockly.WorkspaceSvg,
-		);
-
-		this.dispatchEvent(
-			new CustomEvent(Events.ON_CHANGE, {
-				detail: { state },
-				bubbles: true,
-				composed: true,
-			}),
-		);
-	}
-
-	registerListener(event: Events, callback: (...args: any[]) => void) {
-		this.addEventListener(event, callback);
-		this.handlers.push(() => {
-			this.removeEventListener(event, callback);
-			console.log(`Callback for ${event} removed`);
-		});
-	}
-
-	loadBlocks(event: CustomEvent) {
-		const blocks = event.detail;
-		if (blocks) {
-			Blockly.defineBlocksWithJsonArray(blocks);
-
-			// Generate toolbox contents from the block definitions
-			const customBlocksToolbox = blocks.map((block) => ({
-				kind: "block",
-				type: block.type,
-			}));
-
-			// Create toolbox with blocks in the root (flyout toolbox)
-			const updatedToolbox = {
-				kind: "flyoutToolbox",
-				contents: customBlocksToolbox,
-			};
-
-			// Update the workspace toolbox
-			const workspaceSvg = this.workspace as Blockly.WorkspaceSvg;
-			workspaceSvg.updateToolbox(updatedToolbox);
+		// Debounce to avoid excessive saves
+		if (debounceTimer) {
+			clearTimeout(debounceTimer);
 		}
-	}
 
-	registerCallbacks() {
-		this.registerListener(Events.INIT, this.loadBlocks);
-	}
+		debounceTimer = setTimeout(() => {
+			dispatchChanges(workspace);
+		}, 1000); // Save 1 second after last change
+	});
+}
 
-	setupWorkspaceChangeListener() {
-		let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-		this.workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-			// Ignore UI events, only save on actual workspace changes
-			if (event.isUiEvent) return;
+function loadBlocks(
+	workspace: Blockly.Workspace,
+	event: CustomEvent<BlockDefinition[]>,
+) {
+	const blocks = event.detail;
+	if (blocks) {
+		Blockly.defineBlocksWithJsonArray(blocks);
 
-			// Debounce to avoid excessive saves
-			if (debounceTimer) {
-				clearTimeout(debounceTimer);
-			}
+		// Generate toolbox contents from the block definitions
+		const customBlocksToolbox = blocks.map((block) => ({
+			kind: "block",
+			type: block.type,
+		}));
 
-			debounceTimer = setTimeout(() => {
-				this.dispatchChanges();
-			}, 1000); // Save 1 second after last change
-		});
-	}
+		// Create toolbox with blocks in the root (flyout toolbox)
+		const updatedToolbox = {
+			kind: "categoryToolbox",
+			contents: [
+				{
+					kind: "category",
+					name: "Custom blocks",
+					contents: customBlocksToolbox,
+				},
+			],
+		};
 
-	render() {
-		if (this.workspace === undefined) {
-			console.time("Rendering");
-			this.workspace = initEditor();
-			this.setupWorkspaceChangeListener();
-
-			console.timeEnd("Rendering");
-		}
+		// Update the workspace toolbox
+		const workspaceSvg = workspace as Blockly.WorkspaceSvg;
+		workspaceSvg.updateToolbox(updatedToolbox);
 	}
 }
 
-window.customElements.define("oslf-editor", EditorElement);
+export function init(container: Element): OSLFInstance {
+	const workspace = initEditor(container, DEFAULT_TOOLBOX);
+
+	container.addEventListener(Events.INIT, (event) => {
+		loadBlocks(workspace, event as any);
+	});
+
+	setupWorkspaceChangeListener(workspace);
+
+	const handlers = [];
+
+	return {
+		workspace,
+		handlers,
+	};
+}

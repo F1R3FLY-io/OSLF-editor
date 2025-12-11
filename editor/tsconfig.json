@@ -1,6 +1,14 @@
 {
 	"compilerOptions": {
 		"lib": ["ES6", "DOM"],
-		"outDir": "dist/"
-	}
+		"outDir": "dist/",
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"declarationMap": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
 }

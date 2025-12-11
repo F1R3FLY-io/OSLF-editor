@@ -22,8 +22,15 @@
 		"registry": "https://npm.pkg.github.com"
 	},
 	"main": "dist/index.js",
-	"types": "src/index.ts",
+	"types": "dist/index.d.ts",
 	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
 	"files": [
 		"dist",
 		"src"
@@ -31,7 +38,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "rm -rf dist node_modules",
-		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch --outdir=dist/ --format=esm",
+		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch=forever --outdir=dist/ --format=esm",
 		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/ --format=esm",
 		"prepublishOnly": "npm run build"
 	},

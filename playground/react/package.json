@@ -1,11 +1,11 @@
 {
-	"name": "playground",
+	"name": "react-playground",
 	"version": "1.0.0",
 	"description": "Development playground for f1r3fly-io-oslf-editor",
 	"private": true,
 	"scripts": {
-		"build": "pnpx esbuild index.tsx --bundle --sourcemap --outfile=index.js",
-		"dev": "pnpx esbuild index.tsx --bundle --sourcemap --watch=forever --outfile=index.js",
+		"build": "pnpx esbuild index.tsx --bundle --sourcemap --outfile=dist/index.js",
+		"dev": "pnpx esbuild index.tsx --bundle --sourcemap --watch=forever --outfile=dist/index.js",
 		"serve": "pnpx serve .",
 		"start": "npm run build && npm run serve"
 	},
@@ -13,12 +13,13 @@
 	"license": "UNLICENSED",
 	"packageManager": "pnpm@10.20.0",
 	"dependencies": {
-		"@f1r3fly-io/oslf-editor": "link:../editor",
+		"@f1r3fly-io/oslf-editor": "link:../../editor",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
 	},
 	"devDependencies": {
 		"@types/react": "^19.2.2",
-		"@types/react-dom": "^19.2.2"
+		"@types/react-dom": "^19.2.2",
+		"typescript": "^5.9.3"
 	}
 }

@@ -180,7 +180,7 @@ export const OslfTheme = Blockly.Theme.defineTheme("oslf_theme", {
 	categoryStyles: categoryStyles,
 	componentStyles: componentStyles,
 	fontStyle: fontStyle,
-	startHats: true, // Enable hat blocks for top-level blocks
+	startHats: false, // Enable hat blocks for top-level blocks
 });
 
 export default OslfTheme;

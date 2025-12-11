@@ -1,0 +1,132 @@
+[
+	{
+		"type": "proc_zero",
+		"tooltip": "Zero: 0",
+		"message0": "0",
+		"inputsInline": true,
+		"output": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "proc_drop",
+		"tooltip": "Drop: * ( ... )",
+		"message0": "* ( %1 )",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "CHANNEL",
+				"check": "Name"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": "Proc",
+		"nextStatement": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "proc_output",
+		"tooltip": "Output: ... ! ( ... )",
+		"message0": "%1 ! ( %2 )",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "CHANNEL",
+				"check": "Name"
+			},
+			{
+				"type": "input_value",
+				"name": "MESSAGE",
+				"check": "Proc"
+			}
+		],
+		"inputsInline": true,
+		"previousStatement": "Proc",
+		"nextStatement": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "proc_input",
+		"tooltip": "Input: for ( ... -> ... ) { ... }",
+		"message0": "for ( %1 -> %2 ) { %3 }",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "CHANNEL",
+				"check": "Name"
+			},
+			{
+				"type": "field_input",
+				"name": "VAR",
+				"text": "x"
+			},
+			{
+				"type": "input_statement",
+				"name": "ARG3",
+				"check": "Proc"
+			}
+		],
+		"previousStatement": "Proc",
+		"nextStatement": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "proc_par",
+		"tooltip": "Par: { ... }",
+		"message0": "{ %1 }",
+		"args0": [
+			{
+				"type": "input_statement",
+				"name": "PROCS",
+				"check": "Proc"
+			}
+		],
+		"previousStatement": "Proc",
+		"nextStatement": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "name_quote",
+		"tooltip": "Quote: @ ( ... )",
+		"message0": "@ ( %1 )",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "BODY",
+				"check": "Proc"
+			}
+		],
+		"inputsInline": true,
+		"output": "Name",
+		"colour": "65cda8"
+	},
+	{
+		"type": "proc_var",
+		"tooltip": "Var: ...",
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_input",
+				"name": "VAR",
+				"text": "v"
+			}
+		],
+		"inputsInline": true,
+		"output": "Proc",
+		"colour": "208bfe"
+	},
+	{
+		"type": "name_var",
+		"tooltip": "Var: ...",
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_input",
+				"name": "VAR",
+				"text": "v"
+			}
+		],
+		"inputsInline": true,
+		"output": "Name",
+		"colour": "65cda8"
+	}
+]
