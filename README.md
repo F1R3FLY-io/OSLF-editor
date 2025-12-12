@@ -1,7 +1,7 @@
 # OSLF-editor
 Operational Semantics in Logical Form editor
 
-**[Installation](#installation)** | **[API Documentation](#api-documentation)** | **[Development](#development)** | **[Releases](#releasing-a-new-version-for-contributors)**
+**[Live Demo](https://f1r3fly-io.github.io/OSLF-editor/)** | **[Installation](#installation)** | **[API Documentation](#api-documentation)** | **[Development](#development)** | **[Releases](#releasing-a-new-version-for-contributors)**
 
 ## Installation
 

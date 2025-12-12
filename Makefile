@@ -16,6 +16,11 @@ help:
 	@echo "  make playground-vanilla-dev    - Build Vanilla playground in watch mode"
 	@echo "  make playground-vanilla-open   - Serve Vanilla playground locally"
 	@echo ""
+	@echo "Documentation/GitHub Pages commands:"
+	@echo "  make docs-dev            - Build docs in watch mode"
+	@echo "  make docs-build          - Build docs for production"
+	@echo "  make docs-open           - Serve docs locally"
+	@echo ""
 	@echo "Combined commands:"
 	@echo "  make dev                 - Run editor dev (watch mode)"
 	@echo "  make build               - Build editor"
@@ -56,6 +61,16 @@ playground-vanilla-dev:
 playground-vanilla-open:
 	cd playground/vanilla && pnpm run start
 
+# Documentation/GitHub Pages commands
+docs-dev:
+	cd docs && pnpm run dev
+
+docs-build:
+	cd docs && pnpm run build
+
+docs-open:
+	cd docs && pnpm run start
+
 # Combined/shortcut commands
 dev: editor-dev
 
@@ -75,7 +90,10 @@ install-playground-react:
 install-playground-vanilla:
 	cd playground/vanilla && pnpm install
 
-install: install-editor install-playground-react install-playground-vanilla
+install-docs:
+	cd docs && pnpm install
+
+install: install-editor install-playground-react install-playground-vanilla install-docs
 
 # Release commands
 release-fix:

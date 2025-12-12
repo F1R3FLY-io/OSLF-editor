@@ -1,0 +1,18 @@
+{
+	"name": "oslf-editor-docs",
+	"version": "1.0.0",
+	"description": "GitHub Pages documentation and demo for OSLF Editor",
+	"private": true,
+	"scripts": {
+		"build": "pnpx esbuild main.js --bundle --sourcemap --minify --outfile=bundle.js --format=esm",
+		"dev": "pnpx esbuild main.js --bundle --sourcemap --watch=forever --outfile=bundle.js --format=esm",
+		"serve": "pnpx serve .",
+		"start": "npm run build && npm run serve"
+	},
+	"author": "Denys Bushuliak <denys.b@devbrother.com>",
+	"license": "Apache-2.0",
+	"packageManager": "pnpm@10.20.0",
+	"dependencies": {
+		"@f1r3fly-io/oslf-editor": "link:../editor"
+	}
+}
