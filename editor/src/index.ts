@@ -103,6 +103,8 @@ export function init(container: Element): OSLFInstance {
 
 	const handlers = [];
 
+	console.log("Editor initialized");
+
 	return {
 		workspace,
 		handlers,

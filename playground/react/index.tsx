@@ -3,48 +3,45 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { Events, init, OSLFInstance } from "@f1r3fly-io/oslf-editor";
 
 function App() {
-	const editorRef = useRef<HTMLDivElement>(null);
 	const [blocksInput, setBlocksInput] = useState<string>("");
 	const editor = useRef<OSLFInstance>(null);
 
 	const handleBlocklyChange = useCallback((event: Event) => {
 		const customEvent = event as CustomEvent;
-		console.log(customEvent.detail);
+		console.log("Workspace changed:", customEvent.detail);
 	}, []);
 
 	useEffect(() => {
-		const editorElement = editorRef.current;
+		const editorElement = document.getElementById("blockly");
 		if (!editorElement) {
 			console.error("Editor element not found!");
 			return;
 		}
 
-		editor.current = init("blockly");
+		editor.current = init(editorElement);
 
-		editorElement.addEventListener(Events.ON_CHANGE, handleBlocklyChange);
+		window.addEventListener(Events.ON_CHANGE, handleBlocklyChange);
 
 		return () => {
-			editorElement.removeEventListener(
-				Events.ON_CHANGE,
-				handleBlocklyChange,
-			);
+			window.removeEventListener(Events.ON_CHANGE, handleBlocklyChange);
 		};
 	}, [handleBlocklyChange]);
 
 	const handleLoadCustomBlocks = useCallback(() => {
-		if (!editorRef.current) {
-			alert("Editor is not ready yet.");
-			return;
-		}
-
 		if (!blocksInput.trim()) {
 			alert("Please paste custom blocks JSON first.");
 			return;
 		}
 
+		const editorElement = document.getElementById("blockly");
+		if (!editorElement) {
+			alert("Editor is not ready yet.");
+			return;
+		}
+
 		try {
 			const blocksJson = JSON.parse(blocksInput);
-			editorRef.current.dispatchEvent(
+			editorElement.dispatchEvent(
 				new CustomEvent(Events.INIT, {
 					detail: blocksJson,
 				}),
@@ -56,7 +53,8 @@ function App() {
 	}, [blocksInput]);
 
 	const handleLoadExampleBlocks = useCallback(async () => {
-		if (!editorRef.current) {
+		const editorElement = document.getElementById("blockly");
+		if (!editorElement) {
 			alert("Editor is not ready yet.");
 			return;
 		}
@@ -67,7 +65,7 @@ function App() {
 				throw new Error(`Failed to fetch: ${response.status}`);
 			}
 			const blocks = await response.json();
-			editorRef.current.dispatchEvent(
+			editorElement.dispatchEvent(
 				new CustomEvent(Events.INIT, {
 					detail: blocks,
 				}),
@@ -122,7 +120,7 @@ function App() {
 			</div>
 
 			<div className="editor-container">
-				<div id="blockly" ref={editorRef}></div>
+				<div id="blockly"></div>
 			</div>
 		</div>
 	);
