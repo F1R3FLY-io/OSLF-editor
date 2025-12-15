@@ -8,6 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@f1r3fly-io/oslf-editor':
+      '@f1r3fly.io/oslf-editor':
         specifier: link:../../editor
         version: link:../../editor

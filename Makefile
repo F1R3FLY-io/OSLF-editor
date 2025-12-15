@@ -30,6 +30,9 @@ help:
 	@echo "  make install-playground-react   - Install React playground dependencies"
 	@echo "  make install-playground-vanilla - Install Vanilla playground dependencies"
 	@echo ""
+	@echo "CI/Testing commands:"
+	@echo "  make test-ci             - Run CI tests locally (simulates GitHub Actions)"
+	@echo ""
 	@echo "Release commands:"
 	@echo "  make release-fix         - Create and push fix version release"
 	@echo "  make release-feature     - Create and push feature version release"
@@ -94,6 +97,13 @@ install-docs:
 	cd docs && pnpm install
 
 install: install-editor install-playground-react install-playground-vanilla install-docs
+
+# CI/Testing commands
+test-ci:
+	@echo "Running GitHub Actions workflows locally with act..."
+	@command -v act &> /dev/null || (echo "Error: 'act' is not installed." && echo "Install with: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash" && exit 1)
+	@command -v docker &> /dev/null || (echo "Error: Docker is required to run act." && echo "Please install Docker: https://docs.docker.com/get-docker/" && exit 1)
+	@act -W .github/workflows/github-pages.yml -j build
 
 # Release commands
 release-fix:

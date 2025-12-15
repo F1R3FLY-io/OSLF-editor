@@ -13,7 +13,7 @@
 	"license": "UNLICENSED",
 	"packageManager": "pnpm@10.20.0",
 	"dependencies": {
-		"@f1r3fly-io/oslf-editor": "link:../../editor",
+		"@f1r3fly.io/oslf-editor": "link:../../editor",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
 	},
