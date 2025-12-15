@@ -19,7 +19,7 @@
 	"license": "Apache-2.0",
 	"author": "Denys Bushuliak <denys.b@devbrother.com>",
 	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
+		"access": "public"
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

@@ -1,7 +1,7 @@
 {
 	"name": "react-playground",
 	"version": "1.0.0",
-	"description": "Development playground for f1r3fly-io-oslf-editor",
+	"description": "Development playground for @f1r3fly-io/oslf-editor",
 	"private": true,
 	"scripts": {
 		"build": "pnpx esbuild index.tsx --bundle --sourcemap --outfile=dist/index.js",

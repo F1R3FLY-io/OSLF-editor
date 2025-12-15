@@ -1,7 +1,7 @@
 {
 	"name": "playground-vanilla",
 	"version": "1.0.0",
-	"description": "Vanilla JavaScript playground for f1r3fly-io-oslf-editor",
+	"description": "Vanilla JavaScript playground for @f1r3fly-io/oslf-editor",
 	"private": true,
 	"scripts": {
 		"build": "pnpx esbuild index.js --bundle --sourcemap --outfile=dist/bundle.js --format=esm",

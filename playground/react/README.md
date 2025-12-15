@@ -1,6 +1,6 @@
 # Playground
 
-Development playground for testing and demonstrating the `f1r3fly-io-oslf-editor` package.
+Development playground for testing and demonstrating the `@f1r3fly-io/oslf-editor` package.
 
 ## Purpose
 
