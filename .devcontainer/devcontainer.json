@@ -13,6 +13,6 @@
     "forwardPorts": [3000],
     "postCreateCommand": {
         "claude code": "curl -fsSL https://claude.ai/install.sh | bash",
-        "install act": "curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash"
+        "gh act extension": "gh extension install https://github.com/nektos/gh-act"
     }
 }

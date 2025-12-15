@@ -100,10 +100,12 @@ install: install-editor install-playground-react install-playground-vanilla inst
 
 # CI/Testing commands
 test-ci:
-	@echo "Running GitHub Actions workflows locally with act..."
-	@command -v act &> /dev/null || (echo "Error: 'act' is not installed." && echo "Install with: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash" && exit 1)
-	@command -v docker &> /dev/null || (echo "Error: Docker is required to run act." && echo "Please install Docker: https://docs.docker.com/get-docker/" && exit 1)
-	@act -W .github/workflows/github-pages.yml -j build
+	@echo "Running GitHub Actions workflows locally with gh act..."
+	@command -v gh &> /dev/null || (echo "Error: 'gh' (GitHub CLI) is not installed." && echo "Install with: https://cli.github.com/" && exit 1)
+	@gh act --version &> /dev/null || (echo "Error: 'gh act' extension is not installed." && echo "Install with: gh extension install https://github.com/nektos/gh-act" && exit 1)
+	@command -v docker &> /dev/null || (echo "Error: Docker is required to run gh act." && echo "Please install Docker: https://docs.docker.com/get-docker/" && exit 1)
+	@gh act -e .github/workflows/.event.json --action-offline-mode -W .github/workflows/github-pages.yml -j build
+	@gh act -e .github/workflows/.event.json --action-offline-mode -W .github/workflows/publish.yml -j build
 
 # Release commands
 release-fix:
