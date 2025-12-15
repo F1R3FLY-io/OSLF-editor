@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Pre-push hook to run CI tests locally before pushing
+# This ensures the CI will pass on GitHub Actions
+
+echo ""
+echo "🔍 Running CI tests before push..."
+echo ""
+
+# Check if gh CLI is available
+if ! command -v gh &> /dev/null; then
+    echo "⚠️  Warning: 'gh' (GitHub CLI) is not installed. Skipping CI tests."
+    echo "To enable local CI testing, install GitHub CLI:"
+    echo "  https://cli.github.com/"
+    echo ""
+    exit 0
+fi
+
+# Check if gh act extension is available
+if ! gh act --version &> /dev/null; then
+    echo "⚠️  Warning: 'gh act' extension is not installed. Skipping CI tests."
+    echo "To enable local CI testing, install the gh act extension:"
+    echo "  gh extension install https://github.com/nektos/gh-act"
+    echo ""
+    exit 0
+fi
+
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    echo "⚠️  Warning: Docker is not available. Skipping CI tests."
+    echo "gh act requires Docker to run GitHub Actions locally."
+    echo "Install Docker: https://docs.docker.com/get-docker/"
+    echo ""
+    exit 0
+fi
+
+# Run the GitHub Pages build job
+if gh act -e .github/workflows/.event.json --action-offline-mode -W .github/workflows/github-pages.yml -j build; then
+    echo ""
+    echo "✅ All tests passed! Proceeding with push..."
+    echo ""
+    exit 0
+else
+    echo ""
+    echo "❌ CI tests failed! Push aborted."
+    echo "Fix the errors and try again."
+    echo "To skip this check, use: git push --no-verify"
+    echo ""
+    exit 1
+fi

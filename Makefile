@@ -32,6 +32,7 @@ help:
 	@echo ""
 	@echo "CI/Testing commands:"
 	@echo "  make test-ci             - Run CI tests locally (simulates GitHub Actions)"
+	@echo "  make setup-hooks         - Install git hooks for local CI testing"
 	@echo ""
 	@echo "Release commands:"
 	@echo "  make release-fix         - Create and push fix version release"
@@ -99,6 +100,13 @@ install-docs:
 install: install-editor install-playground-react install-playground-vanilla install-docs
 
 # CI/Testing commands
+setup-hooks:
+	@echo "Installing git hooks..."
+	@cp .githooks/pre-commit .git/hooks/pre-commit
+	@cp .githooks/pre-push .git/hooks/pre-push
+	@chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+	@echo "✅ Git hooks installed successfully!"
+
 test-ci:
 	@echo "Running GitHub Actions workflows locally with gh act..."
 	@command -v gh &> /dev/null || (echo "Error: 'gh' (GitHub CLI) is not installed." && echo "Install with: https://cli.github.com/" && exit 1)
