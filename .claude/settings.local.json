@@ -1,22 +1,21 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(git add:*)",
-      "Bash(pnpm run build:*)",
-      "Bash(make:*)",
-      "Bash(pnpm install:*)",
-      "Bash(ls:*)",
-      "Bash(pnpm pack:*)",
-      "Bash(find:*)",
-      "Bash(pnpm run serve)",
-      "Bash(cat:*)",
-      "Bash(npx tsc:*)",
-      "Bash(pnpm add:*)",
-      "Bash(tsc)"
-    ],
-    "deny": [
-      "Bash(git commit:*)"
-    ],
-    "ask": []
-  }
+	"permissions": {
+		"allow": [
+			"Bash(git add:*)",
+			"Bash(pnpm run build:*)",
+			"Bash(make:*)",
+			"Bash(pnpm install:*)",
+			"Bash(ls:*)",
+			"Bash(pnpm pack:*)",
+			"Bash(find:*)",
+			"Bash(pnpm run serve)",
+			"Bash(cat:*)",
+			"Bash(npx tsc:*)",
+			"Bash(pnpm add:*)",
+			"Bash(tsc)",
+			"Bash(git tag:*)"
+		],
+		"deny": [],
+		"ask": []
+	}
 }

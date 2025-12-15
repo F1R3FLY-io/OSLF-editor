@@ -1,6 +1,6 @@
-import "@f1r3fly-io/oslf-editor";
-import { init } from "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { init } from "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 
 // Wait for DOM to be ready
 document.addEventListener("DOMContentLoaded", () => {

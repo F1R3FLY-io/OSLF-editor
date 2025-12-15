@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { useRef, useState, useEffect, useCallback } from "react";
-import { Events, init, OSLFInstance } from "@f1r3fly-io/oslf-editor";
+import { Events, init, OSLFInstance } from "@f1r3fly.io/oslf-editor";
 
 function App() {
 	const [blocksInput, setBlocksInput] = useState<string>("");

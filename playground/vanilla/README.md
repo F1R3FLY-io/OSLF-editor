@@ -1,6 +1,6 @@
 # Vanilla JavaScript Playground
 
-A simple demonstration of how to embed the `@f1r3fly-io/oslf-editor` package in a plain HTML page using vanilla JavaScript.
+A simple demonstration of how to embed the `@f1r3fly.io/oslf-editor` package in a plain HTML page using vanilla JavaScript.
 
 ## Features
 
@@ -66,8 +66,8 @@ vanilla/
 The editor is imported as an ES module in `index.js`:
 
 ```javascript
-import "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 ```
 
 ### 2. Add the Custom Element

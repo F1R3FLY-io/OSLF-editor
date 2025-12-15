@@ -5,64 +5,19 @@ Operational Semantics in Logical Form editor
 
 ## Installation
 
-To use this editor in your project:
-
-### 1. Configure GitHub Packages Authentication
-
-GitHub Packages requires authentication to download packages. You'll need a Personal Access Token (PAT) with the `read:packages` permission.
-
-#### Create a GitHub Personal Access Token
-
-1. Navigate to GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
-2. Generate a new token
-3. Grant it the following scope:
-   - `read:packages` (required)
-   - `repo` (optional, only if accessing private repositories)
-4. Save the token securely - you'll need it in the next step
-
-#### Configure npm Authentication
-
-Add authentication to your `.npmrc` file. You can configure this at the project level or globally:
-
-**Project-level** (create `.npmrc` in your project root):
-
-```
-@f1r3fly-io:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT_HERE
-```
-
-**Global** (edit `~/.npmrc` in your home directory):
-
-```
-@f1r3fly-io:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT_HERE
-```
-
-**Important:** Replace `YOUR_GITHUB_PAT_HERE` with your actual token. Never commit `.npmrc` files containing tokens to version control.
-
-**Tip:** For project-level configuration, add `.npmrc` to your `.gitignore` and provide a `.npmrc.example` file for team members:
-
-```
-# .npmrc.example
-@f1r3fly-io:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=REPLACE_WITH_YOUR_TOKEN
-```
-
-### 2. Install the package
-
 ```bash
-npm install @f1r3fly-io/oslf-editor
+npm install @f1r3fly.io/oslf-editor
 # or
-pnpm add @f1r3fly-io/oslf-editor
+pnpm add @f1r3fly.io/oslf-editor
 # or
-yarn add @f1r3fly-io/oslf-editor
+yarn add @f1r3fly.io/oslf-editor
 ```
 
-### 3. Use in your application
+### Usage
 
 ```typescript
-import "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 
 // Use the custom element in your HTML
 <oslf-editor></oslf-editor>
@@ -89,8 +44,8 @@ The OSLF Editor is a web component built on top of Blockly that provides a visua
 #### Import the editor
 
 ```typescript
-import "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 ```
 
 #### Use in HTML
@@ -103,8 +58,8 @@ import { Events } from "@f1r3fly-io/oslf-editor";
 
 ```tsx
 import { useRef, useEffect } from "react";
-import "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 
 function App() {
   const editorRef = useRef<HTMLElement>(null);
@@ -140,7 +95,7 @@ The editor element exposes standard DOM methods. Interact with it primarily thro
 The editor uses Custom Events for communication. Import the `Events` enum to access event names:
 
 ```typescript
-import { Events } from "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 ```
 
 #### Event Types
@@ -330,8 +285,8 @@ useEffect(() => {
 
 ```tsx
 import { useRef, useState, useEffect } from "react";
-import "@f1r3fly-io/oslf-editor";
-import { Events } from "@f1r3fly-io/oslf-editor";
+import "@f1r3fly.io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 
 function Editor() {
   const editorRef = useRef<HTMLElement>(null);
@@ -392,8 +347,8 @@ function Editor() {
 <html>
 <head>
   <script type="module">
-    import "@f1r3fly-io/oslf-editor";
-    import { Events } from "@f1r3fly-io/oslf-editor";
+    import "@f1r3fly.io/oslf-editor";
+    import { Events } from "@f1r3fly.io/oslf-editor";
 
     document.addEventListener("DOMContentLoaded", () => {
       const editor = document.querySelector("oslf-editor");
@@ -431,7 +386,7 @@ function Editor() {
 The package includes TypeScript type definitions. Import the Events enum for type safety:
 
 ```typescript
-import { Events } from "@f1r3fly-io/oslf-editor";
+import { Events } from "@f1r3fly.io/oslf-editor";
 
 // TypeScript will recognize the event names
 editor.addEventListener(Events.ON_CHANGE, (event: CustomEvent) => {
@@ -452,37 +407,15 @@ For older browsers, you may need to include polyfills.
 
 #### Installation errors
 
-**`E401 Unauthorized` error:**
-- Your authentication token is missing, incorrect, or expired
-- Verify your `.npmrc` file contains the correct token
-- Regenerate your GitHub PAT if needed
-- Ensure the token has `read:packages` permission
-
 **`E404 Not Found` error:**
-- The package scope might be incorrect (should be `@f1r3fly-io/oslf-editor`)
-- The package may be private and your token lacks access
-- Check that you're using the correct registry URL in `.npmrc`
-
-**Authentication in CI/CD:**
-- Use GitHub Actions token with `permissions: packages: read`
-- Or provide a PAT as a repository secret
-- Example GitHub Actions configuration:
-  ```yaml
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      registry-url: 'https://npm.pkg.github.com'
-      scope: '@f1r3fly-io'
-  - name: Install dependencies
-    run: npm install
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ```
+- The package scope might be incorrect (should be `@f1r3fly.io/oslf-editor`)
+- Ensure you're using npm, pnpm, or yarn version that supports scoped packages
+- Check that you have internet connectivity to access npm registry
 
 #### Editor not rendering
 
 Make sure you:
-1. Imported the editor: `import "@f1r3fly-io/oslf-editor"`
+1. Imported the editor: `import "@f1r3fly.io/oslf-editor"`
 2. Used the correct element name: `<oslf-editor></oslf-editor>`
 3. The element is added to the DOM before dispatching events
 
@@ -508,7 +441,7 @@ The change event:
 
 ## Project Structure
 
-- `/editor` - Main editor package (published to GitHub Packages)
+- `/editor` - Main editor package (published to npm)
 - `/playground` - Development playground for testing (not published)
 
 ## Development
@@ -572,7 +505,7 @@ This will:
 3. Create and push a git tag
 4. Push the commit to main
 
-### Publish to GitHub Packages
+### Publish to npm
 
 After creating a release, publish it on GitHub:
 
@@ -581,7 +514,7 @@ After creating a release, publish it on GitHub:
 3. Add release notes
 4. Click "Publish release"
 
-The GitHub Actions workflow will automatically build and publish the package to GitHub Packages.
+The GitHub Actions workflow will automatically build and publish the package to npm.
 
 ### Manual Publishing
 
