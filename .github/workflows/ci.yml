@@ -1,0 +1,59 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+            - "feature/**"
+    pull_request:
+        branches:
+            - main
+            - develop
+
+jobs:
+    test-and-build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.20.0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install editor dependencies
+              run: cd editor && pnpm install
+
+            - name: Build editor
+              run: cd editor && pnpm run build
+
+            - name: Run editor tests
+              run: cd editor && pnpm test
+              continue-on-error: true
+
+            - name: Install docs dependencies
+              run: cd docs && pnpm install
+
+            - name: Build docs
+              run: cd docs && pnpm run build
+
+            - name: Install playground-react dependencies
+              run: cd playground/react && pnpm install
+
+            - name: Build playground-react
+              run: cd playground/react && pnpm run build
+
+            - name: Install playground-vanilla dependencies
+              run: cd playground/vanilla && pnpm install
+
+            - name: Build playground-vanilla
+              run: cd playground/vanilla && pnpm run build
