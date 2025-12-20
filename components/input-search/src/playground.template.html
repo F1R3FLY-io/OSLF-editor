@@ -1,34 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Input Component</title>
+    <title>Search Input Component - Demo</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
         body {
             margin: 0;
             padding: 40px;
-            background-color: #1a1d28;
+            background-color: #0f1115;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #e0e0e0;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .demo-item {
+            margin-bottom: 30px;
+        }
+
+        .label {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .size-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .size-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .width-label {
+            color: #4A9EFF;
+            font-size: 12px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
+    <h1>Search Input Component - Interactive Demo</h1>
 
-    <search-input></search-input>
+    <!-- States Section -->
+    <div class="section">
+        <h2>Component States</h2>
+
+        <div class="demo-item">
+            <div class="label">Default State (Empty, No Focus)</div>
+            <div style="width: 400px;">
+                <search-input placeholder="Search..."></search-input>
+            </div>
+            <div class="description">
+                Transparent background, gray placeholder text, search icon visible. Click to activate.
+            </div>
+        </div>
+
+        <div class="demo-item">
+            <div class="label">Focused State (Click to see)</div>
+            <div style="width: 400px;">
+                <search-input placeholder="Click me to focus"></search-input>
+            </div>
+            <div class="description">
+                Background appears (#2d3748) when focused. Search icon remains visible while empty.
+            </div>
+        </div>
+
+        <div class="demo-item">
+            <div class="label">Filled State (Has Value)</div>
+            <div style="width: 400px;">
+                <search-input id="filled-input" placeholder="Type something"></search-input>
+            </div>
+            <div class="description">
+                Background visible, search icon replaced with clear (X) button. Click X to clear.
+            </div>
+        </div>
+
+        <div class="demo-item">
+            <div class="label">Custom Placeholder</div>
+            <div style="width: 400px;">
+                <search-input placeholder="Categories"></search-input>
+            </div>
+            <div class="description">
+                Default placeholder is "Categories", but can be customized via attribute.
+            </div>
+        </div>
+    </div>
+
+    <!-- Sizes Section -->
+    <div class="section">
+        <h2>Responsive Sizes</h2>
+        <div class="description" style="margin-bottom: 20px;">
+            Component width adapts to parent container (100%). Here are examples with different widths:
+        </div>
+
+        <div class="size-container">
+            <div class="size-demo">
+                <div class="width-label">Small - 250px</div>
+                <div style="width: 250px;">
+                    <search-input placeholder="Small"></search-input>
+                </div>
+            </div>
+
+            <div class="size-demo">
+                <div class="width-label">Medium - 400px</div>
+                <div style="width: 400px;">
+                    <search-input placeholder="Medium"></search-input>
+                </div>
+            </div>
+
+            <div class="size-demo">
+                <div class="width-label">Large - 600px</div>
+                <div style="width: 600px;">
+                    <search-input placeholder="Large"></search-input>
+                </div>
+            </div>
+
+            <div class="size-demo">
+                <div class="width-label">Full Width - 100%</div>
+                <div style="width: 100%;">
+                    <search-input placeholder="Full Width"></search-input>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Section -->
+    <div class="section">
+        <h2>Events & API</h2>
+        <div class="demo-item">
+            <div class="label">Event Logging (Check Console)</div>
+            <div style="width: 400px;">
+                <search-input id="event-demo" placeholder="Type to see events"></search-input>
+            </div>
+            <div class="description">
+                Emits 'search' event on input (with value in event.detail.value) and 'clear' event when cleared.
+            </div>
+        </div>
+    </div>
 
     <script>
-    const inputs = document.querySelectorAll('search-input');
+        // Pre-fill one input to demonstrate filled state
+        setTimeout(() => {
+            const filledInput = document.getElementById('filled-input');
+            if (filledInput && filledInput.shadowRoot) {
+                const input = filledInput.shadowRoot.querySelector('input');
+                if (input) {
+                    input.value = 'Example text';
+                    input.dispatchEvent(new Event('input'));
+                }
+            }
+        }, 100);
 
-    inputs.forEach(input => {
-        input.addEventListener('search', (event) => {
-            console.log('Search value:', event.detail.value);
+        // Event logging
+        const inputs = document.querySelectorAll('search-input');
+        inputs.forEach(input => {
+            input.addEventListener('search', (event) => {
+                console.log('Search event:', event.detail.value);
+            });
+
+            input.addEventListener('clear', () => {
+                console.log('Clear event');
+            });
         });
 
-        input.addEventListener('clear', () => {
-            console.log('Input cleared');
-        });
-    });
+        // Special logging for the event demo
+        const eventDemo = document.getElementById('event-demo');
+        if (eventDemo) {
+            eventDemo.addEventListener('search', (event) => {
+                console.log('🔍 Search:', event.detail.value);
+            });
+            eventDemo.addEventListener('clear', () => {
+                console.log('❌ Cleared');
+            });
+        }
     </script>
 </body>
 </html>
