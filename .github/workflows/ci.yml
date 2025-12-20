@@ -57,3 +57,12 @@ jobs:
 
             - name: Build playground-vanilla
               run: cd playground/vanilla && pnpm run build
+
+            - name: Install input-search component dependencies
+              run: cd components/input-search && pnpm install
+
+            - name: Run input-search component tests
+              run: cd components/input-search && pnpm test
+
+            - name: Build input-search component
+              run: cd components/input-search && pnpm run build
