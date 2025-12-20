@@ -174,4 +174,4 @@ export class SearchInput extends HTMLElement {
     }
 }
 
-customElements.define("search-input", SearchInput);
+customElements.define("input-search", SearchInput);

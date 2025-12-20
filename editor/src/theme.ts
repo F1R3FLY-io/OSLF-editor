@@ -168,8 +168,8 @@ export const componentStyles = {
 
 // Font style for the theme
 export const fontStyle = {
-	family: "'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace",
-	weight: "normal",
+	family: "'Manrope', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace",
+	weight: "700",
 	size: 12,
 };
 

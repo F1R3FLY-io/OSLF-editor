@@ -76,7 +76,7 @@
         <div class="demo-item">
             <div class="label">Default State (Empty, No Focus)</div>
             <div style="width: 400px;">
-                <search-input placeholder="Search..."></search-input>
+                <input-search placeholder="Search..."></input-search>
             </div>
             <div class="description">
                 Transparent background, gray placeholder text, search icon visible. Click to activate.
@@ -86,7 +86,7 @@
         <div class="demo-item">
             <div class="label">Focused State (Click to see)</div>
             <div style="width: 400px;">
-                <search-input placeholder="Click me to focus"></search-input>
+                <input-search placeholder="Click me to focus"></input-search>
             </div>
             <div class="description">
                 Background appears (#2d3748) when focused. Search icon remains visible while empty.
@@ -96,7 +96,7 @@
         <div class="demo-item">
             <div class="label">Filled State (Has Value)</div>
             <div style="width: 400px;">
-                <search-input id="filled-input" placeholder="Type something"></search-input>
+                <input-search id="filled-input" placeholder="Type something"></input-search>
             </div>
             <div class="description">
                 Background visible, search icon replaced with clear (X) button. Click X to clear.
@@ -106,7 +106,7 @@
         <div class="demo-item">
             <div class="label">Custom Placeholder</div>
             <div style="width: 400px;">
-                <search-input placeholder="Categories"></search-input>
+                <input-search placeholder="Categories"></input-search>
             </div>
             <div class="description">
                 Default placeholder is "Categories", but can be customized via attribute.
@@ -125,28 +125,28 @@
             <div class="size-demo">
                 <div class="width-label">Small - 250px</div>
                 <div style="width: 250px;">
-                    <search-input placeholder="Small"></search-input>
+                    <input-search placeholder="Small"></input-search>
                 </div>
             </div>
 
             <div class="size-demo">
                 <div class="width-label">Medium - 400px</div>
                 <div style="width: 400px;">
-                    <search-input placeholder="Medium"></search-input>
+                    <input-search placeholder="Medium"></input-search>
                 </div>
             </div>
 
             <div class="size-demo">
                 <div class="width-label">Large - 600px</div>
                 <div style="width: 600px;">
-                    <search-input placeholder="Large"></search-input>
+                    <input-search placeholder="Large"></input-search>
                 </div>
             </div>
 
             <div class="size-demo">
                 <div class="width-label">Full Width - 100%</div>
                 <div style="width: 100%;">
-                    <search-input placeholder="Full Width"></search-input>
+                    <input-search placeholder="Full Width"></input-search>
                 </div>
             </div>
         </div>
@@ -158,7 +158,7 @@
         <div class="demo-item">
             <div class="label">Event Logging (Check Console)</div>
             <div style="width: 400px;">
-                <search-input id="event-demo" placeholder="Type to see events"></search-input>
+                <input-search id="event-demo" placeholder="Type to see events"></input-search>
             </div>
             <div class="description">
                 Emits 'search' event on input (with value in event.detail.value) and 'clear' event when cleared.
@@ -180,7 +180,7 @@
         }, 100);
 
         // Event logging
-        const inputs = document.querySelectorAll('search-input');
+        const inputs = document.querySelectorAll('input-search');
         inputs.forEach(input => {
             input.addEventListener('search', (event) => {
                 console.log('Search event:', event.detail.value);

@@ -8,7 +8,7 @@ describe("SearchInput", () => {
 	beforeEach(() => {
 		container = document.createElement("div");
 		document.body.appendChild(container);
-		searchInput = document.createElement("search-input") as HTMLElement;
+		searchInput = document.createElement("input-search") as HTMLElement;
 		container.appendChild(searchInput);
 	});
 
@@ -305,7 +305,7 @@ describe("SearchInput", () => {
 	describe("Edge cases", () => {
 		test("should handle attributeChangedCallback before input is initialized", () => {
 			const newElement = document.createElement(
-				"search-input",
+				"input-search",
 			) as HTMLElement;
 			// Don't append to DOM yet, so input is not initialized
 			(newElement as any).attributeChangedCallback(
@@ -347,7 +347,7 @@ describe("SearchInput", () => {
 
 		test("should handle shadowRoot before render", () => {
 			const newElement = document.createElement(
-				"search-input",
+				"input-search",
 			) as HTMLElement;
 			// setupEventListeners should handle null shadowRoot
 			(newElement as any).setupEventListeners();
