@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Input Component</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #1a1d28;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <search-input></search-input>
+
+    <script>
+    const inputs = document.querySelectorAll('search-input');
+
+    inputs.forEach(input => {
+        input.addEventListener('search', (event) => {
+            console.log('Search value:', event.detail.value);
+        });
+
+        input.addEventListener('clear', () => {
+            console.log('Input cleared');
+        });
+    });
+    </script>
+</body>
+</html>
