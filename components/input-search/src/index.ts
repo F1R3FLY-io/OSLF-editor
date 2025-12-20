@@ -14,7 +14,7 @@ const style = `
 		border: none;
 		border-radius: 12px;
 		box-sizing: border-box;
-		padding: 0 24px;
+		padding: 9px 12px;
 		transition: background-color 0.2s ease;
 	}
 
