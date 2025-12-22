@@ -3,6 +3,17 @@
 # Pre-push hook to run CI tests locally before pushing
 # This ensures the CI will pass on GitHub Actions
 
+# Get current branch name
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Only run CI tests on main branch
+if [ "$CURRENT_BRANCH" != "main" ]; then
+    echo ""
+    echo "ℹ️  Skipping CI tests (not on main branch: $CURRENT_BRANCH)"
+    echo ""
+    exit 0
+fi
+
 echo ""
 echo "🔍 Running CI tests before push..."
 echo ""
