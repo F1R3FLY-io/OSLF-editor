@@ -6,3 +6,8 @@
 - Keep commit messages clean and follow the project's conventional commit style
 - Commit messages should be concise and descriptive
 - Commit should be in English
+
+## Git Push
+- NEVER automatically push to main branch
+- NEVER ask or suggest to push to main branch
+- Only push when explicitly requested by the user for non-main branches
