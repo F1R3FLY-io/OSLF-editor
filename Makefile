@@ -1,4 +1,4 @@
-.PHONY: help release-fix release-feature release-breaking install-gh-act setup-hooks test-ci
+.PHONY: help release-fix release-feature release-breaking install-gh-act prefetch-act-image setup-hooks test-ci
 
 # Default target
 help:
@@ -32,6 +32,7 @@ help:
 	@echo ""
 	@echo "CI/Testing commands:"
 	@echo "  make install-gh-act      - Install gh act extension for local CI testing"
+	@echo "  make prefetch-act-image  - Download and configure gh act medium Docker image (~500MB)"
 	@echo "  make test-ci             - Run CI tests locally (simulates GitHub Actions)"
 	@echo "  make setup-hooks         - Install git hooks for local CI testing"
 	@echo ""
@@ -107,6 +108,16 @@ install-gh-act:
 	@gh extension install https://github.com/nektos/gh-act || (echo "Note: gh act extension may already be installed" && gh extension upgrade act)
 	@echo "✅ gh act extension installed successfully!"
 	@echo "Note: Docker is required to run gh act. Install from: https://docs.docker.com/get-docker/"
+
+prefetch-act-image:
+	@echo "Configuring and prefetching gh act medium image..."
+	@command -v docker &> /dev/null || (echo "Error: Docker is required to prefetch images." && echo "Please install Docker: https://docs.docker.com/get-docker/" && exit 1)
+	@mkdir -p ~/.config/act
+	@echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.config/act/actrc
+	@echo "✅ Act config created at ~/.config/act/actrc"
+	@echo "Pulling medium-size Docker image (catthehacker/ubuntu:act-latest, ~500MB)..."
+	@docker pull catthehacker/ubuntu:act-latest
+	@echo "✅ gh act medium image prefetched successfully!"
 
 setup-hooks:
 	@echo "Installing git hooks..."
