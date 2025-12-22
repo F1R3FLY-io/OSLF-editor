@@ -1,4 +1,4 @@
-.PHONY: help release-fix release-feature release-breaking
+.PHONY: help release-fix release-feature release-breaking install-gh-act setup-hooks test-ci
 
 # Default target
 help:
@@ -31,6 +31,7 @@ help:
 	@echo "  make install-playground-vanilla - Install Vanilla playground dependencies"
 	@echo ""
 	@echo "CI/Testing commands:"
+	@echo "  make install-gh-act      - Install gh act extension for local CI testing"
 	@echo "  make test-ci             - Run CI tests locally (simulates GitHub Actions)"
 	@echo "  make setup-hooks         - Install git hooks for local CI testing"
 	@echo ""
@@ -100,6 +101,13 @@ install-docs:
 install: install-editor install-playground-react install-playground-vanilla install-docs
 
 # CI/Testing commands
+install-gh-act:
+	@echo "Installing gh act extension..."
+	@command -v gh &> /dev/null || (echo "Error: 'gh' (GitHub CLI) is not installed." && echo "Install with: https://cli.github.com/" && exit 1)
+	@gh extension install https://github.com/nektos/gh-act || (echo "Note: gh act extension may already be installed" && gh extension upgrade act)
+	@echo "✅ gh act extension installed successfully!"
+	@echo "Note: Docker is required to run gh act. Install from: https://docs.docker.com/get-docker/"
+
 setup-hooks:
 	@echo "Installing git hooks..."
 	@cp .githooks/pre-commit .git/hooks/pre-commit
