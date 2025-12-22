@@ -8,6 +8,10 @@ export enum Events {
     ON_CHANGE = "blockly:on_change",
 }
 
+// Module-level state for block filtering
+let originalBlocks: BlockDefinition[] = [];
+let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
 const DEFAULT_TOOLBOX = {
     kind: "categoryToolbox",
     contents: [
@@ -30,6 +34,12 @@ export type OSLFInstance = {
 };
 
 function destroy(instance: OSLFInstance) {
+    // Cleanup debounce timer
+    if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = null;
+    }
+
     instance.handlers.forEach((callback) => callback());
     instance.workspace.dispose();
 }
@@ -66,31 +76,102 @@ function setupWorkspaceChangeListener(workspace: Blockly.Workspace) {
     });
 }
 
+function filterBlocksByTooltip(
+    blocks: BlockDefinition[],
+    searchTerm: string,
+): BlockDefinition[] {
+    if (!searchTerm || searchTerm.trim() === "") {
+        return blocks;
+    }
+
+    const normalizedSearch = searchTerm.toLowerCase().trim();
+
+    return blocks.filter((block) => {
+        return block.tooltip
+            ? block.tooltip.toLowerCase().includes(normalizedSearch)
+            : false;
+    });
+}
+
+function generateToolboxFromBlocks(
+    blocks: BlockDefinition[],
+    isSearchActive = false,
+) {
+    const customBlocksToolbox = blocks.map((block) => ({
+        kind: "block",
+        type: block.type,
+    }));
+
+    if (isSearchActive) {
+        // When searching, show all results in a single expanded category
+        return {
+            kind: "categoryToolbox",
+            contents: [
+                {
+                    kind: "category",
+                    name: `Search Results (${blocks.length})`,
+                    contents: customBlocksToolbox,
+                    expanded: "true",
+                    colour: "#5C81A6",
+                },
+            ],
+        };
+    }
+
+    // Category toolbox - normal mode with categories
+    return {
+        kind: "categoryToolbox",
+        contents: [
+            {
+                kind: "category",
+                name: "Custom blocks",
+                contents: customBlocksToolbox,
+            },
+        ],
+    };
+}
+
+function updateToolboxWithFilter(
+    workspace: Blockly.Workspace,
+    searchTerm: string,
+) {
+    // Guard: blocks not yet loaded
+    if (originalBlocks.length === 0) return;
+
+    const filteredBlocks = filterBlocksByTooltip(originalBlocks, searchTerm);
+    // Show search results in expanded category when searching
+    const isSearchActive = searchTerm.trim() !== "";
+    const updatedToolbox = generateToolboxFromBlocks(
+        filteredBlocks,
+        isSearchActive,
+    );
+
+    const workspaceSvg = workspace as Blockly.WorkspaceSvg;
+    workspaceSvg.updateToolbox(updatedToolbox);
+
+    // Auto-select first category to show blocks in flyout when searching
+    if (isSearchActive) {
+        const toolbox = workspaceSvg.getToolbox();
+        if (toolbox) {
+            // Select the first category (position 0) to open the flyout
+            toolbox.selectItemByPosition(0);
+        }
+    }
+}
+
 function loadBlocks(
     workspace: Blockly.Workspace,
     event: CustomEvent<BlockDefinition[]>,
 ) {
     const blocks = event.detail;
     if (blocks) {
+        // Store original blocks for filtering
+        originalBlocks = blocks;
+
         Blockly.defineBlocksWithJsonArray(blocks);
 
-        // Generate toolbox contents from the block definitions
-        const customBlocksToolbox = blocks.map((block) => ({
-            kind: "block",
-            type: block.type,
-        }));
-
-        // Create toolbox with blocks in the root (flyout toolbox)
-        const updatedToolbox = {
-            kind: "categoryToolbox",
-            contents: [
-                {
-                    kind: "category",
-                    name: "Custom blocks",
-                    contents: customBlocksToolbox,
-                },
-            ],
-        };
+        // Use shared toolbox generation function
+        const updatedToolbox = generateToolboxFromBlocks(blocks);
 
         // Update the workspace toolbox
         const workspaceSvg = workspace as Blockly.WorkspaceSvg;
@@ -166,7 +247,7 @@ export function init(container: Element): OSLFInstance {
 
     // inject search input
     const searchInput = document.createElement("input-search");
-    searchInput.placeholder = "Categories";
+    searchInput.placeholder = "Search blocks...";
 
     const workspace = initEditor(container, DEFAULT_TOOLBOX);
 
@@ -185,6 +266,30 @@ export function init(container: Element): OSLFInstance {
         console.log(toolbox);
         toolbox.prepend(searchInput);
     }
+
+    // Setup search input event listeners
+    searchInput.addEventListener("search", (event: Event) => {
+        const customEvent = event as CustomEvent<{ value: string }>;
+        const searchTerm = customEvent.detail.value;
+
+        // Debounce to avoid excessive updates
+        if (searchDebounceTimer) {
+            clearTimeout(searchDebounceTimer);
+        }
+
+        searchDebounceTimer = setTimeout(() => {
+            updateToolboxWithFilter(workspace, searchTerm);
+        }, 300);
+    });
+
+    searchInput.addEventListener("clear", () => {
+        // Clear debounce timer
+        if (searchDebounceTimer) {
+            clearTimeout(searchDebounceTimer);
+        }
+        // Immediately restore all blocks
+        updateToolboxWithFilter(workspace, "");
+    });
 
     return {
         workspace,
