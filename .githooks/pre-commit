@@ -4,10 +4,10 @@
 # This ensures the code builds successfully before committing
 
 echo ""
-read -p "🔍 Run CI tests before commit? (y/N): " -n 1 -r
+read -p "🔍 Run CI tests before commit? (Y/n): " -n 1 -r </dev/tty
 echo ""
 
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if [[ $REPLY =~ ^[Nn]$ ]]; then
     echo "⏭️  Skipping CI tests"
     echo ""
     exit 0

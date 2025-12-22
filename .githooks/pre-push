@@ -15,10 +15,10 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
 fi
 
 echo ""
-read -p "🔍 Run CI tests before push? (y/N): " -n 1 -r
+read -p "🔍 Run CI tests before push? (Y/n): " -n 1 -r </dev/tty
 echo ""
 
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if [[ $REPLY =~ ^[Nn]$ ]]; then
     echo "⏭️  Skipping CI tests"
     echo ""
     exit 0

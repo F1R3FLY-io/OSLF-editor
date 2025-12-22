@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 .PHONY: help release-fix release-feature release-breaking install-gh-act prefetch-act-image setup-hooks test-ci
 
 # Default target
@@ -162,6 +164,7 @@ release-fix:
 	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	(git tag -d "v$$NEW_VERSION" 2>/dev/null || true) && \
 	git tag "v$$NEW_VERSION" && \
 	echo "✅ Release v$$NEW_VERSION created locally" && \
 	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
@@ -193,6 +196,7 @@ release-feature:
 	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	(git tag -d "v$$NEW_VERSION" 2>/dev/null || true) && \
 	git tag "v$$NEW_VERSION" && \
 	echo "✅ Release v$$NEW_VERSION created locally" && \
 	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
@@ -224,6 +228,7 @@ release-breaking:
 	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
+	(git tag -d "v$$NEW_VERSION" 2>/dev/null || true) && \
 	git tag "v$$NEW_VERSION" && \
 	echo "✅ Release v$$NEW_VERSION created locally" && \
 	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
