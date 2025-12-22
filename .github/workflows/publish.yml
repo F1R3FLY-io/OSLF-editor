@@ -24,8 +24,8 @@ jobs:
               with:
                   node-version: "20"
 
-            - name: Install dependencies
-              run: make install-editor
+            - name: Install all workspace dependencies
+              run: pnpm install --frozen-lockfile
 
             - name: Build package
               run: make build
