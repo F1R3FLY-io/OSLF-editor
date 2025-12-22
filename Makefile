@@ -136,34 +136,94 @@ test-ci:
 
 # Release commands
 release-fix:
-	@echo "Creating fix release..."
-	@cd editor && npm version patch --no-git-tag-version
-	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "" && \
+	echo "📦 Release Preview - Fix (Patch)" && \
+	echo "================================" && \
+	echo "" && \
+	echo "Current version: $$CURRENT_VERSION" && \
+	cd editor && PREVIEW_VERSION=$$(npm version patch --no-git-tag-version 2>/dev/null) && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "New version:     $$NEW_VERSION" && \
+	echo "" && \
+	echo "Recent commits:" && \
+	git log --oneline -5 && \
+	echo "" && \
+	git checkout editor/package.json 2>/dev/null && \
+	read -p "Proceed with release? (y/N): " -n 1 -r && \
+	echo "" && \
+	if [[ ! $$REPLY =~ ^[Yy]$$ ]]; then \
+		echo "❌ Release cancelled"; \
+		exit 1; \
+	fi && \
+	echo "" && \
+	echo "Creating fix release..." && \
+	cd editor && npm version patch --no-git-tag-version && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
 	git tag "v$$NEW_VERSION" && \
-	git push origin main && \
-	git push origin "v$$NEW_VERSION"
-	@echo "Fix release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	echo "✅ Release v$$NEW_VERSION created locally" && \
+	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
 release-feature:
-	@echo "Creating feature release..."
-	@cd editor && npm version minor --no-git-tag-version
-	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "" && \
+	echo "📦 Release Preview - Feature (Minor)" && \
+	echo "====================================" && \
+	echo "" && \
+	echo "Current version: $$CURRENT_VERSION" && \
+	cd editor && PREVIEW_VERSION=$$(npm version minor --no-git-tag-version 2>/dev/null) && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "New version:     $$NEW_VERSION" && \
+	echo "" && \
+	echo "Recent commits:" && \
+	git log --oneline -5 && \
+	echo "" && \
+	git checkout editor/package.json 2>/dev/null && \
+	read -p "Proceed with release? (y/N): " -n 1 -r && \
+	echo "" && \
+	if [[ ! $$REPLY =~ ^[Yy]$$ ]]; then \
+		echo "❌ Release cancelled"; \
+		exit 1; \
+	fi && \
+	echo "" && \
+	echo "Creating feature release..." && \
+	cd editor && npm version minor --no-git-tag-version && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
 	git tag "v$$NEW_VERSION" && \
-	git push origin main && \
-	git push origin "v$$NEW_VERSION"
-	@echo "Feature release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	echo "✅ Release v$$NEW_VERSION created locally" && \
+	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
 release-breaking:
-	@echo "Creating breaking release..."
-	@cd editor && npm version major --no-git-tag-version
-	@NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "" && \
+	echo "📦 Release Preview - Breaking (Major)" && \
+	echo "=====================================" && \
+	echo "" && \
+	echo "Current version: $$CURRENT_VERSION" && \
+	cd editor && PREVIEW_VERSION=$$(npm version major --no-git-tag-version 2>/dev/null) && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	echo "New version:     $$NEW_VERSION" && \
+	echo "" && \
+	echo "Recent commits:" && \
+	git log --oneline -5 && \
+	echo "" && \
+	git checkout editor/package.json 2>/dev/null && \
+	read -p "⚠️  Proceed with BREAKING release? (y/N): " -n 1 -r && \
+	echo "" && \
+	if [[ ! $$REPLY =~ ^[Yy]$$ ]]; then \
+		echo "❌ Release cancelled"; \
+		exit 1; \
+	fi && \
+	echo "" && \
+	echo "Creating breaking release..." && \
+	cd editor && npm version major --no-git-tag-version && cd .. && \
+	NEW_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	git add editor/package.json && \
 	git commit -m "chore: bump version to $$NEW_VERSION" && \
 	git tag "v$$NEW_VERSION" && \
-	git push origin main && \
-	git push origin "v$$NEW_VERSION"
-	@echo "Breaking release created! Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
+	echo "✅ Release v$$NEW_VERSION created locally" && \
+	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
