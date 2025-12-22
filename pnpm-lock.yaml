@@ -71,6 +71,28 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  playground/react-npm:
+    dependencies:
+      '@f1r3fly.io/oslf-editor':
+        specifier: ^0.2.7
+        version: 0.2.7
+      react:
+        specifier: ^19.2.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.3(react@19.2.3)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.7
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.3(@types/react@19.2.7)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   playground/vanilla:
     dependencies:
       '@f1r3fly.io/oslf-editor':
@@ -177,6 +199,9 @@ packages:
 
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
+
+  '@f1r3fly.io/oslf-editor@0.2.7':
+    resolution: {integrity: sha512-dfSlVmv6p8rsH1lS3GJgxOkqOUEsb8c1lMSN6RkUI6/vZqOGrnmIaWlEI1F7wcocQeMhS+PbA0mTwcM8iDqTJg==}
 
   '@module-federation/error-codes@0.21.6':
     resolution: {integrity: sha512-MLJUCQ05KnoVl8xd6xs9a5g2/8U+eWmVxg7xiBMeR0+7OjdWUbHwcwgVFatRIwSZvFgKHfWEiI7wsU1q1XbTRQ==}
@@ -762,6 +787,16 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@f1r3fly.io/oslf-editor@0.2.7':
+    dependencies:
+      '@blockly/plugin-cross-tab-copy-paste': 8.0.4(blockly@12.3.1)
+      blockly: 12.3.1
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - utf-8-validate
 
   '@module-federation/error-codes@0.21.6': {}
 

@@ -1,5 +1,5 @@
 packages:
-  - 'editor'
-  - 'docs'
-  - 'playground/*'
-  - 'components/*'
+    - "editor"
+    - "docs"
+    - "playground/*"
+    - "components/*"

@@ -13,10 +13,12 @@ help:
 	@echo "  make editor-clean        - Clean editor build artifacts"
 	@echo ""
 	@echo "Playground commands:"
-	@echo "  make playground-react-dev      - Build React playground in watch mode"
-	@echo "  make playground-react-open     - Serve React playground locally"
-	@echo "  make playground-vanilla-dev    - Build Vanilla playground in watch mode"
-	@echo "  make playground-vanilla-open   - Serve Vanilla playground locally"
+	@echo "  make playground-react-dev       - Build React playground in watch mode"
+	@echo "  make playground-react-open      - Serve React playground locally"
+	@echo "  make playground-react-npm-dev   - Build React NPM playground in watch mode"
+	@echo "  make playground-react-npm-open  - Serve React NPM playground locally"
+	@echo "  make playground-vanilla-dev     - Build Vanilla playground in watch mode"
+	@echo "  make playground-vanilla-open    - Serve Vanilla playground locally"
 	@echo ""
 	@echo "Documentation/GitHub Pages commands:"
 	@echo "  make docs-dev            - Build docs in watch mode"
@@ -27,10 +29,11 @@ help:
 	@echo "  make dev                 - Run editor dev (watch mode)"
 	@echo "  make build               - Build editor"
 	@echo "  make clean               - Clean all build artifacts"
-	@echo "  make install                    - Install all dependencies"
-	@echo "  make install-editor             - Install editor dependencies"
-	@echo "  make install-playground-react   - Install React playground dependencies"
-	@echo "  make install-playground-vanilla - Install Vanilla playground dependencies"
+	@echo "  make install                      - Install all dependencies"
+	@echo "  make install-editor               - Install editor dependencies"
+	@echo "  make install-playground-react     - Install React playground dependencies"
+	@echo "  make install-playground-react-npm - Install React NPM playground dependencies"
+	@echo "  make install-playground-vanilla   - Install Vanilla playground dependencies"
 	@echo ""
 	@echo "CI/Testing commands:"
 	@echo "  make install-gh-act      - Install gh act extension for local CI testing"
@@ -63,6 +66,12 @@ playground-react-dev:
 playground-react-open:
 	cd playground/react && pnpm run start
 
+playground-react-npm-dev:
+	cd playground/react-npm && pnpm run dev
+
+playground-react-npm-open:
+	cd playground/react-npm && pnpm run start
+
 playground-vanilla-dev:
 	cd playground/vanilla && pnpm run dev
 
@@ -94,6 +103,9 @@ install-editor:
 
 install-playground-react:
 	cd playground/react && pnpm install
+
+install-playground-react-npm:
+	cd playground/react-npm && pnpm install
 
 install-playground-vanilla:
 	cd playground/vanilla && pnpm install
