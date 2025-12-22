@@ -4,7 +4,17 @@
 # This ensures the code builds successfully before committing
 
 echo ""
-echo "🔍 Running CI tests before commit..."
+read -p "🔍 Run CI tests before commit? (y/N): " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "⏭️  Skipping CI tests"
+    echo ""
+    exit 0
+fi
+
+echo ""
+echo "🔍 Running CI tests..."
 echo ""
 
 # Check if gh CLI is available

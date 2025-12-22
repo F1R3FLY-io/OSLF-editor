@@ -15,7 +15,17 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
 fi
 
 echo ""
-echo "🔍 Running CI tests before push..."
+read -p "🔍 Run CI tests before push? (y/N): " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "⏭️  Skipping CI tests"
+    echo ""
+    exit 0
+fi
+
+echo ""
+echo "🔍 Running CI tests..."
 echo ""
 
 # Check if gh CLI is available
