@@ -1,0 +1,21 @@
+# Local
+.DS_Store
+*.local
+*.log*
+
+# Dist
+node_modules
+dist/
+
+# Test coverage
+coverage/
+*.coverage
+.nyc_output/
+
+# Profile
+.rspack-profile-*/
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea

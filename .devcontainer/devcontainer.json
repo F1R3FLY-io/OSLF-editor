@@ -10,10 +10,9 @@
             "moby": true
         }
     },
-    "forwardPorts": [3000],
+    "forwardPorts": [3000, 3001, 3002, 8080, 8081, 6006],
     "postCreateCommand": {
         "claude code": "curl -fsSL https://claude.ai/install.sh | bash",
-        "gh act extension": "gh extension install https://github.com/nektos/gh-act",
         "setup hooks": "make setup-hooks"
     }
 }
