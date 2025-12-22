@@ -186,10 +186,9 @@ export function init(container: Element): OSLFInstance {
         "@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');";
     style.innerText += `
 	  .blocklyToolbox{
-			padding-top: 52px;
+			padding-top: 0;
 			min-width: 230px;
-			height: calc(100% - 58px) !important;
-			// height: 100%;
+			height: 100% !important;
 			overflow-y: hidden;
 		}
 		.blocklyToolboxCategory{
