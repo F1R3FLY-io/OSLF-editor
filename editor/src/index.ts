@@ -185,10 +185,13 @@ export function init(container: Element): OSLFInstance {
     style.innerText =
         "@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');";
     style.innerText += `
+	  .blocklyToolbox,
+	  svg.blocklySvg {
+			height: 100% !important;
+		}
 	  .blocklyToolbox{
 			padding-top: 0;
 			min-width: 230px;
-			height: 100% !important;
 			overflow-y: hidden;
 		}
 		.blocklyToolboxCategory{
