@@ -1,7 +1,7 @@
 import * as Blockly from "blockly/core";
 import { BlockDefinition } from "blockly/core/blocks";
 import { initEditor } from "./initEditor";
-import "@f1r3fly.io/input-search";
+import "./components/input-search";
 
 export enum Events {
     INIT = "blockly:init",

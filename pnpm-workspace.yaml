@@ -2,4 +2,3 @@ packages:
     - "editor"
     - "docs"
     - "playground/*"
-    - "components/*"

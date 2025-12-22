@@ -44,7 +44,6 @@
 	},
 	"dependencies": {
 		"@blockly/plugin-cross-tab-copy-paste": "^8.0.2",
-		"@f1r3fly.io/input-search": "workspace:*",
 		"blockly": "^12.3.1"
 	},
 	"devDependencies": {
