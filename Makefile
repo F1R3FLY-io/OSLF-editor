@@ -150,7 +150,14 @@ test-ci:
 
 # Release commands
 release-fix:
-	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@echo "" && \
+	read -p "🔍 Run CI tests before release? (Y/n): " -n 1 -r CI_REPLY && \
+	echo "" && \
+	if [[ ! $$CI_REPLY =~ ^[Nn]$$ ]]; then \
+		echo "Running CI tests..." && \
+		$(MAKE) test-ci || (echo "❌ CI tests failed. Release aborted." && exit 1); \
+	fi && \
+	CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	echo "" && \
 	echo "📦 Release Preview - Fix (Patch)" && \
 	echo "================================" && \
@@ -182,7 +189,14 @@ release-fix:
 	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
 release-feature:
-	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@echo "" && \
+	read -p "🔍 Run CI tests before release? (Y/n): " -n 1 -r CI_REPLY && \
+	echo "" && \
+	if [[ ! $$CI_REPLY =~ ^[Nn]$$ ]]; then \
+		echo "Running CI tests..." && \
+		$(MAKE) test-ci || (echo "❌ CI tests failed. Release aborted." && exit 1); \
+	fi && \
+	CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	echo "" && \
 	echo "📦 Release Preview - Feature (Minor)" && \
 	echo "====================================" && \
@@ -214,7 +228,14 @@ release-feature:
 	echo "📝 Create a GitHub release at https://github.com/F1R3FLY-io/OSLF-editor/releases/new"
 
 release-breaking:
-	@CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
+	@echo "" && \
+	read -p "🔍 Run CI tests before release? (Y/n): " -n 1 -r CI_REPLY && \
+	echo "" && \
+	if [[ ! $$CI_REPLY =~ ^[Nn]$$ ]]; then \
+		echo "Running CI tests..." && \
+		$(MAKE) test-ci || (echo "❌ CI tests failed. Release aborted." && exit 1); \
+	fi && \
+	CURRENT_VERSION=$$(node -p "require('./editor/package.json').version") && \
 	echo "" && \
 	echo "📦 Release Preview - Breaking (Major)" && \
 	echo "=====================================" && \
