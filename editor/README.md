@@ -589,8 +589,12 @@ The change event:
 
 ## Project Structure
 
-- `/editor` - Main editor package (published to npm)
-- `/playground` - Development playground for testing (not published)
+- `/editor` - Main editor package (published to npm as `@f1r3fly.io/oslf-editor`)
+- `/playground` - Development playgrounds for testing (not published)
+  - `/react` - React integration using local editor link
+  - `/react-npm` - Testing published npm package
+  - `/vanilla` - Vanilla JS example
+- `/docs` - GitHub Pages demo site
 
 ## Development
 
@@ -603,16 +607,19 @@ make install
 # Build editor in watch mode
 make dev
 
-# Build playground in watch mode (in a separate terminal)
-make playground-dev
+# Start React playground (in a separate terminal)
+make playground-react-open
 ```
 
 ### Available Commands
 
 #### Installation
-- `make install` - Install all dependencies (editor + playground)
+- `make install` - Install all dependencies (editor + playgrounds + docs)
 - `make install-editor` - Install editor dependencies only
-- `make install-playground` - Install playground dependencies only
+- `make install-playground-react` - Install React playground dependencies
+- `make install-playground-react-npm` - Install React NPM playground dependencies
+- `make install-playground-vanilla` - Install Vanilla playground dependencies
+- `make install-docs` - Install docs dependencies
 
 #### Editor Commands
 - `make editor-dev` - Build editor in watch mode
@@ -621,14 +628,29 @@ make playground-dev
 - `make editor-clean` - Clean editor build artifacts
 
 #### Playground Commands
-- `make playground-dev` - Build playground in watch mode
-- `make playground-open` - Serve playground locally
+- `make playground-react-dev` - Build React playground in watch mode
+- `make playground-react-open` - Serve React playground locally
+- `make playground-react-npm-dev` - Build React NPM playground in watch mode
+- `make playground-react-npm-open` - Serve React NPM playground locally
+- `make playground-vanilla-dev` - Build Vanilla playground in watch mode
+- `make playground-vanilla-open` - Serve Vanilla playground locally
+
+#### Documentation/GitHub Pages Commands
+- `make docs-dev` - Build docs in watch mode
+- `make docs-build` - Build docs for production
+- `make docs-open` - Serve docs locally
 
 #### Shortcut Commands
 - `make dev` - Alias for `make editor-dev`
 - `make build` - Alias for `make editor-build`
 - `make clean` - Alias for `make editor-clean`
 - `make test` - Alias for `make editor-test`
+
+#### CI/Testing Commands
+- `make install-gh-act` - Install gh act extension for local CI testing
+- `make prefetch-act-image` - Download and configure gh act medium Docker image
+- `make test-ci` - Run CI tests locally (simulates GitHub Actions)
+- `make setup-hooks` - Install git hooks for local CI testing
 
 #### Release Commands
 - `make release-fix` - Create and push fix version release
