@@ -2,6 +2,13 @@ import * as Blockly from "blockly/core";
 import { BlockDefinition } from "blockly/core/blocks";
 import { initEditor } from "./initEditor";
 import "./components/input-search";
+import {
+    rhoLangGenerator,
+    generateCode,
+    registerBlocks,
+    Order,
+    RhoLangGenerator,
+} from "./generator";
 
 export enum Events {
     INIT = "blockly:init",
@@ -49,9 +56,12 @@ function dispatchChanges(workspace: Blockly.Workspace) {
         workspace as Blockly.WorkspaceSvg,
     );
 
+    // Generate code from workspace using message0 templates
+    const code = generateCode(workspace);
+
     window.dispatchEvent(
         new CustomEvent(Events.ON_CHANGE, {
-            detail: { state },
+            detail: { state, code },
             bubbles: true,
             composed: true,
         }),
@@ -170,6 +180,9 @@ function loadBlocks(
 
         Blockly.defineBlocksWithJsonArray(blocks);
 
+        // Register blocks with the code generator
+        registerBlocks(blocks);
+
         // Use shared toolbox generation function
         const updatedToolbox = generateToolboxFromBlocks(blocks);
 
@@ -249,7 +262,7 @@ export function init(container: Element): OSLFInstance {
 
     // inject search input
     const searchInput = document.createElement("input-search");
-    searchInput.placeholder = "Search blocks...";
+    searchInput.setAttribute("placeholder", "Search blocks...");
 
     const workspace = initEditor(container, DEFAULT_TOOLBOX);
 
@@ -298,3 +311,6 @@ export function init(container: Element): OSLFInstance {
         handlers,
     };
 }
+
+// Re-export generator utilities
+export { rhoLangGenerator, generateCode, registerBlocks, Order, RhoLangGenerator };

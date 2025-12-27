@@ -4,11 +4,18 @@ import { Events, init, OSLFInstance } from "@f1r3fly.io/oslf-editor";
 
 function App() {
 	const [blocksInput, setBlocksInput] = useState<string>("");
+	const [generatedCode, setGeneratedCode] = useState<string>("");
+	const [workspaceState, setWorkspaceState] = useState<string>("");
 	const editor = useRef<OSLFInstance>(null);
 
 	const handleBlocklyChange = useCallback((event: Event) => {
 		const customEvent = event as CustomEvent;
 		console.log("Workspace changed:", customEvent.detail);
+
+		// Update UI with generated code and workspace state
+		const { code, state } = customEvent.detail;
+		setGeneratedCode(code || "");
+		setWorkspaceState(JSON.stringify(state, null, 2));
 	}, []);
 
 	useEffect(() => {
@@ -121,6 +128,17 @@ function App() {
 
 			<div className="editor-container">
 				<div id="blockly"></div>
+			</div>
+
+			<div className="output-section">
+				<div className="output-panel">
+					<h2>Generated Code</h2>
+					<pre className="code-output">{generatedCode || "// No code generated yet. Add blocks to the workspace."}</pre>
+				</div>
+				<div className="output-panel">
+					<h2>Workspace State (JSON)</h2>
+					<pre className="state-output">{workspaceState || "// No workspace state yet."}</pre>
+				</div>
 			</div>
 		</div>
 	);
