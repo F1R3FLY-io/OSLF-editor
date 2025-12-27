@@ -151,6 +151,42 @@ header p {
 	min-height: 400px;
 }
 
+.output-section {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+.output-panel {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.output-panel h2 {
+	margin: 0 0 15px 0;
+	font-size: 18px;
+	color: #333;
+}
+
+.code-output,
+.state-output {
+	background-color: #1e1e1e;
+	color: #d4d4d4;
+	padding: 15px;
+	border-radius: 4px;
+	font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", monospace;
+	font-size: 13px;
+	line-height: 1.5;
+	overflow: auto;
+	max-height: 300px;
+	margin: 0;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
 footer {
 	text-align: center;
 	padding: 20px;
@@ -169,6 +205,12 @@ footer a {
 
 footer a:hover {
 	text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+	.output-section {
+		grid-template-columns: 1fr;
+	}
 }
 
 @media (max-width: 768px) {

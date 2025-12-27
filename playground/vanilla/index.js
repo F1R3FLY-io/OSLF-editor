@@ -60,9 +60,26 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	};
 
+	// Get output elements
+	const codeOutput = document.getElementById("code-output");
+	const stateOutput = document.getElementById("state-output");
+
 	// Listen to workspace changes
 	const handleBlocklyChange = (event) => {
 		console.log("Workspace changed:", event.detail);
+
+		// Update UI with generated code and workspace state
+		const { code, state } = event.detail;
+
+		if (codeOutput) {
+			codeOutput.textContent = code || "// No code generated yet. Add blocks to the workspace.";
+		}
+
+		if (stateOutput) {
+			stateOutput.textContent = state
+				? JSON.stringify(state, null, 2)
+				: "// No workspace state yet.";
+		}
 	};
 
 	// Attach event listeners
