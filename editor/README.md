@@ -35,6 +35,7 @@ The OSLF Editor is built on top of Blockly and provides a visual editor for Oper
 - [API Reference](#api-reference)
 - [Events](#events)
 - [Loading Custom Blocks](#loading-custom-blocks)
+- [Code Generator](#code-generator)
 - [Listening to Changes](#listening-to-changes)
 - [Examples](#examples)
 - [TypeScript Support](#typescript-support)
@@ -179,8 +180,10 @@ Dispatched **from** `window` when the workspace changes.
 ```typescript
 window.addEventListener(Events.ON_CHANGE, (event: Event) => {
   const customEvent = event as CustomEvent;
-  const { state } = customEvent.detail;
-  console.log("Workspace changed:", state);
+  const { state, code } = customEvent.detail;
+
+  console.log("Workspace state:", state);
+  console.log("Generated code:", code);
 
   // Save to localStorage
   localStorage.setItem("workspace", JSON.stringify(state));
@@ -195,7 +198,8 @@ window.addEventListener(Events.ON_CHANGE, (event: Event) => {
       languageVersion: number,
       blocks: Array<BlockState>
     }
-  }
+  },
+  code: string  // Generated code from blocks using message0 templates
 }
 ```
 
@@ -273,6 +277,88 @@ container.dispatchEvent(
     detail: blocks
   })
 );
+```
+
+### Code Generator
+
+The OSLF Editor includes a built-in code generator that converts visual blocks into text code. The generator uses each block's `message0` field as a template, replacing `%N` placeholders with the actual values from connected inputs.
+
+#### How It Works
+
+When you define a block like:
+
+```json
+{
+  "type": "proc_input",
+  "message0": "for ( %1 -> %2 ) { %3 }",
+  "args0": [
+    { "type": "input_value", "name": "CHANNEL", "check": "Name" },
+    { "type": "field_input", "name": "VAR", "text": "x" },
+    { "type": "input_statement", "name": "BODY", "check": "Proc" }
+  ]
+}
+```
+
+The generator produces code like: `for ( @(channel) -> x ) { ... }`
+
+#### Automatic Code Generation
+
+Code is automatically generated whenever the workspace changes and is included in the `ON_CHANGE` event:
+
+```typescript
+window.addEventListener(Events.ON_CHANGE, (event: Event) => {
+  const { code, state } = (event as CustomEvent).detail;
+  console.log("Generated code:", code);
+});
+```
+
+#### Manual Code Generation
+
+You can also generate code directly using the exported `generateCode` function:
+
+```typescript
+import { init, generateCode } from "@f1r3fly.io/oslf-editor";
+
+const container = document.getElementById("editor");
+const editor = init(container);
+
+// Generate code from current workspace
+const code = generateCode(editor.workspace);
+console.log(code);
+```
+
+#### Generator API Reference
+
+##### `generateCode(workspace): string`
+
+Generates code from all blocks in the workspace.
+
+```typescript
+import { generateCode } from "@f1r3fly.io/oslf-editor";
+
+const editor = init(container);
+const code = generateCode(editor.workspace);
+```
+
+##### `registerBlocks(blocks): void`
+
+Registers block definitions with the code generator. This is called automatically when you dispatch the `INIT` event, but you can call it manually if needed.
+
+```typescript
+import { registerBlocks } from "@f1r3fly.io/oslf-editor";
+
+registerBlocks(myBlockDefinitions);
+```
+
+##### `rhoLangGenerator`
+
+The generator instance for advanced usage:
+
+```typescript
+import { rhoLangGenerator } from "@f1r3fly.io/oslf-editor";
+
+// Access the generator directly
+const code = rhoLangGenerator.workspaceToCode(editor.workspace);
 ```
 
 ### Listening to Changes
@@ -427,7 +513,14 @@ function Editor() {
 The package includes TypeScript type definitions. Import types and enums for full type safety:
 
 ```typescript
-import { init, Events, OSLFInstance } from "@f1r3fly.io/oslf-editor";
+import {
+  init,
+  Events,
+  OSLFInstance,
+  generateCode,
+  registerBlocks,
+  rhoLangGenerator
+} from "@f1r3fly.io/oslf-editor";
 
 const container = document.getElementById("editor") as HTMLElement;
 const editor: OSLFInstance = init(container);
@@ -435,9 +528,15 @@ const editor: OSLFInstance = init(container);
 // TypeScript will recognize the event names
 window.addEventListener(Events.ON_CHANGE, (event: Event) => {
   const customEvent = event as CustomEvent;
+  const { state, code } = customEvent.detail;
+
   // Type-safe event handling
-  console.log(customEvent.detail.state);
+  console.log("State:", state);
+  console.log("Code:", code);
 });
+
+// Generate code with full type safety
+const code: string = generateCode(editor.workspace);
 ```
 
 ### Browser Support
