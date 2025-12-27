@@ -36,7 +36,7 @@
 		"src"
 	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "vitest run",
 		"clean": "rm -rf dist node_modules",
 		"dev": "pnpx esbuild src/index.ts --bundle --sourcemap --watch=forever --outdir=dist/ --format=esm",
 		"build": "pnpx esbuild src/index.ts --bundle --sourcemap --minify --outdir=dist/ --format=esm",
@@ -47,6 +47,7 @@
 		"blockly": "^12.3.1"
 	},
 	"devDependencies": {
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.16"
 	}
 }
