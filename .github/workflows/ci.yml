@@ -38,7 +38,6 @@ jobs:
 
             - name: Run editor tests
               run: cd editor && pnpm test
-              continue-on-error: true
 
             - name: Build docs
               run: cd docs && pnpm run build
