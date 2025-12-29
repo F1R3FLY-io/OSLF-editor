@@ -21,8 +21,8 @@ class OslfConstantProvider extends Blockly.zelos.ConstantProvider {
 	}
 
 	/**
-	 * Create a rounded puzzle tab shape.
-	 * This replaces the default Zelos puzzle tab with a smoother curve.
+	 * Create a rounded rectangle puzzle tab shape.
+	 * Small horizontal bump with rounded corners for value input connections.
 	 */
 	private makeRoundedPuzzleTab(): {
 		type: number;
@@ -31,27 +31,32 @@ class OslfConstantProvider extends Blockly.zelos.ConstantProvider {
 		pathDown: string;
 		pathUp: string;
 	} {
-		const width = this.TAB_WIDTH;
-		const height = this.TAB_HEIGHT;
+		// Small rounded rectangle tab dimensions
+		const tabWidth = 8;
+		const tabHeight = 16;
+		const radius = 4;
 
-		// Smooth rounded puzzle tab using bezier curves
-		// Creates a rounded protrusion for value input connections
+		// Path going down (right side of block)
+		// Creates a small rounded rectangle protruding to the right
 		const pathDown =
-			`v 5 ` +
-			`c 0,10 -8,8 -8,7.5 ` +
-			`s 8,-2.5 8,7.5 ` +
-			`v 5`;
+			`v ${(tabHeight - radius * 2) / 2} ` + // go down to start of tab
+			`c 0,${radius} ${radius},${radius} ${tabWidth},${radius} ` + // curve out to tab
+			`v ${tabHeight - radius * 2} ` + // straight down along tab
+			`c -${tabWidth - radius},0 -${tabWidth},${radius} -${tabWidth},${radius} ` + // curve back
+			`v ${(tabHeight - radius * 2) / 2}`; // continue down
 
+		// Path going up (reverse)
 		const pathUp =
-			`v -5 ` +
-			`c 0,-10 -8,-8 -8,-7.5 ` +
-			`s 8,2.5 8,-7.5 ` +
-			`v -5`;
+			`v -${(tabHeight - radius * 2) / 2} ` +
+			`c 0,-${radius} ${radius},-${radius} ${tabWidth},-${radius} ` +
+			`v -${tabHeight - radius * 2} ` +
+			`c -${tabWidth - radius},0 -${tabWidth},-${radius} -${tabWidth},-${radius} ` +
+			`v -${(tabHeight - radius * 2) / 2}`;
 
 		return {
 			type: this.SHAPES.PUZZLE,
-			width: width,
-			height: height,
+			width: tabWidth,
+			height: tabHeight,
 			pathDown: pathDown,
 			pathUp: pathUp,
 		};
@@ -59,6 +64,7 @@ class OslfConstantProvider extends Blockly.zelos.ConstantProvider {
 
 	/**
 	 * Override notch shape for statement connections (top/bottom connectors).
+	 * Creates a smooth curved wave-like indentation.
 	 */
 	override makeNotch(): {
 		type: number;
@@ -67,32 +73,27 @@ class OslfConstantProvider extends Blockly.zelos.ConstantProvider {
 		pathLeft: string;
 		pathRight: string;
 	} {
-		const width = this.NOTCH_WIDTH;
-		const height = this.NOTCH_HEIGHT;
+		// Smooth wave notch dimensions
+		const notchWidth = 36;
+		const notchHeight = 8;
 
-		// Rounded notch shape using smooth curves
+		// Smooth curved notch - wave shape going down then up
+		// pathLeft: drawing from left to right (used on top of blocks)
 		const pathLeft =
-			`c 2,0 3,1 4,2 ` +
-			`l 4,4 ` +
-			`c 1,1 2,2 4,2 ` +
-			`l 8,0 ` +
-			`c 2,0 3,-1 4,-2 ` +
-			`l 4,-4 ` +
-			`c 1,-1 2,-2 4,-2`;
+			`c 3,0 6,${notchHeight} 9,${notchHeight} ` + // curve down
+			`l ${notchWidth - 18},0 ` + // flat bottom
+			`c 3,0 6,-${notchHeight} 9,-${notchHeight}`; // curve up
 
+		// pathRight: drawing from right to left (used on bottom of blocks)
 		const pathRight =
-			`c -2,0 -3,1 -4,2 ` +
-			`l -4,4 ` +
-			`c -1,1 -2,2 -4,2 ` +
-			`l -8,0 ` +
-			`c -2,0 -3,-1 -4,-2 ` +
-			`l -4,-4 ` +
-			`c -1,-1 -2,-2 -4,-2`;
+			`c -3,0 -6,${notchHeight} -9,${notchHeight} ` +
+			`l -${notchWidth - 18},0 ` +
+			`c -3,0 -6,-${notchHeight} -9,-${notchHeight}`;
 
 		return {
 			type: this.SHAPES.NOTCH,
-			width: width,
-			height: height,
+			width: notchWidth,
+			height: notchHeight,
 			pathLeft: pathLeft,
 			pathRight: pathRight,
 		};
