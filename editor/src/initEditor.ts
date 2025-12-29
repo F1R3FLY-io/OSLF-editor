@@ -2,7 +2,6 @@ import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
 import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
 import { applyBlockGradients } from "./gradients";
-import "./renderer"; // Register custom OSLF renderer
 import OslfTheme from "./theme";
 
 export function initEditor(
@@ -22,7 +21,7 @@ export function initEditor(
 		grid: { spacing: 7, length: 1, colour: "#3e4042", snap: true },
 		toolbox: toolbox,
 		theme: OslfTheme,
-		renderer: "oslf_renderer",
+		renderer: "zelos",
 	});
 
 	// Init plugins
