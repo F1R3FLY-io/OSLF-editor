@@ -1,144 +1,205 @@
 import type * as Blockly from "blockly/core";
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+const GRADIENT_STYLE_ID = "blockly-gradient-styles";
+
+/** Store for tracking created gradients */
+const createdGradients = new Set<string>();
+
+/** Reference to the style element */
+let gradientStyle: HTMLStyleElement | null = null;
+
+/** Map of SVG elements to their gradient defs */
+const svgDefsMap = new Map<SVGSVGElement, SVGDefsElement>();
+
+/** MutationObserver for detecting new blocks */
+let observer: MutationObserver | null = null;
+
 /**
- * Gradient configuration for block styling.
- * Each gradient has a light color (top) and dark color (bottom).
+ * Converts a hex color to RGB components.
  */
-interface GradientConfig {
-	id: string;
-	lightColor: string;
-	darkColor: string;
+function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	if (!result) return null;
+	return {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16),
+	};
 }
 
 /**
- * Generate gradient definitions based on block colors.
- * Creates a vertical gradient from light (top) to dark (bottom).
+ * Converts RGB components to hex color.
  */
-function createGradientConfigs(): GradientConfig[] {
-	return [
-		// Yellow/Gold - for contract, send/receive blocks
-		{ id: "gradient-yellow", lightColor: "#ffe066", darkColor: "#c9a227" },
-		// Blue - for control, process blocks
-		{ id: "gradient-blue", lightColor: "#66b3ff", darkColor: "#1a5c99" },
-		// Purple/Violet - for name, logical blocks
-		{ id: "gradient-purple", lightColor: "#b366ff", darkColor: "#5c2d91" },
-		// Green - for ground, comparison blocks
-		{ id: "gradient-green", lightColor: "#66e066", darkColor: "#2d8f2d" },
-		// Pink/Magenta - for collection, composition blocks
-		{ id: "gradient-pink", lightColor: "#ff66a3", darkColor: "#99264d" },
-		// Orange - for receipt, arithmetic blocks
-		{ id: "gradient-orange", lightColor: "#ffb366", darkColor: "#995c1a" },
-		// Cyan - for declaration blocks
-		{ id: "gradient-cyan", lightColor: "#66e6e6", darkColor: "#1a9999" },
-		// Yellow-green - for method blocks
-		{ id: "gradient-lime", lightColor: "#d4e866", darkColor: "#8fa61a" },
-	];
+function rgbToHex(r: number, g: number, b: number): string {
+	const toHex = (n: number) => {
+		const clamped = Math.max(0, Math.min(255, Math.round(n)));
+		return clamped.toString(16).padStart(2, "0");
+	};
+	return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
 /**
- * Creates SVG gradient definitions element.
+ * Creates a lighter version of a color (for gradient top).
+ * Increases brightness by mixing with white.
  */
-function createGradientDefs(): SVGDefsElement {
-	const svgNS = "http://www.w3.org/2000/svg";
-	const defs = document.createElementNS(svgNS, "defs");
+function lightenColor(hex: string, amount = 0.3): string {
+	const rgb = hexToRgb(hex);
+	if (!rgb) return hex;
 
-	const gradients = createGradientConfigs();
+	return rgbToHex(
+		rgb.r + (255 - rgb.r) * amount,
+		rgb.g + (255 - rgb.g) * amount,
+		rgb.b + (255 - rgb.b) * amount,
+	);
+}
 
-	for (const gradient of gradients) {
-		const linearGradient = document.createElementNS(svgNS, "linearGradient");
-		linearGradient.setAttribute("id", gradient.id);
-		linearGradient.setAttribute("x1", "0%");
-		linearGradient.setAttribute("y1", "0%");
-		linearGradient.setAttribute("x2", "0%");
-		linearGradient.setAttribute("y2", "100%");
+/**
+ * Creates a darker version of a color (for gradient bottom).
+ * Decreases brightness by mixing with black.
+ */
+function darkenColor(hex: string, amount = 0.35): string {
+	const rgb = hexToRgb(hex);
+	if (!rgb) return hex;
 
-		const stop1 = document.createElementNS(svgNS, "stop");
-		stop1.setAttribute("offset", "0%");
-		stop1.setAttribute("stop-color", gradient.lightColor);
+	return rgbToHex(rgb.r * (1 - amount), rgb.g * (1 - amount), rgb.b * (1 - amount));
+}
 
-		const stop2 = document.createElementNS(svgNS, "stop");
-		stop2.setAttribute("offset", "100%");
-		stop2.setAttribute("stop-color", gradient.darkColor);
+/**
+ * Generates a gradient ID from a hex color.
+ */
+function getGradientId(hex: string): string {
+	// Remove # and create a valid ID
+	return `gradient-${hex.replace("#", "").toLowerCase()}`;
+}
 
-		linearGradient.appendChild(stop1);
-		linearGradient.appendChild(stop2);
-		defs.appendChild(linearGradient);
+/**
+ * Creates an SVG linear gradient element for a given color.
+ */
+function createGradientElement(baseColor: string): SVGLinearGradientElement {
+	const gradientId = getGradientId(baseColor);
+	const lightColor = lightenColor(baseColor);
+	const darkColor = darkenColor(baseColor);
+
+	const linearGradient = document.createElementNS(SVG_NS, "linearGradient");
+	linearGradient.setAttribute("id", gradientId);
+	linearGradient.setAttribute("x1", "0%");
+	linearGradient.setAttribute("y1", "0%");
+	linearGradient.setAttribute("x2", "0%");
+	linearGradient.setAttribute("y2", "100%");
+
+	const stop1 = document.createElementNS(SVG_NS, "stop");
+	stop1.setAttribute("offset", "0%");
+	stop1.setAttribute("stop-color", lightColor);
+
+	const stop2 = document.createElementNS(SVG_NS, "stop");
+	stop2.setAttribute("offset", "100%");
+	stop2.setAttribute("stop-color", darkColor);
+
+	linearGradient.appendChild(stop1);
+	linearGradient.appendChild(stop2);
+
+	return linearGradient;
+}
+
+/**
+ * Adds a CSS rule to apply a gradient to blocks with a specific fill color.
+ */
+function addGradientCssRule(baseColor: string): void {
+	if (!gradientStyle) return;
+
+	const gradientId = getGradientId(baseColor);
+	const normalizedColor = baseColor.toLowerCase();
+
+	// Add CSS rule for this specific color
+	const rule = `.blocklyPath[fill="${normalizedColor}"] { fill: url(#${gradientId}) !important; }`;
+	gradientStyle.textContent += rule + "\n";
+}
+
+/**
+ * Gets or creates gradient defs for an SVG element.
+ */
+function getOrCreateDefs(svg: SVGSVGElement): SVGDefsElement {
+	let defs = svgDefsMap.get(svg);
+	if (!defs) {
+		defs = document.createElementNS(SVG_NS, "defs");
+		defs.setAttribute("data-gradients", "true");
+		svg.insertBefore(defs, svg.firstChild);
+		svgDefsMap.set(svg, defs);
 	}
-
 	return defs;
 }
 
 /**
- * CSS styles to apply gradients to blocks based on their fill color.
- * Maps block colors to gradient IDs.
+ * Ensures a gradient exists for the given color in the specified SVG.
+ * Creates the gradient definition and CSS rule if needed.
  */
-function createGradientStyles(): string {
-	return `
-		/* Yellow/Gold blocks */
-		.blocklyPath[fill="#ffcc00"],
-		.blocklyPath[fill="#ffab19"],
-		.blocklyPath[fill="#d9ad00"],
-		.blocklyPath[fill="#d98f15"] {
-			fill: url(#gradient-yellow) !important;
-		}
+function ensureGradientForColor(baseColor: string, svg: SVGSVGElement): void {
+	const normalizedColor = baseColor.toLowerCase();
 
-		/* Blue blocks */
-		.blocklyPath[fill="#208bfe"],
-		.blocklyPath[fill="#4d97ff"],
-		.blocklyPath[fill="#1a73d8"],
-		.blocklyPath[fill="#3d7fd9"],
-		.blocklyPath[fill="#4ea3ff"] {
-			fill: url(#gradient-blue) !important;
-		}
+	// Skip invalid colors
+	if (!hexToRgb(normalizedColor)) return;
 
-		/* Purple/Violet blocks */
-		.blocklyPath[fill="#9966ff"],
-		.blocklyPath[fill="#a366ff"],
-		.blocklyPath[fill="#7f52d9"],
-		.blocklyPath[fill="#8852d9"],
-		.blocklyPath[fill="#65cda8"] {
-			fill: url(#gradient-purple) !important;
-		}
+	// Get or create defs for this SVG
+	const defs = getOrCreateDefs(svg);
+	const gradientId = getGradientId(normalizedColor);
 
-		/* Green blocks */
-		.blocklyPath[fill="#5cb85c"],
-		.blocklyPath[fill="#40bf86"],
-		.blocklyPath[fill="#4a9d4a"],
-		.blocklyPath[fill="#359f6f"] {
-			fill: url(#gradient-green) !important;
-		}
+	// Check if gradient already exists in this SVG
+	if (!defs.querySelector(`#${gradientId}`)) {
+		const gradient = createGradientElement(normalizedColor);
+		defs.appendChild(gradient);
+	}
 
-		/* Pink/Magenta blocks */
-		.blocklyPath[fill="#ff6680"],
-		.blocklyPath[fill="#ff4da6"],
-		.blocklyPath[fill="#d94f6b"],
-		.blocklyPath[fill="#d93f8a"] {
-			fill: url(#gradient-pink) !important;
-		}
-
-		/* Orange blocks */
-		.blocklyPath[fill="#ff6b35"],
-		.blocklyPath[fill="#d9592c"] {
-			fill: url(#gradient-orange) !important;
-		}
-
-		/* Cyan blocks */
-		.blocklyPath[fill="#00c9c9"],
-		.blocklyPath[fill="#00a7a7"] {
-			fill: url(#gradient-cyan) !important;
-		}
-
-		/* Lime/Yellow-green blocks */
-		.blocklyPath[fill="#c4d91f"],
-		.blocklyPath[fill="#a3b619"] {
-			fill: url(#gradient-lime) !important;
-		}
-	`;
+	// Add CSS rule if not already added globally
+	if (!createdGradients.has(normalizedColor)) {
+		addGradientCssRule(normalizedColor);
+		createdGradients.add(normalizedColor);
+	}
 }
 
 /**
- * Injects gradient definitions and styles into a Blockly workspace.
- * Should be called after workspace initialization.
+ * Scans all Blockly SVGs for block paths and creates gradients for their colors.
+ */
+function scanAllSvgsForGradients(): void {
+	// Find all SVGs that might contain blocks
+	const allSvgs = document.querySelectorAll<SVGSVGElement>(
+		"svg.blocklySvg, svg.blocklyFlyout",
+	);
+
+	allSvgs.forEach((svg) => {
+		const blockPaths = svg.querySelectorAll(".blocklyPath[fill]");
+		blockPaths.forEach((path) => {
+			const fill = path.getAttribute("fill");
+			if (fill && fill.startsWith("#")) {
+				ensureGradientForColor(fill, svg);
+			}
+		});
+	});
+}
+
+/**
+ * Sets up a MutationObserver to detect new blocks and apply gradients.
+ */
+function setupObserver(container: Element): void {
+	if (observer) return;
+
+	observer = new MutationObserver(() => {
+		// Debounce scanning to avoid excessive updates
+		scanAllSvgsForGradients();
+	});
+
+	// Observe the entire container for any changes
+	observer.observe(container, {
+		childList: true,
+		subtree: true,
+		attributes: true,
+		attributeFilter: ["fill"],
+	});
+}
+
+/**
+ * Initializes the gradient system for a Blockly workspace.
+ * Dynamically creates gradients based on actual block colors.
  *
  * @param workspace - The Blockly workspace to apply gradients to
  */
@@ -149,31 +210,49 @@ export function applyBlockGradients(workspace: Blockly.WorkspaceSvg): void {
 		return;
 	}
 
-	// Check if gradients are already injected
-	if (svg.querySelector("defs linearGradient")) {
+	// Find the container element (parent of all Blockly SVGs)
+	const container = svg.parentElement;
+	if (!container) {
+		console.warn("Could not find workspace container");
 		return;
 	}
 
-	// Add gradient definitions to SVG
-	const defs = createGradientDefs();
-	svg.insertBefore(defs, svg.firstChild);
-
-	// Add CSS styles
-	const styleId = "blockly-gradient-styles";
-	if (!document.getElementById(styleId)) {
-		const style = document.createElement("style");
-		style.id = styleId;
-		style.textContent = createGradientStyles();
-		document.head.appendChild(style);
+	// Create style element if not exists
+	if (!gradientStyle) {
+		gradientStyle = document.createElement("style");
+		gradientStyle.id = GRADIENT_STYLE_ID;
+		document.head.appendChild(gradientStyle);
 	}
+
+	// Initial scan for existing blocks in all SVGs
+	scanAllSvgsForGradients();
+
+	// Setup observer for new blocks on the container
+	setupObserver(container);
 }
 
 /**
- * Removes gradient styles from the document.
+ * Removes gradient styles and stops observing.
  */
 export function removeBlockGradients(): void {
-	const style = document.getElementById("blockly-gradient-styles");
-	if (style) {
-		style.remove();
+	// Stop observer
+	if (observer) {
+		observer.disconnect();
+		observer = null;
 	}
+
+	// Remove style element
+	if (gradientStyle) {
+		gradientStyle.remove();
+		gradientStyle = null;
+	}
+
+	// Remove all defs elements
+	svgDefsMap.forEach((defs) => {
+		defs.remove();
+	});
+	svgDefsMap.clear();
+
+	// Clear tracking set
+	createdGradients.clear();
 }
