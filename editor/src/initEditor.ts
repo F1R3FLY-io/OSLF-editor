@@ -1,6 +1,7 @@
 import { CrossTabCopyPaste } from "@blockly/plugin-cross-tab-copy-paste";
 import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
+import { applyBlockGradients } from "./gradients";
 import OslfTheme from "./theme";
 
 export function initEditor(
@@ -28,6 +29,9 @@ export function initEditor(
 		console.error("Some error occurred while copying or pasting");
 	});
 	Blockly.ContextMenuRegistry.registry.unregister("blockDuplicate");
+
+	// Apply gradient styling to blocks
+	applyBlockGradients(workspace);
 
 	return workspace;
 }
