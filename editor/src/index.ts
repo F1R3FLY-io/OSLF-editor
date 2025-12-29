@@ -314,3 +314,6 @@ export function init(container: Element): OSLFInstance {
 
 // Re-export generator utilities
 export { rhoLangGenerator, generateCode, registerBlocks, Order, RhoLangGenerator };
+
+// Re-export gradient utilities
+export { applyBlockGradients, removeBlockGradients } from "./gradients";
