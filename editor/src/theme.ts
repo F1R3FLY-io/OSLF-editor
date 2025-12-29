@@ -37,7 +37,7 @@ const Colors = {
 };
 
 // Define block styles for different categories
-export const blockStyles = {
+const blockStyles = {
 	ground_blocks: {
 		colourPrimary: "#5cb85c",
 		colourSecondary: "#4a9d4a",
@@ -106,7 +106,7 @@ export const blockStyles = {
 };
 
 // Define category styles for the toolbox
-export const categoryStyles = {
+const categoryStyles = {
 	ground_category: {
 		colour: "#5cb85c",
 	},
@@ -149,7 +149,7 @@ export const categoryStyles = {
 };
 
 // Component styles for workspace, toolbox, etc.
-export const componentStyles = {
+const componentStyles = {
 	workspaceBackgroundColour: Colors.workspace,
 	toolboxBackgroundColour: Colors.toolbox,
 	toolboxForegroundColour: Colors.textSecondary,
@@ -167,7 +167,7 @@ export const componentStyles = {
 };
 
 // Font style for the theme
-export const fontStyle = {
+const fontStyle = {
 	family: "'Manrope', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace",
 	weight: "700",
 	size: 12,

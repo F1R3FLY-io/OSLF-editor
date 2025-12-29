@@ -178,57 +178,12 @@ export class RhoLangGenerator extends Blockly.CodeGenerator {
 	}
 
 	/**
-	 * Hook called before generating code.
-	 * Initialize any state needed for code generation.
-	 */
-	init(workspace: Blockly.Workspace): void {
-		super.init(workspace);
-		// Reset any generator state here if needed
-	}
-
-	/**
-	 * Hook called after generating code.
-	 * Clean up any state.
-	 */
-	finish(code: string): string {
-		return super.finish(code);
-	}
-
-	/**
 	 * Common tasks for generating code from blocks.
 	 * Called on every block that isn't disabled.
 	 */
 	scrubNakedValue(line: string): string {
 		// Naked values are top-level blocks with outputs, not plugged into anything
 		return line + "\n";
-	}
-
-	/**
-	 * Generate code for all blocks in the workspace.
-	 */
-	workspaceToCode(workspace: Blockly.Workspace): string {
-		return super.workspaceToCode(workspace);
-	}
-
-	/**
-	 * Gets the code from a value input connection.
-	 * Wraps in parentheses if needed based on precedence.
-	 */
-	valueToCode(
-		block: Blockly.Block,
-		name: string,
-		outerOrder: OrderType,
-	): string {
-		return super.valueToCode(block, name, outerOrder) || "";
-	}
-
-	/**
-	 * Gets the code from a statement input (nested blocks).
-	 */
-	statementToCode(block: Blockly.Block, name: string): string {
-		const code = super.statementToCode(block, name);
-		// Indent nested statements
-		return code;
 	}
 
 	/**
