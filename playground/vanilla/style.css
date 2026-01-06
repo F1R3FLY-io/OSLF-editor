@@ -100,6 +100,15 @@ header p {
 	background-color: #5a6268;
 }
 
+.btn-danger {
+	background-color: #dc3545;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #c82333;
+}
+
 #blocks-input {
 	width: 100%;
 	padding: 12px;

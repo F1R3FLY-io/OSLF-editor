@@ -299,3 +299,9 @@ export { rhoLangGenerator, generateCode, registerBlocks, Order, RhoLangGenerator
 
 // Re-export gradient utilities
 export { applyBlockGradients, removeBlockGradients } from "./gradients";
+
+// Re-export Blockly serialization utilities for workspace state management
+export const workspaceSerialization = {
+    save: Blockly.serialization.workspaces.save,
+    load: Blockly.serialization.workspaces.load,
+};
