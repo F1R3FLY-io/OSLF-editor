@@ -1,6 +1,7 @@
 import "@f1r3fly.io/oslf-editor";
-import { init } from "@f1r3fly.io/oslf-editor";
-import { Events } from "@f1r3fly.io/oslf-editor";
+import { init, Events, workspaceSerialization } from "@f1r3fly.io/oslf-editor";
+
+const STORAGE_KEY = "oslf-editor-workspace-state";
 
 // Wait for DOM to be ready
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,16 +9,51 @@ document.addEventListener("DOMContentLoaded", () => {
 	const blocksTextarea = document.getElementById("blocks-input");
 	const loadButton = document.getElementById("load-blocks-btn");
 	const loadExampleButton = document.getElementById("load-example-btn");
+	const clearStorageButton = document.getElementById("clear-storage-btn");
 
 	if (!editor) {
 		console.error("Editor element not found!");
 		return;
 	}
 
-	init(editor);
+	const { workspace } = init(editor);
+
+	// Load workspace state from localStorage
+	const loadWorkspaceState = () => {
+		try {
+			const savedState = localStorage.getItem(STORAGE_KEY);
+			if (savedState) {
+				const state = JSON.parse(savedState);
+				workspaceSerialization.load(state, workspace);
+				console.log("Workspace state restored from localStorage");
+			}
+		} catch (e) {
+			console.error("Failed to load workspace state:", e);
+		}
+	};
+
+	// Save workspace state to localStorage
+	const saveWorkspaceState = (state) => {
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+		} catch (e) {
+			console.error("Failed to save workspace state:", e);
+		}
+	};
+
+	// Clear workspace state from localStorage
+	const clearWorkspaceState = () => {
+		try {
+			localStorage.removeItem(STORAGE_KEY);
+			workspace.clear();
+			console.log("Workspace state cleared");
+		} catch (e) {
+			console.error("Failed to clear workspace state:", e);
+		}
+	};
 
 	// Load example blocks from custom_blocks.json
-	const loadExampleBlocks = async () => {
+	const loadExampleBlocks = async (restoreState = false) => {
 		try {
 			const response = await fetch("custom_blocks.json");
 			if (!response.ok) {
@@ -31,6 +67,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			);
 			// Optionally populate textarea with the example
 			blocksTextarea.value = JSON.stringify(blocks, null, 2);
+
+			// Restore workspace state after blocks are loaded
+			if (restoreState) {
+				loadWorkspaceState();
+			}
 		} catch (e) {
 			console.error("Failed to load example blocks:", e);
 			alert(
@@ -80,10 +121,21 @@ document.addEventListener("DOMContentLoaded", () => {
 				? JSON.stringify(state, null, 2)
 				: "// No workspace state yet.";
 		}
+
+		// Auto-save workspace state to localStorage
+		if (state) {
+			saveWorkspaceState(state);
+		}
 	};
 
 	// Attach event listeners
 	loadButton.addEventListener("click", loadCustomBlocks);
-	loadExampleButton.addEventListener("click", loadExampleBlocks);
+	loadExampleButton.addEventListener("click", () => loadExampleBlocks(false));
+	if (clearStorageButton) {
+		clearStorageButton.addEventListener("click", clearWorkspaceState);
+	}
 	window.addEventListener(Events.ON_CHANGE, handleBlocklyChange);
+
+	// Auto-load blocks and restore workspace state on startup
+	loadExampleBlocks(true);
 });

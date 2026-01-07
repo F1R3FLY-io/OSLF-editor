@@ -37,19 +37,7 @@ const DEFAULT_TOOLBOX = {
 
 export type OSLFInstance = {
     workspace: Blockly.Workspace;
-    handlers: Array<() => void>;
 };
-
-function destroy(instance: OSLFInstance) {
-    // Cleanup debounce timer
-    if (searchDebounceTimer) {
-        clearTimeout(searchDebounceTimer);
-        searchDebounceTimer = null;
-    }
-
-    instance.handlers.forEach((callback) => callback());
-    instance.workspace.dispose();
-}
 
 function dispatchChanges(workspace: Blockly.Workspace) {
     const state = Blockly.serialization.workspaces.save(
@@ -272,13 +260,8 @@ export function init(container: Element): OSLFInstance {
 
     setupWorkspaceChangeListener(workspace);
 
-    const handlers = [];
-
-    console.log("Editor initialized");
-
     const toolbox = document.getElementsByClassName("blocklyToolbox")[0];
     if (toolbox) {
-        console.log(toolbox);
         toolbox.prepend(searchInput);
     }
 
@@ -308,7 +291,6 @@ export function init(container: Element): OSLFInstance {
 
     return {
         workspace,
-        handlers,
     };
 }
 
@@ -317,3 +299,9 @@ export { rhoLangGenerator, generateCode, registerBlocks, Order, RhoLangGenerator
 
 // Re-export gradient utilities
 export { applyBlockGradients, removeBlockGradients } from "./gradients";
+
+// Re-export Blockly serialization utilities for workspace state management
+export const workspaceSerialization = {
+    save: Blockly.serialization.workspaces.save,
+    load: Blockly.serialization.workspaces.load,
+};

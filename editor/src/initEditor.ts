@@ -3,6 +3,7 @@ import * as Blockly from "blockly/core";
 import * as En from "blockly/msg/en";
 import { applyBlockGradients } from "./gradients";
 import OslfTheme from "./theme";
+import { RENDERER_NAME } from "./CustomRenderer";
 
 export function initEditor(
 	container: string | Element,
@@ -21,6 +22,7 @@ export function initEditor(
 		grid: { spacing: 7, length: 1, colour: "#3e4042", snap: true },
 		toolbox: toolbox,
 		theme: OslfTheme,
+		renderer: RENDERER_NAME,
 	});
 
 	// Init plugins
