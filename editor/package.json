@@ -1,6 +1,6 @@
 {
 	"name": "@f1r3fly.io/oslf-editor",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "Operational Semantics in Logical Form editor",
 	"keywords": [
 		"OSLF",
