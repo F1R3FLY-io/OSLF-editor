@@ -2,10 +2,101 @@ import { createRoot } from "react-dom/client";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { Events, init, OSLFInstance } from "@f1r3fly.io/oslf-editor";
 
+// Dialog Editor Component
+function EditorDialog({
+	isOpen,
+	onClose,
+	onCodeChange,
+}: {
+	isOpen: boolean;
+	onClose: () => void;
+	onCodeChange: (code: string, state: object) => void;
+}) {
+	const dialogRef = useRef<HTMLDialogElement>(null);
+	const editorContainerRef = useRef<HTMLDivElement>(null);
+	const editorInstance = useRef<OSLFInstance | null>(null);
+
+	useEffect(() => {
+		const dialog = dialogRef.current;
+		if (!dialog) return;
+
+		if (isOpen) {
+			dialog.showModal();
+		} else {
+			dialog.close();
+		}
+	}, [isOpen]);
+
+	useEffect(() => {
+		if (!isOpen || !editorContainerRef.current) return;
+
+		// Small delay to ensure dialog is fully rendered
+		const timer = setTimeout(() => {
+			if (editorContainerRef.current && !editorInstance.current) {
+				editorInstance.current = init(editorContainerRef.current);
+
+				// Load example blocks
+				fetch("custom_blocks.json")
+					.then((res) => res.json())
+					.then((blocks) => {
+						editorContainerRef.current?.dispatchEvent(
+							new CustomEvent(Events.INIT, { detail: blocks })
+						);
+					})
+					.catch(console.error);
+			}
+		}, 100);
+
+		const handleChange = (event: Event) => {
+			const { code, state } = (event as CustomEvent).detail;
+			onCodeChange(code || "", state || {});
+		};
+
+		window.addEventListener(Events.ON_CHANGE, handleChange);
+
+		return () => {
+			clearTimeout(timer);
+			window.removeEventListener(Events.ON_CHANGE, handleChange);
+		};
+	}, [isOpen, onCodeChange]);
+
+	const handleBackdropClick = (e: React.MouseEvent) => {
+		if (e.target === dialogRef.current) {
+			onClose();
+		}
+	};
+
+	return (
+		<dialog
+			ref={dialogRef}
+			className="editor-dialog"
+			onClick={handleBackdropClick}
+		>
+			<div className="dialog-content">
+				<div className="dialog-header">
+					<h2>OSLF Editor</h2>
+					<button
+						className="dialog-close-btn"
+						onClick={onClose}
+						aria-label="Close dialog"
+					>
+						×
+					</button>
+				</div>
+				<div className="dialog-body">
+					<div ref={editorContainerRef} className="dialog-editor" />
+				</div>
+			</div>
+		</dialog>
+	);
+}
+
 function App() {
 	const [blocksInput, setBlocksInput] = useState<string>("");
 	const [generatedCode, setGeneratedCode] = useState<string>("");
 	const [workspaceState, setWorkspaceState] = useState<string>("");
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [dialogCode, setDialogCode] = useState<string>("");
 	const editor = useRef<OSLFInstance>(null);
 
 	const handleBlocklyChange = useCallback((event: Event) => {
@@ -16,6 +107,10 @@ function App() {
 		const { code, state } = customEvent.detail;
 		setGeneratedCode(code || "");
 		setWorkspaceState(JSON.stringify(state, null, 2));
+	}, []);
+
+	const handleDialogCodeChange = useCallback((code: string, state: object) => {
+		setDialogCode(code);
 	}, []);
 
 	useEffect(() => {
@@ -97,6 +192,36 @@ function App() {
 				</p>
 			</header>
 
+			{/* Dialog Example Section */}
+			<div className="dialog-example-section">
+				<div className="control-header">
+					<h2>Dialog Example</h2>
+					<button
+						onClick={() => setIsDialogOpen(true)}
+						className="btn btn-primary"
+						aria-label="Open editor in dialog"
+					>
+						Open Editor in Dialog
+					</button>
+				</div>
+				<p className="section-description">
+					Click the button to open the OSLF Editor in a modal dialog window.
+					This demonstrates how to embed the editor in a popup/modal context.
+				</p>
+				{dialogCode && (
+					<div className="dialog-code-preview">
+						<h3>Code from Dialog Editor:</h3>
+						<pre className="code-output">{dialogCode}</pre>
+					</div>
+				)}
+			</div>
+
+			<EditorDialog
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+				onCodeChange={handleDialogCodeChange}
+			/>
+
 			<div className="controls">
 				<div className="control-header">
 					<h2>Custom Blocks Definitions</h2>
@@ -127,6 +252,7 @@ function App() {
 			</div>
 
 			<div className="editor-container">
+				<h2 className="editor-title">Inline Editor</h2>
 				<div id="blockly"></div>
 			</div>
 

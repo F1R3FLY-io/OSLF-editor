@@ -2,6 +2,7 @@ import type * as Blockly from "blockly/core";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const GRADIENT_STYLE_ID = "blockly-gradient-styles";
+const GRADIENT_SVG_ID = "blockly-gradient-defs";
 
 /** Store for tracking created gradients */
 const createdGradients = new Set<string>();
@@ -9,8 +10,11 @@ const createdGradients = new Set<string>();
 /** Reference to the style element */
 let gradientStyle: HTMLStyleElement | null = null;
 
-/** Map of SVG elements to their gradient defs */
-const svgDefsMap = new Map<SVGSVGElement, SVGDefsElement>();
+/** Reference to the shared SVG element for gradient defs */
+let gradientSvg: SVGSVGElement | null = null;
+
+/** Reference to the defs element inside the shared SVG */
+let gradientDefs: SVGDefsElement | null = null;
 
 /** MutationObserver for detecting new blocks */
 let observer: MutationObserver | null = null;
@@ -117,44 +121,61 @@ function addGradientCssRule(baseColor: string): void {
 }
 
 /**
- * Gets or creates gradient defs for an SVG element.
+ * Creates or returns the shared SVG element for gradient definitions.
+ * This SVG persists regardless of toolbox state.
  */
-function getOrCreateDefs(svg: SVGSVGElement): SVGDefsElement {
-	let defs = svgDefsMap.get(svg);
-	if (!defs) {
-		defs = document.createElementNS(SVG_NS, "defs");
-		defs.setAttribute("data-gradients", "true");
-		svg.insertBefore(defs, svg.firstChild);
-		svgDefsMap.set(svg, defs);
+function getOrCreateSharedDefs(): SVGDefsElement {
+	// Check if the shared SVG still exists in the DOM
+	if (!gradientSvg || !gradientSvg.isConnected) {
+		// Create a hidden SVG element to hold all gradient definitions
+		gradientSvg = document.createElementNS(SVG_NS, "svg");
+		gradientSvg.setAttribute("id", GRADIENT_SVG_ID);
+		gradientSvg.setAttribute("width", "0");
+		gradientSvg.setAttribute("height", "0");
+		gradientSvg.style.position = "absolute";
+		gradientSvg.style.visibility = "hidden";
+		gradientSvg.style.pointerEvents = "none";
+
+		gradientDefs = document.createElementNS(SVG_NS, "defs");
+		gradientSvg.appendChild(gradientDefs);
+
+		// Insert at the beginning of body so it's always available
+		document.body.insertBefore(gradientSvg, document.body.firstChild);
+
+		// Re-create all previously registered gradients
+		createdGradients.forEach((color) => {
+			const gradient = createGradientElement(color);
+			gradientDefs!.appendChild(gradient);
+		});
 	}
-	return defs;
+
+	return gradientDefs!;
 }
 
 /**
- * Ensures a gradient exists for the given color in the specified SVG.
- * Creates the gradient definition and CSS rule if needed.
+ * Ensures a gradient exists for the given color.
+ * Creates the gradient definition in the shared SVG and CSS rule if needed.
  */
-function ensureGradientForColor(baseColor: string, svg: SVGSVGElement): void {
+function ensureGradientForColor(baseColor: string): void {
 	const normalizedColor = baseColor.toLowerCase();
 
-	// Skip invalid colors
+	// Skip invalid colors or already created gradients
 	if (!hexToRgb(normalizedColor)) return;
+	if (createdGradients.has(normalizedColor)) return;
 
-	// Get or create defs for this SVG
-	const defs = getOrCreateDefs(svg);
+	// Get the shared defs element
+	const defs = getOrCreateSharedDefs();
 	const gradientId = getGradientId(normalizedColor);
 
-	// Check if gradient already exists in this SVG
+	// Check if gradient already exists (shouldn't happen, but safety check)
 	if (!defs.querySelector(`#${gradientId}`)) {
 		const gradient = createGradientElement(normalizedColor);
 		defs.appendChild(gradient);
 	}
 
-	// Add CSS rule if not already added globally
-	if (!createdGradients.has(normalizedColor)) {
-		addGradientCssRule(normalizedColor);
-		createdGradients.add(normalizedColor);
-	}
+	// Add CSS rule
+	addGradientCssRule(normalizedColor);
+	createdGradients.add(normalizedColor);
 }
 
 /**
@@ -171,7 +192,7 @@ function scanAllSvgsForGradients(): void {
 		blockPaths.forEach((path) => {
 			const fill = path.getAttribute("fill");
 			if (fill && fill.startsWith("#")) {
-				ensureGradientForColor(fill, svg);
+				ensureGradientForColor(fill);
 			}
 		});
 	});
@@ -218,11 +239,19 @@ export function applyBlockGradients(workspace: Blockly.WorkspaceSvg): void {
 	}
 
 	// Create style element if not exists
-	if (!gradientStyle) {
+	if (!gradientStyle || !gradientStyle.isConnected) {
 		gradientStyle = document.createElement("style");
 		gradientStyle.id = GRADIENT_STYLE_ID;
 		document.head.appendChild(gradientStyle);
+
+		// Re-add CSS rules for already created gradients
+		createdGradients.forEach((color) => {
+			addGradientCssRule(color);
+		});
 	}
+
+	// Ensure the shared gradient SVG exists
+	getOrCreateSharedDefs();
 
 	// Initial scan for existing blocks in all SVGs
 	scanAllSvgsForGradients();
@@ -247,11 +276,12 @@ export function removeBlockGradients(): void {
 		gradientStyle = null;
 	}
 
-	// Remove all defs elements
-	svgDefsMap.forEach((defs) => {
-		defs.remove();
-	});
-	svgDefsMap.clear();
+	// Remove the shared gradient SVG
+	if (gradientSvg) {
+		gradientSvg.remove();
+		gradientSvg = null;
+		gradientDefs = null;
+	}
 
 	// Clear tracking set
 	createdGradients.clear();

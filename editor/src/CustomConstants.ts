@@ -15,7 +15,9 @@ const SHAPE_PUZZLE = 2;
 /**
  * Custom constant provider for OSLF blocks with triangular connectors.
  */
-export class CustomConstantProvider extends Blockly.blockRendering.ConstantProvider {
+export class CustomConstantProvider
+	extends Blockly.blockRendering.ConstantProvider
+{
 	CORNER_RADIUS = 4;
 
 	/**
@@ -31,11 +33,11 @@ export class CustomConstantProvider extends Blockly.blockRendering.ConstantProvi
 		const width = NOTCH_WIDTH;
 		const height = NOTCH_HEIGHT;
 
-		// Triangular notch pointing up (reversed)
+		// Triangular notch pointing down (original direction)
 		// pathLeft: draws the notch when going left-to-right (top of block)
 		// pathRight: draws the notch when going right-to-left (bottom of block)
-		const pathLeft = `l ${width / 2},-${height} l ${width / 2},${height}`;
-		const pathRight = `l -${width / 2},-${height} l -${width / 2},${height}`;
+		const pathLeft = `l ${width / 2},${height} l ${width / 2},-${height}`;
+		const pathRight = `l -${width / 2},${height} l -${width / 2},-${height}`;
 
 		return {
 			type: SHAPE_NOTCH,
