@@ -15,7 +15,9 @@ const SHAPE_PUZZLE = 2;
 /**
  * Custom constant provider for OSLF blocks with triangular connectors.
  */
-export class CustomConstantProvider extends Blockly.blockRendering.ConstantProvider {
+export class CustomConstantProvider
+	extends Blockly.blockRendering.ConstantProvider
+{
 	CORNER_RADIUS = 4;
 
 	/**

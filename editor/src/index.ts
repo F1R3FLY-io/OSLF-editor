@@ -288,15 +288,20 @@ export function init(container: Element): OSLFInstance {
 		.blocklyToolboxCategory{
 			padding: 0;
 			margin-bottom: 0;
+			height: 45px
 		}
 	  .blocklyToolboxCategory.blocklyToolboxSelected{
 			background-color: transparent !important;
+			border-left: #9A52FF 2px solid;
 		}
 	  .blocklyToolboxCategory.blocklyToolboxSelected .blocklyToolboxCategoryLabel{
 			color: #ffffff !important;
 		}
 		.blocklyToolbox, .blocklyFlyout{
-			border-right: #2E3F52 1px solid;
+			border-right: #2E3F52 2px solid;
+		}
+		.blocklyTreeRowContentContainer::before{
+			display: none;
 		}
 		.blocklyToolboxCategoryGroup {
 			overflow-y: auto;
